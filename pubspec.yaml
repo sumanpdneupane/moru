@@ -10,6 +10,14 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
+  flutter_locales: ^2.0.2
+  flutter_svg: ^1.1.3
+  google_fonts: ^3.0.1
+  responsive_builder: ^0.4.2
+  fluro: ^2.0.3
+  flutter_animation_progress_bar: ^2.2.1
+  dotted_border: ^2.0.0+2
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
@@ -18,6 +26,11 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/locales/
+    - assets/
+    - assets/images/
+    - assets/icons/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
