@@ -1,6 +1,8 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:moru/uis/mobile/MMainScreen.dart';
+import 'package:moru/uis/mobile/forgot_password/MForgotPasswordScreen.dart';
 import 'package:moru/uis/mobile/home/MHomeScreen.dart';
 import 'package:moru/uis/mobile/login/MLoginScreen.dart';
 import 'package:moru/uis/mobile/signup/MSignupScreen.dart';
@@ -11,6 +13,7 @@ class Routes {
   static const String LOGIN_PAGE = "MLoginPage";
   static const String SIGNUP_PAGE = "MSignUpPage";
   static const String HOME_PAGE = "MHomePage";
+  static const String FORGOT_PAGE = "MForgotPasswordScreen";
 
 
   static Route<dynamic>? generateRoutes(RouteSettings settings) {
@@ -23,6 +26,8 @@ class Routes {
         return _MaterialPageRoute(MLoginScreen());
       case SIGNUP_PAGE:
         return _MaterialPageRoute(MSignupScreen());
+      case FORGOT_PAGE:
+        return _MaterialPageRoute(MForgotPasswordScreen());
       case HOME_PAGE:
         return _MaterialPageRoute(MHomeScreen());
       default:

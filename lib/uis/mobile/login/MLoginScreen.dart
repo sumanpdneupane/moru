@@ -17,7 +17,7 @@ class MLoginScreen extends StatefulWidget {
 class _MLoginScreenState extends State<MLoginScreen> {
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width * 0.85;
+    var width = MediaQuery.of(context).size.width * 0.87;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -65,15 +65,42 @@ class _MLoginScreenState extends State<MLoginScreen> {
               ),
               Container(
                 width: width,
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Forget Password",
-                    style: GoogleFonts.syne(
-                      fontSize: 16,
-                      color: CustomColors.inputfillColor,
+                child: Row(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Forget Password",
+                        style: GoogleFonts.syne(
+                          fontSize: 16,
+                          color: CustomColors.inputfillColor,
+                        ),
+                      ),
                     ),
-                  ),
+                    Expanded(
+                      child: Container(
+                        alignment: Alignment.centerRight,
+                        child: GestureDetector(
+                          onTap: () {
+                            Routes.popAndPushNamed(context, Routes.FORGOT_PAGE);
+                          },
+                          child: Container(
+                            height: 24,
+                            width: 24,
+                            decoration: BoxDecoration(
+                              color: CustomColors.orangeshade,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Icon(
+                              Icons.arrow_forward,
+                              color: Colors.white,
+                              size: 17,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

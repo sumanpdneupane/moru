@@ -21,7 +21,7 @@ class _MSignupScreenState extends State<MSignupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width * 0.85;
+    var width = MediaQuery.of(context).size.width * 0.87;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
