@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:moru/uis/mobile/MMainScreen.dart';
+import 'package:moru/uis/mobile/checkups/widgets/CheckupStyleWidget.dart';
 import 'package:moru/uis/mobile/home/widgets/CheckupWidget.dart';
 import 'package:moru/uis/mobile/home/widgets/HowItWorkWidget.dart';
 import 'package:moru/uis/mobile/home/widgets/TrackWidgets.dart';
@@ -45,7 +46,7 @@ class HomePgeBody extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 24),
+          SizedBox(height: 4),
           WelcomeWidget(),
           SizedBox(height: 32),
           HowItWorkWidget(),
@@ -84,17 +85,50 @@ class HomePgeBody extends StatelessWidget {
           SizedBox(
             height: 16,
           ),
-          TrackWidgets(),
-          SizedBox(
-            height: 12,
+          // TrackWidgets(),
+          // SizedBox(
+          //   height: 12,
+          // ),
+          // TrackWidgets(
+          //   boxcolor: CustomColors.orangeshade,
+          //   icon: Moru.teeth_add,
+          //   lcltxt: 'emergency',
+          //   lcltxt2: 'report_ready',
+          //   lcltxt3: '14th_of_may_2022',
+          //   circlecolor: CustomColors.darkred,
+          // ),
+          CheckupStyleWidget(
+            date: "14th_of_May_2022",
+            title: "full_assessment",
+            title2: "in_progress",
+            dotColor: CustomColors.yellow,
           ),
-          TrackWidgets(
+          SizedBox(height: 8),
+          CheckupStyleWidget(
+            date: "10th_of_aprill_2022",
+            title: "single_issue",
+            title2: "need_update",
             boxcolor: CustomColors.orangeshade,
+            icon: Moru.teeth_calen,
+            dotColor: CustomColors.red,
+          ),
+          SizedBox(height: 8),
+          CheckupStyleWidget(
+            date: "14th_of_May_2022",
+            title: "Emergency",
+            title2: "report_ready",
+            dotColor: CustomColors.green,
+            icon: Moru.teeth_cross,
+            showReport: true,
+          ),
+          SizedBox(height: 8),
+          CheckupStyleWidget(
+            date: "10th_of_aprill_2022",
+            title: "emergency",
+            title2: "report_ready",
+            dotColor: CustomColors.green,
             icon: Moru.teeth_add,
-            lcltxt: 'emergency',
-            lcltxt2: 'report_ready',
-            lcltxt3: '14th_of_may_2022',
-            circlecolor: CustomColors.darkred,
+            showReport: true,
           ),
           SizedBox(
             height: 48,

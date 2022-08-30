@@ -27,25 +27,41 @@ class MCheckupReadyScreen extends StatelessWidget {
       builder: (context, SizingInformation) {
         return Scaffold(
           body: SafeArea(
-            child: SingleChildScrollView(
-              physics: AlwaysScrollableScrollPhysics(),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                      top: 20,
-                      // left: 20,
-                      // right: 20,
-                    ),
-                    alignment: Alignment.topCenter,
-                    width: MediaQuery.of(context).size.width * 0.87,
-                    child: CheckUp2Body(),
+            child: Column(
+              children: [
+                SizedBox(height: 24),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.87,
+                  child: BackButtonWidget(
+                    onTap: () {
+                      Routes.pop(context);
+                    },
+                    localeText: "back_to_checkups",
                   ),
-                ],
-              ),
+                ),
+                Container(
+                  height: 8,
+                  color: Colors.white,
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(top: 4),
+                          alignment: Alignment.topCenter,
+                          width: MediaQuery.of(context).size.width * 0.87,
+                          child: CheckUp2Body(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           bottomSheet: FooterWidget(
@@ -664,14 +680,7 @@ class CheckUp2Body extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 24),
-            BackButtonWidget(
-              onTap: () {
-                Routes.pop(context);
-              },
-              localeText: "back_to_checkups",
-            ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 16),
             CheckupStyleWidget(
               date: "14th_of_May_2022",
               title: "Emergency",

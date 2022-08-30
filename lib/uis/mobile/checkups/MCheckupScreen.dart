@@ -35,7 +35,7 @@ class CheckupBody extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 24),
+            SizedBox(height: 4),
             Container(
               alignment: Alignment.center,
               child: LocaleText(
@@ -47,15 +47,15 @@ class CheckupBody extends StatelessWidget {
               ),
             ),
             SizedBox(height: 32),
-            InputTextField(
-              heading: "Email",
-              hintText: 'Search checkups',
-              prefixicon: Image.asset(
-                'assets/icons/search.png',
-              ),
-              width: width * 0.87,
-            ),
-            SizedBox(height: 16),
+            // InputTextField(
+            //   heading: "Email",
+            //   hintText: 'Search checkups',
+            //   prefixicon: Image.asset(
+            //     'assets/icons/search.png',
+            //   ),
+            //   width: width * 0.87,
+            // ),
+            // SizedBox(height: 16),
             CheckupStyleWidget(
               date: "14th_of_May_2022",
               title: "full_assessment",
@@ -66,7 +66,7 @@ class CheckupBody extends StatelessWidget {
             CheckupStyleWidget(
               date: "10th_of_aprill_2022",
               title: "single_issue",
-              title2: "report_ready",
+              title2: "need_update",
               boxcolor: CustomColors.orangeshade,
               icon: Moru.teeth_calen,
               dotColor: CustomColors.red,
