@@ -74,14 +74,13 @@ class TrackWidgets extends StatelessWidget {
                             size: 10,
                             color: circlecolor,
                           ),
-                          SizedBox(
-                            width: 3,
-                          ),
+                          SizedBox(width: 5),
                           LocaleText(
                             lcltxt2,
                             style: GoogleFonts.syne(
                               fontSize: 13,
                               fontWeight: FontWeight.normal,
+                              color: Colors.grey[500],
                             ),
                           )
                         ],

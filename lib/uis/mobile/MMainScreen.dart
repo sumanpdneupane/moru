@@ -2,17 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:moru/uis/mobile/home/MHomeScreen.dart';
 import 'package:moru/utils/CustomColors.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+
+import 'checkups/MCheckupScreen.dart';
 
 class MMainScreen extends StatefulWidget {
   int selectedIndex;
   Widget child;
+  Widget? bottomSheet;
+
+  List<Widget> screens = [
+    MHomeScreen(),
+    MCheckupScreen(),
+    MCheckupScreen(),
+  ];
 
   MMainScreen({
     Key? key,
     required this.selectedIndex,
     required this.child,
+    this.bottomSheet,
   }) : super(key: key);
 
   @override
@@ -20,10 +31,22 @@ class MMainScreen extends StatefulWidget {
 }
 
 class _MMainScreenState extends State<MMainScreen> {
+  @override
+  void initState() {
+    widget.selectedIndex = 0;
+    super.initState();
+  }
+
   void onindexchange(int index) {
     setState(() {
       widget.selectedIndex = index;
     });
+  }
+
+  Color? bottomNavigationColor(int selectedIndex, int index) {
+    return selectedIndex == index
+        ? CustomColors.primarycolor
+        : Colors.grey[500];
   }
 
   @override
@@ -31,129 +54,117 @@ class _MMainScreenState extends State<MMainScreen> {
     return ResponsiveBuilder(
       builder: (context, SizingInformation) {
         return Scaffold(
-          body: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Flexible(
-                flex: 6,
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    margin: EdgeInsets.only(
-                      top: 20,
-                    ),
-                    width: MediaQuery.of(context).size.width * 0.87,
-                    child: SingleChildScrollView(
-                      child: widget.child,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          // floatingActionButton: FloatingActionButton(
-          //   backgroundColor: CustomColors.primarycolor,
-          //   onPressed: () {
-          //     showDialog(
-          //       context: context,
-          //       builder: (context) {
-          //         return AlertDialog(
-          //           title: Text('Language Change'),
-          //           actions: [
-          //             RaisedButton(
-          //               onPressed: (() {
-          //                 Locales.change(context, 'en');
-          //                 Navigator.pop(context);
-          //               }),
-          //               color: CustomColors.primarycolor,
-          //               child: Text(
-          //                 "English",
-          //                 style: TextStyle(
-          //                   color: Colors.white,
-          //                 ),
-          //               ),
-          //             ),
-          //             SizedBox(
-          //               width: 20,
-          //             ),
-          //             RaisedButton(
-          //               onPressed: (() {
-          //                 Locales.change(context, 'ar');
-          //                 Navigator.pop(context);
-          //               }),
-          //               color: CustomColors.primarycolor,
-          //               child: Text(
-          //                 "Arabic",
-          //                 style: TextStyle(
-          //                   color: Colors.white,
-          //                 ),
-          //               ),
-          //             ),
-          //             SizedBox(
-          //               width: 20,
-          //             ),
-          //           ],
-          //         );
-          //       },
-          //     );
-          //   },
-          //   child: Icon(
-          //     Icons.language_outlined,
-          //     color: Colors.white,
-          //     size: 32,
-          //   ),
-          // ),
-          bottomNavigationBar: BottomNavigationBar(
-                  unselectedFontSize: 0,
-                  type: BottomNavigationBarType.fixed,
-                  currentIndex: widget.selectedIndex,
-                  onTap: (value) {
-                    setState(() {
-                      widget.selectedIndex = value;
-                    });
-                  },
-                  items: [
-                    BottomNavigationBarItem(
-                      icon: SvgPicture.asset(
-                        'assets/icons/home.svg',
-                        color: bottomNavigationColor(widget.selectedIndex, 0),
+            body: SafeArea(
+              child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(
+                        top: 20,
+                        // left: 20,
+                        // right: 20,
                       ),
-                      label: '',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: SvgPicture.asset(
-                        'assets/icons/tooth.svg',
-                        width: 20,
-                        color: bottomNavigationColor(widget.selectedIndex, 1),
-                      ),
-                      label: '',
-                    ),
-                    // BottomNavigationBarItem(
-                    //   icon: SvgPicture.asset(
-                    //     'assets/icons/bell.svg',
-                    //     color: bottomNavigationColor(widget.selectedIndex, 2),
-                    //   ),
-                    //   label: '',
-                    // ),
-                    BottomNavigationBarItem(
-                      icon: SvgPicture.asset(
-                        'assets/icons/menu.svg',
-                        color: bottomNavigationColor(widget.selectedIndex, 3),
-                      ),
-                      label: '',
+                      alignment: Alignment.topCenter,
+                      width: MediaQuery.of(context).size.width * 0.87,
+                      child: widget.screens[widget.selectedIndex],
                     ),
                   ],
-                )
+                ),
+              ),
+            ),
+            bottomSheet: widget.bottomSheet,
 
-        );
+            // floatingActionButton: FloatingActionButton(
+            //   backgroundColor: CustomColors.primarycolor,
+            //   onPressed: () {
+            //     showDialog(
+            //       context: context,
+            //       builder: (context) {
+            //         return AlertDialog(
+            //           title: Text('Language Change'),
+            //           actions: [
+            //             RaisedButton(
+            //               onPressed: (() {
+            //                 Locales.change(context, 'en');
+            //                 Navigator.pop(context);
+            //               }),
+            //               color: CustomColors.primarycolor,
+            //               child: Text(
+            //                 "English",
+            //                 style: TextStyle(
+            //                   color: Colors.white,
+            //                 ),
+            //               ),
+            //             ),
+            //             SizedBox(
+            //               width: 20,
+            //             ),
+            //             RaisedButton(
+            //               onPressed: (() {
+            //                 Locales.change(context, 'ar');
+            //                 Navigator.pop(context);
+            //               }),
+            //               color: CustomColors.primarycolor,
+            //               child: Text(
+            //                 "Arabic",
+            //                 style: TextStyle(
+            //                   color: Colors.white,
+            //                 ),
+            //               ),
+            //             ),
+            //             SizedBox(
+            //               width: 20,
+            //             ),
+            //           ],
+            //         );
+            //       },
+            //     );
+            //   },
+            //   child: Icon(
+            //     Icons.language_outlined,
+            //     color: Colors.white,
+            //     size: 32,
+            //   ),
+            // ),
+            bottomNavigationBar: BottomNavigationBar(
+              unselectedFontSize: 0,
+              type: BottomNavigationBarType.fixed,
+              currentIndex: widget.selectedIndex,
+              onTap: (value) {
+                print("BottomNavigationBar::value--------> ${value}");
+                onindexchange(value);
+              },
+              items: [
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    'assets/icons/home.svg',
+                    color: bottomNavigationColor(widget.selectedIndex, 0),
+                  ),
+                  label: '',
+                ),
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    'assets/icons/tooth.svg',
+                    width: 20,
+                    color: bottomNavigationColor(widget.selectedIndex, 1),
+                  ),
+                  label: '',
+                ),
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    'assets/icons/call.svg',
+                    color: bottomNavigationColor(widget.selectedIndex, 2),
+                  ),
+                  label: '',
+                ),
+              ],
+            ));
       },
     );
-  }
-
-  Color? bottomNavigationColor(int selectedIndex, int index) {
-    return selectedIndex == index
-        ? CustomColors.primarycolor
-        : Colors.grey[500];
   }
 
   Widget listtile(

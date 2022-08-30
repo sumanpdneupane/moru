@@ -21,12 +21,13 @@ class MHomeScreen extends StatefulWidget {
 class _MHomeScreenState extends State<MHomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return MMainScreen(
-      child: SafeArea(
-        child: HomePgeBody(),
-      ),
-      selectedIndex: 0,
-    );
+    // return MMainScreen(
+    //   child: SafeArea(
+    //     child: HomePgeBody(),
+    //   ),
+    //   selectedIndex: 0,
+    // );
+    return HomePgeBody();
   }
 }
 

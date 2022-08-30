@@ -15,6 +15,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  card_swiper:
+    dependency: "direct main"
+    description:
+      name: card_swiper
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.1"
   characters:
     dependency: transitive
     description:
@@ -147,6 +154,15 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_xlider:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: master
+      resolved-ref: ef4a358f84bb6a6119b213fef6f759f22246c882
+      url: "https://github.com/Ali-Azmoud/flutter_xlider.git"
+    source: git
+    version: "3.4.0"
   google_fonts:
     dependency: "direct main"
     description:
@@ -287,6 +303,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.0"
+  photo_view:
+    dependency: "direct main"
+    description:
+      name: photo_view
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.13.0"
   platform:
     dependency: transitive
     description:

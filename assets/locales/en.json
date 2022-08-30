@@ -2,7 +2,7 @@
     "empty":"",
     "welcome_user": "Welcome, Mariam",
     "homepage":"Homepage",
-    "checkup":"Checkup",
+    "checkup":"Checkups",
     "add_family":"Add Family Member",
     "notification":"Notification",
     "contact_us":"Contact Us",
@@ -48,6 +48,17 @@
     "please_wait":"Please wait while\nwe connect you to a doctor",
     "take_pic_of_teeth":"Take Photos of you'r teeth for checkup",
     "tell_the_dentist_why_you_want_a_consultation":"Tell the dentist why you want a consultation",
-    "provide_payment_details_at_checkout":"Provide payment details at check-out"
-
+    "provide_payment_details_at_checkout":"Provide payment details at check-out",
+    "resubmit_photos": "Resubmit Photos",
+    "report":"Report",
+    "diagonsis": "Diagonsis",
+    "next_step": "Next Step",
+    "next_steps": "Next Steps",
+    "cost": "Cost",
+    "you_asked": "You Asked",
+    "reply_from": "Reply from",
+    "what_i_saw": "What I saw",
+    "what_you_can_do": "What you can do",
+    "treatment_cost": "Treatment Cost",
+    "recommended_products": "Recommended Products"
 }

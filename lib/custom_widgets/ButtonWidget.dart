@@ -8,6 +8,7 @@ class ButtonWidget extends StatelessWidget {
   final double fontSize;
   final Color backgroundColor;
   final Color textColor;
+  final String prefixIconPath;
   final Function() onTap;
 
   const ButtonWidget({
@@ -19,6 +20,7 @@ class ButtonWidget extends StatelessWidget {
     required this.backgroundColor,
     required this.textColor,
     required this.onTap,
+    this.prefixIconPath = "",
   }) : super(key: key);
 
   @override
@@ -34,17 +36,58 @@ class ButtonWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           color: backgroundColor,
         ),
-        child: Center(
-          child: Text(
-            name,
-            style: GoogleFonts.syne(
-              fontSize: fontSize,
-              fontWeight: FontWeight.w700,
-              color: Color(0xffFFFFFF),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            prefixIconPath == ""
+                ? Container()
+                : Container(
+                    margin: EdgeInsets.only(right: 16),
+                    child: Image.asset(
+                      "${prefixIconPath}",
+                      width: fontSize + 12,
+                      height: fontSize + 12,
+                    ),
+                  ),
+            Text(
+              name,
+              style: GoogleFonts.syne(
+                fontSize: fontSize,
+                fontWeight: FontWeight.w700,
+                color: Color(0xffFFFFFF),
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
   }
 }
+
+//  @override
+//   Widget build(BuildContext context) {
+//     return GestureDetector(
+//       onTap: () {
+//         onTap();
+//       },
+//       child: Container(
+//         width: width,
+//         height: height,
+//         decoration: BoxDecoration(
+//           borderRadius: BorderRadius.circular(16),
+//           color: backgroundColor,
+//         ),
+//         child: Center(
+//           child: Text(
+//             name,
+//             style: GoogleFonts.syne(
+//               fontSize: fontSize,
+//               fontWeight: FontWeight.w700,
+//               color: Color(0xffFFFFFF),
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }

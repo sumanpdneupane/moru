@@ -2,7 +2,7 @@
     "empty":"",
     "welcome_user": "أهلا بك يا مريم",
     "homepage":"الصفحة الرئيسية",
-    "checkup":"الفحص",
+    "checkup":"الفحوصات",
     "add_family":"إضافة فرد من العائلة",
     "notification":"الاشعارات",
     "contact_us":"تواصل معنا",
@@ -47,6 +47,17 @@
     "please_wait":"يرجى الانتظار حتى نوصلك \nبالطبيب",
     "take_pic_of_teeth":"التقط صورًا لأسنانك ليقيمها طبيب الأسنان",
     "tell_the_dentist_why_you_want_a_consultation":"أخبر طبيب الأسنان لماذا تريد الاستشارة",
-    "provide_payment_details_at_checkout":"تقديم تفاصيل الدفع عند تسجيل المغادرة"
-
+    "provide_payment_details_at_checkout":"تقديم تفاصيل الدفع عند تسجيل المغادرة",
+    "resubmit_photos": "إعادة إرسال الصور",
+    "report":"تقرير",
+    "diagonsis": "تشخبص",
+    "next_step": "الخطوة التالية",
+    "next_steps": "الخطوة التالية",
+    "cost": "كلفة",
+    "you_asked": "أنت سألت",
+    "reply_from": "الرد من",
+    "what_i_saw": "ما رأيته",
+    "what_you_can_do": "ما تستطيع فعله",
+    "treatment_cost": "تكلفة العلاج",
+    "recommended_products": "المنتجات الموصى بها"
 }

@@ -2,6 +2,8 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moru/uis/mobile/MMainScreen.dart';
+import 'package:moru/uis/mobile/checkups/MCheckupScreen.dart';
+import 'package:moru/uis/mobile/checkups/pages/MCheckupReadyScreen.dart';
 import 'package:moru/uis/mobile/forgot_password/MForgotPasswordScreen.dart';
 import 'package:moru/uis/mobile/home/MHomeScreen.dart';
 import 'package:moru/uis/mobile/login/MLoginScreen.dart';
@@ -12,9 +14,9 @@ class Routes {
   static const String SPLASH_PAGE = "MSplashScreen";
   static const String LOGIN_PAGE = "MLoginPage";
   static const String SIGNUP_PAGE = "MSignUpPage";
-  static const String HOME_PAGE = "MHomePage";
   static const String FORGOT_PAGE = "MForgotPasswordScreen";
-
+  static const String HOME_PAGE = "MHomePage";
+  static const String CHECKUP_READY_PAGE = "MCheckupReadyScreen";
 
   static Route<dynamic>? generateRoutes(RouteSettings settings) {
     final args = settings.arguments;
@@ -29,7 +31,10 @@ class Routes {
       case FORGOT_PAGE:
         return _MaterialPageRoute(MForgotPasswordScreen());
       case HOME_PAGE:
-        return _MaterialPageRoute(MHomeScreen());
+        return _MaterialPageRoute(
+            MMainScreen(selectedIndex: 0, child: Container()));
+      case CHECKUP_READY_PAGE:
+        return _MaterialPageRoute(MCheckupReadyScreen());
       default:
         MSplashScreen();
     }
@@ -61,6 +66,6 @@ class Routes {
   }
 
   static String initialRoute() {
-    return Routes.SPLASH_PAGE;
+    return Routes.HOME_PAGE;
   }
 }
