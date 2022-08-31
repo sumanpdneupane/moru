@@ -108,32 +108,75 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-              SizedBox(
-                //width: 300,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 3,
-                      child: InputTextField(
-                        heading: "",
-                        hintText: "",
-                        width: width,
-                      ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: InputTextField(
+                      heading: "",
+                      hintText: "",
+                      width: width,
                     ),
-                    SizedBox(width: 16),
-                    Expanded(
-                      flex: 1,
-                      child: MyButton(
-                        btntxt: 'apply',
-                        boxcolor: CustomColors.primarycolor,
-                        fontcolor: Colors.white,
-                        width: width,
-                      ),
+                  ),
+                  SizedBox(width: 16),
+                  Expanded(
+                    flex: 1,
+                    child: ButtonWidget(
+                      name: "Apply",
+                      height: 50,
+                      width: width,
+                      fontSize: 15,
+                      backgroundColor: CustomColors.primarycolor,
+                      textColor: Colors.white,
+                      onTap: () {
+                      },
                     ),
-                  ],
-                ),
+                    // child: MyButton(
+                    //   btntxt: 'apply',
+                    //   boxcolor: CustomColors.primarycolor,
+                    //   fontcolor: Colors.white,
+                    //   width: width,
+                    // ),
+                  ),
+                ],
               ),
+              // SizedBox(
+              //   //width: 300,
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.start,
+              //     children: [
+              //       Expanded(
+              //         flex: 3,
+              //         child: InputTextField(
+              //           heading: "",
+              //           hintText: "",
+              //           width: width,
+              //         ),
+              //       ),
+              //       SizedBox(width: 16),
+              //       Expanded(
+              //         flex: 1,
+              //         child: ButtonWidget(
+              //           name: "Apply",
+              //           height: 50,
+              //           width: width,
+              //           fontSize: 15,
+              //           backgroundColor: CustomColors.primarycolor,
+              //           textColor: Colors.white,
+              //           onTap: () {
+              //           },
+              //         ),
+              //         // child: MyButton(
+              //         //   btntxt: 'apply',
+              //         //   boxcolor: CustomColors.primarycolor,
+              //         //   fontcolor: Colors.white,
+              //         //   width: width,
+              //         // ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               SizedBox(height: 20),
             ],
           ),
