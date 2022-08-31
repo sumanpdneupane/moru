@@ -80,80 +80,80 @@ class _MSignupScreenState extends State<MSignupScreen> {
                     height: 15,
                   ),
                   MyInputField(
-                    heading: "Age",
+                    heading: "Confirm Password",
                     width: width,
                   ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Container(
-                    width: width,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          child: Text(
-                            "Gender",
-                            style: GoogleFonts.syne(
-                              fontSize: 16,
-                              color: CustomColors.inputfillColor,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Row(
-                          children: [
-                            MyWrapButton(
-                              boxcolor: CustomColors.primarycolor,
-                              btntxt: "Male",
-                              fontcolor: Colors.white,
-                              height: 40,
-                            ),
-                            SizedBox(
-                              width: 18,
-                            ),
-                            MyWrapButton(
-                              boxcolor:
-                                  CustomColors.inputfillColor.withOpacity(0.07),
-                              btntxt: "Female",
-                              fontcolor: CustomColors.primarycolor,
-                              height: 40,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  MyCheckBox(
-                    text: 'Accept terms and conditions',
-                    width: width,
-                    value: Value,
-                    activeColor: CustomColors.primarycolor,
-                    onChanged: (val) {
-                      setState(() {
-                        Value = val!;
-                      });
-                    },
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  MyCheckBox(
-                    text: 'Privacy Policy',
-                    width: width,
-                    value: dValue,
-                    activeColor: CustomColors.primarycolor,
-                    onChanged: (val) {
-                      setState(() {
-                        dValue = val!;
-                      });
-                    },
-                  ),
+                  // SizedBox(
+                  //   height: 15,
+                  // ),
+                  // Container(
+                  //   width: width,
+                  //   child: Column(
+                  //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //     children: [
+                  //       Container(
+                  //         child: Text(
+                  //           "Gender",
+                  //           style: GoogleFonts.syne(
+                  //             fontSize: 16,
+                  //             color: CustomColors.inputfillColor,
+                  //           ),
+                  //         ),
+                  //       ),
+                  //       SizedBox(
+                  //         height: 8,
+                  //       ),
+                  //       Row(
+                  //         children: [
+                  //           MyWrapButton(
+                  //             boxcolor: CustomColors.primarycolor,
+                  //             btntxt: "Male",
+                  //             fontcolor: Colors.white,
+                  //             height: 40,
+                  //           ),
+                  //           SizedBox(
+                  //             width: 18,
+                  //           ),
+                  //           MyWrapButton(
+                  //             boxcolor:
+                  //                 CustomColors.inputfillColor.withOpacity(0.07),
+                  //             btntxt: "Female",
+                  //             fontcolor: CustomColors.primarycolor,
+                  //             height: 40,
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+                  // SizedBox(
+                  //   height: 15,
+                  // ),
+                  // MyCheckBox(
+                  //   text: 'Accept terms and conditions',
+                  //   width: width,
+                  //   value: Value,
+                  //   activeColor: CustomColors.primarycolor,
+                  //   onChanged: (val) {
+                  //     setState(() {
+                  //       Value = val!;
+                  //     });
+                  //   },
+                  // ),
+                  // SizedBox(
+                  //   height: 8,
+                  // ),
+                  // MyCheckBox(
+                  //   text: 'Privacy Policy',
+                  //   width: width,
+                  //   value: dValue,
+                  //   activeColor: CustomColors.primarycolor,
+                  //   onChanged: (val) {
+                  //     setState(() {
+                  //       dValue = val!;
+                  //     });
+                  //   },
+                  // ),
                   SizedBox(
                     height: 40,
                   ),
