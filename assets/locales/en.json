@@ -19,6 +19,7 @@
     "single_issue":"Single\nIssue",
     "full_assessment":"Full\nAssessment",
     "video_consultation":"Video\nConsultation",
+    "full_assessment2":"Full Assessment",
     "emergency":"Emergency",
     "track":"Track 📍",
     "in_progress":"In Progress",
@@ -29,6 +30,7 @@
     "instruction1":"Instruction",
     "next":"Next",
     "upload_image":"Upload Front Image",
+    "take_image":"Take Image",
     "select_file":"Select File",
     "bad_breath":"Bad breath",
     "decay_and_preventing_holes":"Decay and preventing holes",
@@ -38,7 +40,7 @@
     "sensitive_teeth":"Sensitive teeth",
     "most_important":"What is  most important to you  regarding your dental care today?",
     "fill_in_the_following":"Fill in the following",
-    "aplly":"Apply",
+    "apply":"Apply",
     "go_to_homepage":"Go to Homepage",
     "photos":"Photos 📷",
     "resubmit":"Resubmit",
@@ -61,5 +63,8 @@
     "what_you_can_do": "What you can do",
     "treatment_cost": "Treatment Cost",
     "recommended_products": "Recommended Products",
-    "need_update": "Need Update"
+    "need_update": "Need Update",
+    "payment": "Payment",
+    "promocode": "Promocode",
+    "track_report":"Track Report"
 }

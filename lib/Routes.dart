@@ -6,6 +6,12 @@ import 'package:moru/uis/mobile/checkups/MCheckupScreen.dart';
 import 'package:moru/uis/mobile/checkups/pages/MCheckupReadyScreen.dart';
 import 'package:moru/uis/mobile/forgot_password/MForgotPasswordScreen.dart';
 import 'package:moru/uis/mobile/home/MHomeScreen.dart';
+import 'package:moru/uis/mobile/instructions/MInstructionScreen.dart';
+import 'package:moru/uis/mobile/instructions/pages/MAppoinmentDoneScreen.dart';
+import 'package:moru/uis/mobile/instructions/pages/MPaymentScreen.dart';
+import 'package:moru/uis/mobile/instructions/pages/MQuestionnarie1Screen.dart';
+import 'package:moru/uis/mobile/instructions/pages/MQuestionnarie2Screen.dart';
+import 'package:moru/uis/mobile/instructions/pages/MUploadImageScreen.dart';
 import 'package:moru/uis/mobile/login/MLoginScreen.dart';
 import 'package:moru/uis/mobile/signup/MSignupScreen.dart';
 import 'package:moru/uis/mobile/splash/MSplashScreen.dart';
@@ -17,6 +23,12 @@ class Routes {
   static const String FORGOT_PAGE = "MForgotPasswordScreen";
   static const String HOME_PAGE = "MHomePage";
   static const String CHECKUP_READY_PAGE = "MCheckupReadyScreen";
+  static const String INSTRUCTION_PAGE = "MInstructionScreen";
+  static const String UPLOAD_IMAGE_PAGE = "MUploadImageScreen";
+  static const String QUESTIONNARE_1_PAGE = "MQuestionnarie1Screen";
+  static const String QUESTIONNARE_2_PAGE = "MQuestionnarie2Screen";
+  static const String PAYMENT_PAGE = "MPaymentScreen";
+  static const String APPOINMENT_DONE_PAGE = "MAppoinmentDoneScreen";
 
   static Route<dynamic>? generateRoutes(RouteSettings settings) {
     final args = settings.arguments;
@@ -35,6 +47,18 @@ class Routes {
             MMainScreen(selectedIndex: 0, child: Container()));
       case CHECKUP_READY_PAGE:
         return _MaterialPageRoute(MCheckupReadyScreen());
+      case INSTRUCTION_PAGE:
+        return _MaterialPageRoute(MInstructionScreen());
+      case UPLOAD_IMAGE_PAGE:
+        return _MaterialPageRoute(MUploadImageScreen());
+      case QUESTIONNARE_1_PAGE:
+        return _MaterialPageRoute(MQuestionnarie1Screen());
+      case QUESTIONNARE_2_PAGE:
+        return _MaterialPageRoute(MQuestionnarie2Screen());
+      case PAYMENT_PAGE:
+        return _MaterialPageRoute(MPaymentScreen());
+      case APPOINMENT_DONE_PAGE:
+        return _MaterialPageRoute(MAppoinmentDoneScreen());
       default:
         MSplashScreen();
     }
@@ -61,11 +85,18 @@ class Routes {
     Navigator.of(context).pushReplacementNamed(routeName);
   }
 
+  static pushNamedAndRemoveUntil(context, routeName) {
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      routeName,
+      (Route<dynamic> route) => false,
+    );
+  }
+
   static pop(context) {
     Navigator.of(context).pop();
   }
 
   static String initialRoute() {
-    return Routes.SPLASH_PAGE;
+    return Routes.HOME_PAGE;
   }
 }

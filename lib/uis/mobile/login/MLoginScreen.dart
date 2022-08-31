@@ -46,23 +46,17 @@ class _MLoginScreenState extends State<MLoginScreen> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 40,
-              ),
+              SizedBox(height: 40),
               MyInputField(
                 heading: "Email",
                 width: width,
               ),
-              SizedBox(
-                height: 15,
-              ),
+              SizedBox(height: 15),
               MyInputField(
                 heading: "Password",
                 width: width,
               ),
-              SizedBox(
-                height: 15,
-              ),
+              SizedBox(height: 15),
               Container(
                 width: width,
                 child: Row(
@@ -103,43 +97,113 @@ class _MLoginScreenState extends State<MLoginScreen> {
                   ],
                 ),
               ),
+              const SizedBox(height: 20),
+              ButtonWidget(
+                name: "Sign In",
+                height: 50,
+                width: width,
+                fontSize: 19,
+                backgroundColor: CustomColors.primarycolor,
+                textColor: Colors.white,
+                onTap: () {
+                  Routes.popAndPushNamed(context, Routes.HOME_PAGE);
+                },
+              ),
+              const SizedBox(height: 16),
+              ButtonWidget(
+                name: "Sign Up",
+                height: 50,
+                width: width,
+                fontSize: 19,
+                backgroundColor: CustomColors.primarycolor2,
+                textColor: Colors.white,
+                onTap: () {
+                  Routes.popAndPushNamed(context, Routes.SIGNUP_PAGE);
+                },
+              ),
+              SizedBox(height: 40),
+              Container(
+                width: width,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      flex: 4,
+                      child: Container(
+                        height: 1,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                        "OR",
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.syne(
+                          fontSize: 19,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 4,
+                      child: Container(
+                        height: 1,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 24),
+              ButtonWidget(
+                name: "Continue with Google",
+                height: 50,
+                width: width,
+                fontSize: 19,
+                backgroundColor: Colors.grey[300]!,
+                textColor: CustomColors.primarycolor2,
+                prefixIconPath: "assets/icons/google.png",
+                onTap: () {},
+              ),
             ],
           ),
         ),
       ),
       bottomSheet: FooterWidget(
         children: [
-          const SizedBox(
-            height: 20,
-          ),
-          ButtonWidget(
-            name: "Sign In",
-            height: 50,
-            width: width,
-            fontSize: 19,
-            backgroundColor: CustomColors.primarycolor,
-            textColor: Colors.white,
-            onTap: () {
-              Routes.popAndPushNamed(context, Routes.HOME_PAGE);
-            },
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          ButtonWidget(
-            name: "Sign Up",
-            height: 50,
-            width: width,
-            fontSize: 19,
-            backgroundColor: CustomColors.primarycolor2,
-            textColor: Colors.white,
-            onTap: () {
-              Routes.popAndPushNamed(context, Routes.SIGNUP_PAGE);
-            },
-          ),
-          const SizedBox(
-            height: 24,
-          ),
+          // const SizedBox(
+          //   height: 20,
+          // ),
+          // ButtonWidget(
+          //   name: "Sign In",
+          //   height: 50,
+          //   width: width,
+          //   fontSize: 19,
+          //   backgroundColor: CustomColors.primarycolor,
+          //   textColor: Colors.white,
+          //   onTap: () {
+          //     Routes.popAndPushNamed(context, Routes.HOME_PAGE);
+          //   },
+          // ),
+          // const SizedBox(
+          //   height: 16,
+          // ),
+          // ButtonWidget(
+          //   name: "Sign Up",
+          //   height: 50,
+          //   width: width,
+          //   fontSize: 19,
+          //   backgroundColor: CustomColors.primarycolor2,
+          //   textColor: Colors.white,
+          //   onTap: () {
+          //     Routes.popAndPushNamed(context, Routes.SIGNUP_PAGE);
+          //   },
+          // ),
+          // const SizedBox(
+          //   height: 24,
+          // ),
         ],
       ),
     );

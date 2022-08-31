@@ -3,6 +3,7 @@ import 'package:flutter_locales/flutter_locales.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:moru/custom_widgets/InputTextField.dart';
 import 'package:moru/custom_widgets/MyInputField.dart';
+import 'package:moru/custom_widgets/base_uis/BaseUIWidget.dart';
 import 'package:moru/uis/mobile/MMainScreen.dart';
 import 'package:moru/uis/mobile/checkups/widgets/CheckupStyleWidget.dart';
 import 'package:moru/utils/CustomColors.dart';
@@ -14,11 +15,9 @@ class MCheckupScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return MMainScreen(
-    //   child: CheckupBody(),
-    //   selectedIndex: 1,
-    // );
-    return CheckupBody();
+    return BaseUIWidget(
+      child: CheckupBody(),
+    );
   }
 }
 

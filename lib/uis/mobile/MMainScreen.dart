@@ -53,116 +53,153 @@ class _MMainScreenState extends State<MMainScreen> {
   Widget build(BuildContext context) {
     return ResponsiveBuilder(
       builder: (context, SizingInformation) {
-        return Scaffold(
-            body: SafeArea(
-              child: SingleChildScrollView(
-                physics: AlwaysScrollableScrollPhysics(),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(
-                        top: 20,
-                        // left: 20,
-                        // right: 20,
-                      ),
-                      alignment: Alignment.topCenter,
-                      width: MediaQuery.of(context).size.width * 0.87,
-                      child: widget.screens[widget.selectedIndex],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            bottomSheet: widget.bottomSheet,
+       return Scaffold(
+          body: widget.screens[widget.selectedIndex],
+         bottomNavigationBar: BottomNavigationBar(
+           unselectedFontSize: 0,
+           type: BottomNavigationBarType.fixed,
+           currentIndex: widget.selectedIndex,
+           onTap: (value) {
+             print("BottomNavigationBar::value--------> ${value}");
+             onindexchange(value);
+           },
+           items: [
+             BottomNavigationBarItem(
+               icon: SvgPicture.asset(
+                 'assets/icons/home.svg',
+                 color: bottomNavigationColor(widget.selectedIndex, 0),
+               ),
+               label: '',
+             ),
+             BottomNavigationBarItem(
+               icon: SvgPicture.asset(
+                 'assets/icons/tooth.svg',
+                 width: 20,
+                 color: bottomNavigationColor(widget.selectedIndex, 1),
+               ),
+               label: '',
+             ),
+             BottomNavigationBarItem(
+               icon: SvgPicture.asset(
+                 'assets/icons/call.svg',
+                 color: bottomNavigationColor(widget.selectedIndex, 2),
+               ),
+               label: '',
+             ),
+           ],
+         ),
+       );
 
-            // floatingActionButton: FloatingActionButton(
-            //   backgroundColor: CustomColors.primarycolor,
-            //   onPressed: () {
-            //     showDialog(
-            //       context: context,
-            //       builder: (context) {
-            //         return AlertDialog(
-            //           title: Text('Language Change'),
-            //           actions: [
-            //             RaisedButton(
-            //               onPressed: (() {
-            //                 Locales.change(context, 'en');
-            //                 Navigator.pop(context);
-            //               }),
-            //               color: CustomColors.primarycolor,
-            //               child: Text(
-            //                 "English",
-            //                 style: TextStyle(
-            //                   color: Colors.white,
-            //                 ),
-            //               ),
-            //             ),
-            //             SizedBox(
-            //               width: 20,
-            //             ),
-            //             RaisedButton(
-            //               onPressed: (() {
-            //                 Locales.change(context, 'ar');
-            //                 Navigator.pop(context);
-            //               }),
-            //               color: CustomColors.primarycolor,
-            //               child: Text(
-            //                 "Arabic",
-            //                 style: TextStyle(
-            //                   color: Colors.white,
-            //                 ),
-            //               ),
-            //             ),
-            //             SizedBox(
-            //               width: 20,
-            //             ),
-            //           ],
-            //         );
-            //       },
-            //     );
-            //   },
-            //   child: Icon(
-            //     Icons.language_outlined,
-            //     color: Colors.white,
-            //     size: 32,
-            //   ),
-            // ),
-            bottomNavigationBar: BottomNavigationBar(
-              unselectedFontSize: 0,
-              type: BottomNavigationBarType.fixed,
-              currentIndex: widget.selectedIndex,
-              onTap: (value) {
-                print("BottomNavigationBar::value--------> ${value}");
-                onindexchange(value);
-              },
-              items: [
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset(
-                    'assets/icons/home.svg',
-                    color: bottomNavigationColor(widget.selectedIndex, 0),
-                  ),
-                  label: '',
-                ),
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset(
-                    'assets/icons/tooth.svg',
-                    width: 20,
-                    color: bottomNavigationColor(widget.selectedIndex, 1),
-                  ),
-                  label: '',
-                ),
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset(
-                    'assets/icons/call.svg',
-                    color: bottomNavigationColor(widget.selectedIndex, 2),
-                  ),
-                  label: '',
-                ),
-              ],
-            ));
+        // return Scaffold(
+        //   body: SafeArea(
+        //     child: SingleChildScrollView(
+        //       physics: AlwaysScrollableScrollPhysics(),
+        //       child: Row(
+        //         mainAxisSize: MainAxisSize.max,
+        //         crossAxisAlignment: CrossAxisAlignment.start,
+        //         mainAxisAlignment: MainAxisAlignment.center,
+        //         children: [
+        //           Container(
+        //             margin: EdgeInsets.only(
+        //               top: 20,
+        //               // left: 20,
+        //               // right: 20,
+        //             ),
+        //             alignment: Alignment.topCenter,
+        //             width: MediaQuery.of(context).size.width * 0.87,
+        //             child: widget.screens[widget.selectedIndex],
+        //           ),
+        //         ],
+        //       ),
+        //     ),
+        //   ),
+        //   bottomSheet: widget.bottomSheet,
+        //   bottomNavigationBar: BottomNavigationBar(
+        //     unselectedFontSize: 0,
+        //     type: BottomNavigationBarType.fixed,
+        //     currentIndex: widget.selectedIndex,
+        //     onTap: (value) {
+        //       print("BottomNavigationBar::value--------> ${value}");
+        //       onindexchange(value);
+        //     },
+        //     items: [
+        //       BottomNavigationBarItem(
+        //         icon: SvgPicture.asset(
+        //           'assets/icons/home.svg',
+        //           color: bottomNavigationColor(widget.selectedIndex, 0),
+        //         ),
+        //         label: '',
+        //       ),
+        //       BottomNavigationBarItem(
+        //         icon: SvgPicture.asset(
+        //           'assets/icons/tooth.svg',
+        //           width: 20,
+        //           color: bottomNavigationColor(widget.selectedIndex, 1),
+        //         ),
+        //         label: '',
+        //       ),
+        //       BottomNavigationBarItem(
+        //         icon: SvgPicture.asset(
+        //           'assets/icons/call.svg',
+        //           color: bottomNavigationColor(widget.selectedIndex, 2),
+        //         ),
+        //         label: '',
+        //       ),
+        //     ],
+        //   ),
+        //   // floatingActionButton: FloatingActionButton(
+        //   //   backgroundColor: CustomColors.primarycolor,
+        //   //   onPressed: () {
+        //   //     showDialog(
+        //   //       context: context,
+        //   //       builder: (context) {
+        //   //         return AlertDialog(
+        //   //           title: Text('Language Change'),
+        //   //           actions: [
+        //   //             RaisedButton(
+        //   //               onPressed: (() {
+        //   //                 Locales.change(context, 'en');
+        //   //                 Navigator.pop(context);
+        //   //               }),
+        //   //               color: CustomColors.primarycolor,
+        //   //               child: Text(
+        //   //                 "English",
+        //   //                 style: TextStyle(
+        //   //                   color: Colors.white,
+        //   //                 ),
+        //   //               ),
+        //   //             ),
+        //   //             SizedBox(
+        //   //               width: 20,
+        //   //             ),
+        //   //             RaisedButton(
+        //   //               onPressed: (() {
+        //   //                 Locales.change(context, 'ar');
+        //   //                 Navigator.pop(context);
+        //   //               }),
+        //   //               color: CustomColors.primarycolor,
+        //   //               child: Text(
+        //   //                 "Arabic",
+        //   //                 style: TextStyle(
+        //   //                   color: Colors.white,
+        //   //                 ),
+        //   //               ),
+        //   //             ),
+        //   //             SizedBox(
+        //   //               width: 20,
+        //   //             ),
+        //   //           ],
+        //   //         );
+        //   //       },
+        //   //     );
+        //   //   },
+        //   //   child: Icon(
+        //   //     Icons.language_outlined,
+        //   //     color: Colors.white,
+        //   //     size: 32,
+        //   //   ),
+        //   // ),
+        // );
       },
     );
   }

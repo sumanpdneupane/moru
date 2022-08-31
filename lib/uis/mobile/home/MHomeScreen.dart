@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:moru/custom_widgets/base_uis/BaseUIWidget.dart';
 import 'package:moru/uis/mobile/MMainScreen.dart';
 import 'package:moru/uis/mobile/checkups/widgets/CheckupStyleWidget.dart';
 import 'package:moru/uis/mobile/home/widgets/CheckupWidget.dart';
@@ -22,13 +23,16 @@ class MHomeScreen extends StatefulWidget {
 class _MHomeScreenState extends State<MHomeScreen> {
   @override
   Widget build(BuildContext context) {
-    // return MMainScreen(
-    //   child: SafeArea(
-    //     child: HomePgeBody(),
-    //   ),
-    //   selectedIndex: 0,
-    // );
-    return HomePgeBody();
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+
+    return BaseUIWidget(
+      child: HomePgeBody(),
+      header: Container(
+        width: width * 0.87,
+        child: WelcomeWidget(),
+      ),
+    );
   }
 }
 
@@ -46,8 +50,8 @@ class HomePgeBody extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 4),
-          WelcomeWidget(),
+          // SizedBox(height: 4),
+          // WelcomeWidget(),
           SizedBox(height: 32),
           HowItWorkWidget(),
           Visibility(
@@ -85,6 +89,7 @@ class HomePgeBody extends StatelessWidget {
           SizedBox(
             height: 16,
           ),
+          //future needed
           // TrackWidgets(),
           // SizedBox(
           //   height: 12,

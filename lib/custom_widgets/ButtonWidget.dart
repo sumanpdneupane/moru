@@ -46,8 +46,8 @@ class ButtonWidget extends StatelessWidget {
                     margin: EdgeInsets.only(right: 16),
                     child: Image.asset(
                       "${prefixIconPath}",
-                      width: fontSize + 12,
-                      height: fontSize + 12,
+                      width: fontSize + 8,
+                      height: fontSize + 8,
                     ),
                   ),
             Text(
@@ -55,7 +55,7 @@ class ButtonWidget extends StatelessWidget {
               style: GoogleFonts.syne(
                 fontSize: fontSize,
                 fontWeight: FontWeight.w700,
-                color: Color(0xffFFFFFF),
+                color: textColor == null ? Colors.white : textColor,
               ),
             ),
           ],

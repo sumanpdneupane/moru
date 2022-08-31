@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moru/Routes.dart';
 import 'package:moru/custom_widgets/grids/MyGrid.dart';
 import 'package:moru/utils/CustomColors.dart';
 import 'package:moru/utils/MoruIcons.dart';
@@ -22,14 +23,19 @@ class CheckupWidget extends StatelessWidget {
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             children: [
-              MyGrid(
-                icon: Moru.teeth_cross,
-                text: 'single_issue',
-                color: CustomColors.primarycolor2,
+              GestureDetector(
+                onTap: (() {
+                  Routes.pushNamed(context, Routes.INSTRUCTION_PAGE);
+                }),
+                child: MyGrid(
+                  icon: Moru.teeth_cross,
+                  text: 'single_issue',
+                  color: CustomColors.primarycolor2,
+                ),
               ),
               GestureDetector(
                 onTap: (() {
-                  Navigator.pushNamed(context, '/instruction');
+                  //Routes.pushNamed(context, Routes.INSTRUCTION_PAGE);
                 }),
                 child: MyGrid(
                   icon: Moru.smile,

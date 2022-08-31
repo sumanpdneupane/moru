@@ -24,6 +24,9 @@ dependencies:
     git:
       url: https://github.com/Ali-Azmoud/flutter_xlider.git
       ref: master
+  file_picker: 5.0.1
+  image_picker: 0.8.5+3
+  flutter_image_compress: 1.1.2
 
   #For Mobile
   convex_bottom_bar: 3.0.0

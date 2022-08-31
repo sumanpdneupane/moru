@@ -8,6 +8,7 @@ class InputTextField extends StatelessWidget {
   double width;
   Widget? prefixicon;
   Widget? suffixicon;
+  int? maxLines;
 
   InputTextField({
     Key? key,
@@ -16,6 +17,7 @@ class InputTextField extends StatelessWidget {
     required this.width,
     this.prefixicon,
     this.suffixicon,
+    this.maxLines = 1,
   }) : super(key: key);
 
   @override
@@ -32,6 +34,7 @@ class InputTextField extends StatelessWidget {
               child: SizedBox(
                 child: TextFormField(
                   keyboardType: TextInputType.emailAddress,
+                  maxLines: maxLines,
                   decoration: InputDecoration(
                     prefixIcon: prefixicon,
                     suffixIcon: suffixicon,
@@ -46,7 +49,12 @@ class InputTextField extends StatelessWidget {
                       fontSize: 15.0,
                       color: Color.fromARGB(255, 156, 154, 154),
                     ),
-                    contentPadding: const EdgeInsets.only(left: 20, right: 20),
+                    contentPadding: const EdgeInsets.only(
+                      left: 20,
+                      right: 20,
+                      top: 4,
+                      bottom: 4,
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide.none,
