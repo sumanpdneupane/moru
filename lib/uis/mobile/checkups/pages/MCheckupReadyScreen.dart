@@ -42,7 +42,7 @@ class MCheckupReadyScreen extends StatelessWidget {
                 ),
                 Container(
                   height: 8,
-                  color: Colors.white,
+                  color: Colors.transparent,
                 ),
                 Expanded(
                   child: SingleChildScrollView(

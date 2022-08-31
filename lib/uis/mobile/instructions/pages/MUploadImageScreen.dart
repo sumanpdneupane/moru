@@ -58,14 +58,14 @@ class _MUploadImageScreenState extends State<MUploadImageScreen> {
             backgroundColor: CustomColors.primarycolor,
             textColor: Colors.white,
             onTap: () async {
-              files = [];
-              String path = await FileManger.openCamera();
-              if (path == FileManger.NO_SELECTED) {
-                Commons.toastMessage(context, path);
-              } else {
-                //widget.callback!(path);
-                addImageFile(path);
-              }
+              // files = [];
+              // String path = await FileManger.openCamera();
+              // if (path == FileManger.NO_SELECTED) {
+              //   Commons.toastMessage(context, path);
+              // } else {
+              //   //widget.callback!(path);
+              //   addImageFile(path);
+              // }
             },
           ),
           const SizedBox(height: 12),

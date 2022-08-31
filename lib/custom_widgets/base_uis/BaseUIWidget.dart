@@ -28,7 +28,7 @@ class BaseUIWidget extends StatelessWidget {
                 header == null ? Container() : header!,
                 Container(
                   height: 8,
-                  color: Colors.white,
+                  //color: Colors.white,
                 ),
                 Expanded(
                   child: SingleChildScrollView(

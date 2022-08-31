@@ -27,7 +27,7 @@ class BackButtonWidget extends StatelessWidget {
             width: 36,
             //padding: EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.white,
+              //color: Colors.white,
               border: Border.all(
                 color: CustomColors.primarycolor1.withOpacity(0.35),
               ),

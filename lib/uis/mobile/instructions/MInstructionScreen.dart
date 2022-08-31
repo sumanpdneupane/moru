@@ -46,13 +46,13 @@ class MInstructionScreen extends StatelessWidget {
             backgroundColor: CustomColors.primarycolor,
             textColor: Colors.white,
             onTap: () async {
-              files = [];
-              String path = await FileManger.openCamera();
-              if (path == FileManger.NO_SELECTED) {
-                Commons.toastMessage(context, path);
-              } else {
-                files.add(File(path));
-              }
+              // files = [];
+              // String path = await FileManger.openCamera();
+              // if (path == FileManger.NO_SELECTED) {
+              //   Commons.toastMessage(context, path);
+              // } else {
+              //   files.add(File(path));
+              // }
 
               Routes.pushNamed(context, Routes.UPLOAD_IMAGE_PAGE);
             },
