@@ -1,120 +1,69 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:moru/Routes.dart';
+import 'package:moru/custom_widgets/ButtonWidget.dart';
 import 'package:moru/utils/CustomColors.dart';
 
 class ResubmitPhotosDialog {
   ResubmitPhotosDialog({required BuildContext context}) {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) {
+        var width = MediaQuery.of(context).size.width;
+
         return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Icon(Icons.close),
-                  SizedBox(
-                    width: 10,
-                  ),
-                ],
-              ),
-              Text("Please resubmit your photos"),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                height: 290,
-                width: MediaQuery.of(context).size.width * 0.5,
-                child: DottedBorder(
-                  color: Colors.black,
-                  strokeWidth: 0.5,
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.upload),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Text("Select a photo or drag and drop here"),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          "JPG, PNG or PDF, file size no more than 10MB",
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Container(
-                          height: 36,
-                          width: 100,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border:
-                                  Border.all(color: CustomColors.primarycolor)),
-                          child: Center(child: Text("Select Photo")),
-                        ),
-                      ],
+          backgroundColor: Color(0x0000ffff),
+          child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                //SizedBox(height: 64),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Routes.pop(context);
+                      },
+                      child: SvgPicture.asset(
+                        'assets/icons/cross.svg',
+                        width: 38,
+                        height: 38,
+                        color: Colors.white,
+                      ),
                     ),
+                  ],
+                ),
+                SizedBox(height: 24),
+                Container(
+                  height: 450,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/card4.png'),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.circular(20),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  InkWell(
-                    onTap: (() => Navigator.pop(context)),
-                    child: Container(
-                      height: 50,
-                      width: 100,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: CustomColors.primarycolor,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: Text("Cancel"),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  InkWell(
-                    onTap: (() => Navigator.pop(context)),
-                    child: Container(
-                      margin: EdgeInsets.only(right: 20),
-                      height: 50,
-                      width: 100,
-                      decoration: BoxDecoration(
-                        color: CustomColors.primarycolor,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Upload",
-                          style: GoogleFonts.syne(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                SizedBox(height: 38),
+                ButtonWidget(
+                  name: "Resubmit",
+                  height: 50,
+                  width: width * 0.87,
+                  fontSize: 15,
+                  backgroundColor: CustomColors.primarycolor,
+                  textColor: Colors.white,
+                  prefixIconPath: "assets/icons/reload.png",
+                  onTap: () {
+                    Routes.pop(context);
+                  },
+                ),
+              ],
+            ),
           ),
         );
       },

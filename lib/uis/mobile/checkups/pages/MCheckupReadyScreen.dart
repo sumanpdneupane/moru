@@ -9,6 +9,7 @@ import 'package:moru/custom_widgets/ButtonWidget.dart';
 import 'package:moru/custom_widgets/FooterWidget.dart';
 import 'package:moru/custom_widgets/back_button/BackButtonWidget.dart';
 import 'package:moru/uis/mobile/MMainScreen.dart';
+import 'package:moru/uis/mobile/checkups/dialog/ResubmitPhotosDialog.dart';
 import 'package:moru/uis/mobile/checkups/widgets/CheckupActionWidget.dart';
 import 'package:moru/uis/mobile/checkups/widgets/CheckupStyleWidget.dart';
 import 'package:moru/utils/CustomColors.dart';
@@ -144,20 +145,25 @@ class CheckUp2Body extends StatelessWidget {
                   ),
                 ),
                 !photos[index].isVerified
-                    ? Container(
-                        height: size,
-                        width: size,
-                        margin: EdgeInsets.only(right: 8),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: CustomColors.darkred.withOpacity(0.45),
-                        ),
-                        child: Center(
-                          child: Image.asset(
-                            "assets/icons/alert.png",
-                            height: 32,
-                            width: 32,
-                            color: Colors.white,
+                    ? GestureDetector(
+                        onTap: () {
+                          ResubmitPhotosDialog(context: context);
+                        },
+                        child: Container(
+                          height: size,
+                          width: size,
+                          margin: EdgeInsets.only(right: 8),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: CustomColors.darkred.withOpacity(0.45),
+                          ),
+                          child: Center(
+                            child: Image.asset(
+                              "assets/icons/alert.png",
+                              height: 32,
+                              width: 32,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       )
