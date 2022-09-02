@@ -1,0 +1,20 @@
+key store path: E:\0. Personal\Projects\moru\android\app\key.jks
+key store password: moru123
+key alias: key0
+key password: moru123
+
+
+
+//SHA key generation
+1. GOTO C:\Program Files\Java\jdk-16\bin and open cmd in bin directory
+2. PASTE this command in cmd: keytool -list -v -keystore "E:\0. Personal\Projects\moru\android\app\key.jks" -alias "key0"
+3. Provide password: moru123
+4. Certificate fingerprints:
+         SHA1: 11:0F:A7:44:97:2F:0F:B1:6E:76:D3:5B:1D:03:05:0C:CE:1A:3C:C3
+         SHA256: 31:9E:0E:48:4C:C2:AA:16:AE:49:1D:14:34:09:23:17:B7:D8:35:10:88:CF:52:DB:0E:D8:4C:B7:6E:86:DA:A9
+
+
+5. keytool -list -v -keystore C:\Users\cpl\.android\debug.keystore -alias androiddebugkey -storepass android -keypass android
+6. Certificate fingerprints:
+        SHA1: B0:12:A2:21:59:58:00:85:BD:E3:10:54:DE:A2:1A:D8:F6:8E:EF:3E
+        SHA256: 64:2F:4B:9D:12:68:34:E2:B4:D9:0E:70:6F:92:36:BF:4B:34:92:89:8C:1C:C8:3C:D5:CF:E9:E8:26:42:BA:58

@@ -6,11 +6,13 @@ class MyInputField extends StatelessWidget {
   String heading;
   double width;
   Widget? suffixicon;
+  TextEditingController? controller;
 
   MyInputField({
     Key? key,
     required this.heading,
     required this.width,
+    required this.controller,
     this.suffixicon,
   }) : super(key: key);
 
@@ -37,6 +39,7 @@ class MyInputField extends StatelessWidget {
               width: width,
               child: SizedBox(
                 child: TextFormField(
+                  controller: controller,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     suffixIcon: suffixicon,

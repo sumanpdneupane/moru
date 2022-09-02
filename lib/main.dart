@@ -1,12 +1,26 @@
+import 'dart:async';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:moru/Routes.dart';
 import 'package:moru/utils/Constants.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Locales.init(['en', 'ar']);
-  runApp(const MyApp());
+  //runApp(const MyApp());
+  runZonedGuarded<Future<void>>(
+    () async {
+      WidgetsFlutterBinding.ensureInitialized();
+      await Locales.init(['en', 'ar']);
+      await Firebase.initializeApp();
+      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+
+      runApp(MyApp());
+    },
+    (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -15,6 +29,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //Check which route mobile or website
+    EasyLoading.instance
+      ..displayDuration = const Duration(milliseconds: 2000)
+      ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+      ..loadingStyle = EasyLoadingStyle.dark
+      ..indicatorSize = 45.0
+      ..radius = 10.0
+      ..progressColor = Colors.yellow
+      ..backgroundColor = Colors.green
+      ..indicatorColor = Colors.yellow
+      ..textColor = Colors.yellow
+      ..maskColor = Colors.blue.withOpacity(0.5)
+      ..userInteractions = false
+      ..dismissOnTap = false;
 
     return LocaleBuilder(builder: (locale) {
       return MaterialApp(
@@ -29,6 +56,7 @@ class MyApp extends StatelessWidget {
         onGenerateRoute: Routes.generateRoutes,
         initialRoute: Routes.initialRoute(),
         navigatorKey: Constants.navigatorKey,
+        builder: EasyLoading.init(),
       );
     });
   }

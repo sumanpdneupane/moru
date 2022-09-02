@@ -97,6 +97,6 @@ class Routes {
   }
 
   static String initialRoute() {
-    return Routes.LOGIN_PAGE;
+    return Routes.SPLASH_PAGE;
   }
 }

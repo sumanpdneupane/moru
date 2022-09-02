@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class Commons {
@@ -40,5 +41,11 @@ class Commons {
         backgroundColor: backgroundColor,
       ),
     );
+  }
+
+  static void consoleLog(Object? str) {
+    if (kDebugMode) {
+      print(str);
+    }
   }
 }

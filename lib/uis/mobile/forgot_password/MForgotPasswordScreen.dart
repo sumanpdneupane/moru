@@ -51,6 +51,7 @@ class _MForgotPasswordScreenState extends State<MForgotPasswordScreen> {
               ),
               MyInputField(
                 heading: "Email",
+                controller: TextEditingController(),
                 width: width,
               ),
             ],

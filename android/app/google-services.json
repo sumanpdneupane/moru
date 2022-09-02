@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "524010047131",
+    "firebase_url": "https://web-rtc-6f95e.firebaseio.com",
+    "project_id": "web-rtc-6f95e",
+    "storage_bucket": "web-rtc-6f95e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:524010047131:android:d57c66b29347889495683e",
+        "android_client_info": {
+          "package_name": "com.moru.moru"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "524010047131-3o70vbgs1v5r032ulekqqnpfld6hp5dc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.moru.moru",
+            "certificate_hash": "110fa744972f0fb16e76d35b1d03050cce1a3cc3"
+          }
+        },
+        {
+          "client_id": "524010047131-sbbbhfqe8rgh5irgkrptqct2h31q065o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.moru.moru",
+            "certificate_hash": "b012a22159580085bde31054dea21ad8f68eef3e"
+          }
+        },
+        {
+          "client_id": "524010047131-lt0dmlh7sbbta5vfet4d9hrq0v6n24rr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvl20kZyar_AW5-fgo-QDlML4mDXp_mHA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "524010047131-lt0dmlh7sbbta5vfet4d9hrq0v6n24rr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

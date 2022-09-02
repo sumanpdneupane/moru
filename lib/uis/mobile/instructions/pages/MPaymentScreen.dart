@@ -239,11 +239,13 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
               const SizedBox(height: 20),
               MyInputField(
                 width: width,
+                controller: TextEditingController(),
                 heading: 'Card Number',
               ),
               const SizedBox(height: 20),
               MyInputField(
                 width: width,
+                controller: TextEditingController(),
                 heading: 'Card Holder',
               ),
               const SizedBox(height: 20),
@@ -253,6 +255,7 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
                   Expanded(
                     child: MyInputField(
                       width: width,
+                      controller: TextEditingController(),
                       heading: 'Expiration Date',
                     ),
                   ),
@@ -260,6 +263,7 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
                   Expanded(
                     child: MyInputField(
                       width: width,
+                      controller: TextEditingController(),
                       heading: 'CVV',
                     ),
                   ),
