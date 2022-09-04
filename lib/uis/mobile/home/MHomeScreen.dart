@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:moru/custom_widgets/ButtonWidget.dart';
 import 'package:moru/custom_widgets/base_uis/BaseUIWidget.dart';
+import 'package:moru/model/UserModel.dart';
 import 'package:moru/uis/mobile/MMainScreen.dart';
 import 'package:moru/uis/mobile/checkups/widgets/CheckupStyleWidget.dart';
 import 'package:moru/uis/mobile/home/widgets/CheckupWidget.dart';
@@ -11,6 +13,7 @@ import 'package:moru/uis/mobile/home/widgets/UpcomingCheckupWidget.dart';
 import 'package:moru/uis/mobile/home/widgets/WelcomeWidget.dart';
 import 'package:moru/utils/CustomColors.dart';
 import 'package:moru/utils/MoruIcons.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class MHomeScreen extends StatefulWidget {
@@ -50,8 +53,6 @@ class HomePgeBody extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // SizedBox(height: 4),
-          // WelcomeWidget(),
           SizedBox(height: 32),
           HowItWorkWidget(),
           Visibility(

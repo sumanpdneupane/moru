@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moru/Routes.dart';
 import 'package:moru/custom_widgets/grids/MyGrid.dart';
+import 'package:moru/utils/Commons.dart';
 import 'package:moru/utils/CustomColors.dart';
 import 'package:moru/utils/MoruIcons.dart';
 
@@ -43,14 +44,16 @@ class CheckupWidget extends StatelessWidget {
                   color: CustomColors.primarycolor,
                 ),
               ),
-              // Visibility(
-              //   visible: false,
-              //   child: MyGrid(
-              //     icon: Moru.teeth_calen,
-              //     text: 'video_consultation',
-              //     color: CustomColors.yellow,
-              //   ),
-              // ),
+              GestureDetector(
+                onTap: () {
+                  Commons.toastMessage(context, "Comming Soon.");
+                },
+                child: MyGrid(
+                  icon: Moru.teeth_calen,
+                  text: 'video_consultation',
+                  color: CustomColors.yellow,
+                ),
+              ),
               // Visibility(
               //   visible: false,
               //   child: MyGrid(

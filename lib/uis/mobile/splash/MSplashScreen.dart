@@ -5,6 +5,7 @@ import 'package:moru/model/UserModel.dart';
 import 'package:moru/services/Repository.dart';
 import 'package:moru/utils/Commons.dart';
 import 'package:moru/utils/CustomColors.dart';
+import 'package:provider/provider.dart';
 
 class MSplashScreen extends StatefulWidget {
   const MSplashScreen({Key? key}) : super(key: key);
@@ -20,6 +21,7 @@ class _MSplashScreenState extends State<MSplashScreen> {
     UserModel? userModel =
         await repository.users.getCurrentUserInfo(userId: uid);
     if (userModel != null) {
+      Provider.of<UserViewModel>(context, listen: false).update(userModel);
       return true;
     } else {
       return false;

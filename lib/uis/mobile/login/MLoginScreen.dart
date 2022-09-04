@@ -11,6 +11,7 @@ import 'package:moru/utils/Commons.dart';
 import 'package:moru/utils/CustomColors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class MLoginScreen extends StatefulWidget {
   const MLoginScreen({Key? key}) : super(key: key);
@@ -29,6 +30,7 @@ class _MLoginScreenState extends State<MLoginScreen> {
     UserModel? userModel =
         await repository.users.getCurrentUserInfo(userId: uid);
     if (userModel != null) {
+      Provider.of<UserViewModel>(context, listen: false).update(userModel);
       Routes.popAndPushNamed(context, Routes.HOME_PAGE);
       Commons.toastMessage(context, "Login successully");
       return true;

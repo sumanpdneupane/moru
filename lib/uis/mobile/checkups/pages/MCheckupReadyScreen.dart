@@ -483,27 +483,53 @@ class CheckUp2Body extends StatelessWidget {
               color: Colors.black,
             ),
           ),
-          FlutterSlider(
-            values: [40],
-            max: 100,
-            min: 0,
-            disabled: false,
-            trackBar: FlutterSliderTrackBar(
-              activeTrackBar: BoxDecoration(
-                //gradient:,
-                color: Colors.orange,
-                borderRadius: BorderRadius.circular(5),
+          SizedBox(height: 24),
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                width: width,
+                height: 4.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(2),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Colors.blue,
+                      Colors.green,
+                      Colors.yellow,
+                      Colors.orange,
+                      Colors.red,
+                    ],
+                  ),
+                ),
               ),
-              activeTrackBarHeight: 6,
-              inactiveTrackBar: BoxDecoration(
-                //gradient:,
-                color: Colors.orange,
-                borderRadius: BorderRadius.circular(5),
-              ),
-              inactiveTrackBarHeight: 6,
-            ),
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      offset: Offset(0.0, 1.0), //(x,y)
+                      blurRadius: 6.0,
+                    ),
+                  ],
+                ),
+                child: Container(
+                  width: 12.0,
+                  height: 12.0,
+                  margin: EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color:CustomColors.primarycolor,
+                  ),
+                ),
+              )
+            ],
           ),
-          SizedBox(height: 16),
+          SizedBox(height: 24),
           Text(
             "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
             style: GoogleFonts.syne(

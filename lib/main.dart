@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:moru/Routes.dart';
+import 'package:moru/model/UserModel.dart';
 import 'package:moru/utils/Constants.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
   //runApp(const MyApp());
@@ -44,19 +46,24 @@ class MyApp extends StatelessWidget {
       ..dismissOnTap = false;
 
     return LocaleBuilder(builder: (locale) {
-      return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        localizationsDelegates: Locales.delegates,
-        supportedLocales: Locales.supportedLocales,
-        locale: locale,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+      return MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(value: UserViewModel()),
+        ],
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Flutter Demo',
+          localizationsDelegates: Locales.delegates,
+          supportedLocales: Locales.supportedLocales,
+          locale: locale,
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          onGenerateRoute: Routes.generateRoutes,
+          initialRoute: Routes.initialRoute(),
+          navigatorKey: Constants.navigatorKey,
+          builder: EasyLoading.init(),
         ),
-        onGenerateRoute: Routes.generateRoutes,
-        initialRoute: Routes.initialRoute(),
-        navigatorKey: Constants.navigatorKey,
-        builder: EasyLoading.init(),
       );
     });
   }
