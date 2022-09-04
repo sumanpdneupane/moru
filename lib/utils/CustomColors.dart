@@ -12,4 +12,6 @@ class CustomColors {
   static const darkred = Color(0xffB22727);
   static const inputfillColor = Color(0xff6B779A);
   static const greyLight = Color(0xffF1F4F7);
+  static const black = Color(0xff000000);
+  static const white = Color(0xffffffff);
 }

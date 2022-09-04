@@ -22,6 +22,7 @@ class FileManger {
 
   static Future<String?> openFileSystem({
     FileType? fileType,
+    required bool allowExtensions,
     List<String>? allowedExtensions,
   }) async {
     if (fileType == null) {
@@ -31,11 +32,18 @@ class FileManger {
     if (allowedExtensions == null || allowedExtensions.length < 1) {
       allowedExtensions = ['jpg', 'png', 'pdf', 'doc'];
     }
-
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: fileType,
-      allowedExtensions: allowedExtensions,
-    );
+    FilePickerResult? result;
+    if (allowExtensions) {
+      result = await FilePicker.platform.pickFiles(
+        type: fileType,
+        allowedExtensions: allowedExtensions,
+      );
+    } else {
+      result = await FilePicker.platform.pickFiles(
+        type: fileType,
+        allowedExtensions: ['jpg', 'png'],
+      );
+    }
 
     if (result == null) {
       return NO_SELECTED;

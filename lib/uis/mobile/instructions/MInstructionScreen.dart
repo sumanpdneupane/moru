@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:flutter_locales/flutter_locales.dart';
@@ -9,6 +10,7 @@ import 'package:moru/custom_widgets/ButtonWidget.dart';
 import 'package:moru/custom_widgets/FooterWidget.dart';
 import 'package:moru/custom_widgets/back_button/BackButtonWidget.dart';
 import 'package:moru/custom_widgets/base_uis/BaseUIWidget.dart';
+import 'package:moru/custom_widgets/dialogs/OpenCameraFileBottomDialog.dart';
 import 'package:moru/libraries/FileManger.dart';
 import 'package:moru/uis/mobile/instructions/pages/MUploadImageScreen.dart';
 import 'package:moru/utils/Commons.dart';
@@ -17,6 +19,23 @@ import 'package:moru/utils/MoruIcons.dart';
 
 class MInstructionScreen extends StatelessWidget {
   const MInstructionScreen({Key? key}) : super(key: key);
+
+  Future openCameraOrGallery(BuildContext context) async {
+    files = [];
+    OpenCameraFileBottomDialog(
+      context: context,
+      fileType: FileType.image,
+      allowExtensions: false,
+      callback: (String path) {
+        if (path == FileManger.NO_SELECTED) {
+          Commons.toastMessage(context, path);
+        } else {
+          files.add(File(path));
+          Routes.pushNamed(context, Routes.UPLOAD_IMAGE_PAGE);
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +65,7 @@ class MInstructionScreen extends StatelessWidget {
             backgroundColor: CustomColors.primarycolor,
             textColor: Colors.white,
             onTap: () async {
+              await openCameraOrGallery(context);
               // files = [];
               // String path = await FileManger.openCamera();
               // if (path == FileManger.NO_SELECTED) {
@@ -53,8 +73,8 @@ class MInstructionScreen extends StatelessWidget {
               // } else {
               //   files.add(File(path));
               // }
-
-              Routes.pushNamed(context, Routes.UPLOAD_IMAGE_PAGE);
+              //
+              // Routes.pushNamed(context, Routes.UPLOAD_IMAGE_PAGE);
             },
           ),
           const SizedBox(height: 24),
@@ -201,7 +221,7 @@ class InnerBody extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       '1. ',
@@ -210,11 +230,13 @@ class InnerBody extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    LocaleText(
-                      'take_pic_of_teeth',
-                      style: GoogleFonts.syne(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
+                    Expanded(
+                      child: LocaleText(
+                        'take_pic_of_teeth',
+                        style: GoogleFonts.syne(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ],
@@ -223,7 +245,7 @@ class InnerBody extends StatelessWidget {
                   height: 10,
                 ),
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       '2. ',
@@ -232,11 +254,13 @@ class InnerBody extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    LocaleText(
-                      'tell_the_dentist_why_you_want_a_consultation',
-                      style: GoogleFonts.syne(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
+                    Expanded(
+                      child: LocaleText(
+                        'tell_the_dentist_why_you_want_a_consultation',
+                        style: GoogleFonts.syne(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ],
@@ -245,7 +269,7 @@ class InnerBody extends StatelessWidget {
                   height: 10,
                 ),
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       '3. ',
@@ -254,12 +278,14 @@ class InnerBody extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    LocaleText(
-                      'provide_payment_details_at_checkout',
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.syne(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
+                    Expanded(
+                      child: LocaleText(
+                        'provide_payment_details_at_checkout',
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.syne(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ],

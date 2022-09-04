@@ -12,17 +12,22 @@ import 'package:provider/provider.dart';
 
 Future<void> main() async {
   //runApp(const MyApp());
-  runZonedGuarded<Future<void>>(
-    () async {
-      WidgetsFlutterBinding.ensureInitialized();
-      await Locales.init(['en', 'ar']);
-      await Firebase.initializeApp();
-      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+  // runZonedGuarded<Future<void>>(
+  //   () async {
+  //     WidgetsFlutterBinding.ensureInitialized();
+  //     await Locales.init(['en', 'ar']);
+  //     await Firebase.initializeApp();
+  //     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+  //
+  //     runApp(MyApp());
+  //   },
+  //   (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack),
+  // );
 
-      runApp(MyApp());
-    },
-    (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack),
-  );
+  WidgetsFlutterBinding.ensureInitialized();
+  await Locales.init(['en', 'ar']);
+  await Firebase.initializeApp();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

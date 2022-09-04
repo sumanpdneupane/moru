@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dotted_border/dotted_border.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moru/Routes.dart';
@@ -9,6 +10,7 @@ import 'package:moru/custom_widgets/FooterWidget.dart';
 import 'package:moru/custom_widgets/MyButton.dart';
 import 'package:moru/custom_widgets/back_button/BackButtonWidget.dart';
 import 'package:moru/custom_widgets/base_uis/BaseUIWidget.dart';
+import 'package:moru/custom_widgets/dialogs/OpenCameraFileBottomDialog.dart';
 import 'package:moru/libraries/FileManger.dart';
 import 'package:moru/uis/mobile/instructions/MInstructionScreen.dart';
 import 'package:moru/utils/Commons.dart';
@@ -24,14 +26,24 @@ class MUploadImageScreen extends StatefulWidget {
 }
 
 class _MUploadImageScreenState extends State<MUploadImageScreen> {
-
+  Future openCameraOrGallery(BuildContext context) async {
+    OpenCameraFileBottomDialog(
+      context: context,
+      fileType: FileType.image,
+      allowExtensions: false,
+      callback: (String path) {
+        if (path == FileManger.NO_SELECTED) {
+          Commons.toastMessage(context, path);
+        } else {
+          addImageFile(path);
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    var width = MediaQuery.of(context).size.width;
 
     return BaseUIWidget(
       header: Container(
@@ -49,25 +61,25 @@ class _MUploadImageScreenState extends State<MUploadImageScreen> {
       ),
       bottomSheet: FooterWidget(
         children: [
-          const SizedBox(height: 12),
-          ButtonWidget(
-            name: "Take next photo",
-            height: 50,
-            width: width * 0.87,
-            fontSize: 15,
-            backgroundColor: CustomColors.primarycolor,
-            textColor: Colors.white,
-            onTap: () async {
-              // files = [];
-              // String path = await FileManger.openCamera();
-              // if (path == FileManger.NO_SELECTED) {
-              //   Commons.toastMessage(context, path);
-              // } else {
-              //   //widget.callback!(path);
-              //   addImageFile(path);
-              // }
-            },
-          ),
+          // const SizedBox(height: 12),
+          // ButtonWidget(
+          //   name: "Take next photo",
+          //   height: 50,
+          //   width: width * 0.87,
+          //   fontSize: 15,
+          //   backgroundColor: CustomColors.primarycolor,
+          //   textColor: Colors.white,
+          //   onTap: () async {
+          //     // files = [];
+          //     // String path = await FileManger.openCamera();
+          //     // if (path == FileManger.NO_SELECTED) {
+          //     //   Commons.toastMessage(context, path);
+          //     // } else {
+          //     //   //widget.callback!(path);
+          //     //   addImageFile(path);
+          //     // }
+          //   },
+          // ),
           const SizedBox(height: 12),
           ButtonWidget(
             name: "Next",
@@ -87,26 +99,25 @@ class _MUploadImageScreenState extends State<MUploadImageScreen> {
   }
 
   Align innerBody(BuildContext context) {
-    var width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    var width = MediaQuery.of(context).size.width;
 
     return Align(
       alignment: Alignment.center,
       child: Container(
         //height: 300,
-          child: files.length > 0 ? imageView(files[0], 450) : Container(
-            height: 450,
-            //width: width * 0.7,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/card4.png'),
-                fit: BoxFit.contain,
+        child: files.length > 0
+            ? imageView(files[0], 450)
+            : Container(
+                height: 450,
+                //width: width * 0.7,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/card4.png'),
+                    fit: BoxFit.contain,
+                  ),
+                  //borderRadius: BorderRadius.circular(20),
+                ),
               ),
-              //borderRadius: BorderRadius.circular(20),
-            ),
-          ),
       ),
     );
   }
@@ -139,6 +150,3 @@ class _MUploadImageScreenState extends State<MUploadImageScreen> {
     });
   }
 }
-
-
-
