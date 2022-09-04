@@ -96,6 +96,10 @@ class Routes {
     Navigator.of(context).pop();
   }
 
+  static popUntil(context) {
+    Navigator.of(context).popUntil((route) => false);
+  }
+
   static String initialRoute() {
     return Routes.SPLASH_PAGE;
   }

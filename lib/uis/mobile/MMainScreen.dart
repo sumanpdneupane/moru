@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:moru/Routes.dart';
+import 'package:moru/services/Repository.dart';
 import 'package:moru/uis/mobile/home/MHomeScreen.dart';
 import 'package:moru/utils/CustomColors.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -12,6 +14,7 @@ class MMainScreen extends StatefulWidget {
   int selectedIndex;
   Widget child;
   Widget? bottomSheet;
+  Repository repository = Repository();
 
   List<Widget> screens = [
     MHomeScreen(),
@@ -53,42 +56,51 @@ class _MMainScreenState extends State<MMainScreen> {
   Widget build(BuildContext context) {
     return ResponsiveBuilder(
       builder: (context, SizingInformation) {
-       return Scaffold(
+        return Scaffold(
           body: widget.screens[widget.selectedIndex],
-         bottomNavigationBar: BottomNavigationBar(
-           unselectedFontSize: 0,
-           type: BottomNavigationBarType.fixed,
-           currentIndex: widget.selectedIndex,
-           onTap: (value) {
-             print("BottomNavigationBar::value--------> ${value}");
-             onindexchange(value);
-           },
-           items: [
-             BottomNavigationBarItem(
-               icon: SvgPicture.asset(
-                 'assets/icons/home.svg',
-                 color: bottomNavigationColor(widget.selectedIndex, 0),
-               ),
-               label: '',
-             ),
-             BottomNavigationBarItem(
-               icon: SvgPicture.asset(
-                 'assets/icons/tooth.svg',
-                 width: 20,
-                 color: bottomNavigationColor(widget.selectedIndex, 1),
-               ),
-               label: '',
-             ),
-             BottomNavigationBarItem(
-               icon: SvgPicture.asset(
-                 'assets/icons/call.svg',
-                 color: bottomNavigationColor(widget.selectedIndex, 2),
-               ),
-               label: '',
-             ),
-           ],
-         ),
-       );
+          bottomNavigationBar: BottomNavigationBar(
+            unselectedFontSize: 0,
+            type: BottomNavigationBarType.fixed,
+            currentIndex: widget.selectedIndex,
+            onTap: (value) {
+              print("BottomNavigationBar::value--------> ${value}");
+              onindexchange(value);
+            },
+            items: [
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  'assets/icons/home.svg',
+                  color: bottomNavigationColor(widget.selectedIndex, 0),
+                ),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  'assets/icons/tooth.svg',
+                  width: 20,
+                  color: bottomNavigationColor(widget.selectedIndex, 1),
+                ),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  'assets/icons/call.svg',
+                  color: bottomNavigationColor(widget.selectedIndex, 2),
+                ),
+                label: '',
+              ),
+            ],
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () async {
+              await widget.repository.authentication.signOut();
+              Routes.popAndPushNamed(context, Routes.SPLASH_PAGE);
+            },
+            child: Icon(
+              Icons.output_outlined,
+            ),
+          ),
+        );
 
         // return Scaffold(
         //   body: SafeArea(
