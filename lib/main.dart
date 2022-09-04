@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -29,21 +30,26 @@ Future<void> main() async {
   // await Firebase.initializeApp(
   //   options:
   // );
-  await Firebase.initializeApp(
-    options: FirebaseOptions(
-        // apiKey: "AIzaSyBoIq1GbM-DMiWVZdC9LKxEmtW43htkaF0",
-        // appId: "1:524010047131:web:cd294471a31292b995683e",
-        // messagingSenderId: "524010047131",
-        // projectId: "web-rtc-6f95e",
-        apiKey: "AIzaSyBoIq1GbM-DMiWVZdC9LKxEmtW43htkaF0",
-        authDomain: "web-rtc-6f95e.firebaseapp.com",
-        databaseURL: "https://web-rtc-6f95e.firebaseio.com",
-        projectId: "web-rtc-6f95e",
-        storageBucket: "web-rtc-6f95e.appspot.com",
-        messagingSenderId: "524010047131",
-        appId: "1:524010047131:web:cd294471a31292b995683e",
-        measurementId: "G-6S9E7LTG34"),
-  );
+  if (Platform.isAndroid || Platform.isIOS) {
+    await Firebase.initializeApp();
+  } else {
+    await Firebase.initializeApp(
+      options: FirebaseOptions(
+          // apiKey: "AIzaSyBoIq1GbM-DMiWVZdC9LKxEmtW43htkaF0",
+          // appId: "1:524010047131:web:cd294471a31292b995683e",
+          // messagingSenderId: "524010047131",
+          // projectId: "web-rtc-6f95e",
+          apiKey: "AIzaSyBoIq1GbM-DMiWVZdC9LKxEmtW43htkaF0",
+          authDomain: "web-rtc-6f95e.firebaseapp.com",
+          databaseURL: "https://web-rtc-6f95e.firebaseio.com",
+          projectId: "web-rtc-6f95e",
+          storageBucket: "web-rtc-6f95e.appspot.com",
+          messagingSenderId: "524010047131",
+          appId: "1:524010047131:web:cd294471a31292b995683e",
+          measurementId: "G-6S9E7LTG34"),
+    );
+  }
+
   runApp(MyApp());
 }
 

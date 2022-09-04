@@ -10,7 +10,7 @@ class FileManger {
 
   static Future<String> openCamera() async {
     final picker = ImagePicker();
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
     // used getImage() instead of deprecated pickImage
 
     if (pickedFile == null) {

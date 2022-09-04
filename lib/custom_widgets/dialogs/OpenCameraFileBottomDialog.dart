@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -185,11 +187,16 @@ class _OpenDialogState extends State<_OpenDialog> {
               backgroundColor: CustomColors.greyLight,
               onTab: () async {
                 Navigator.pop(context);
-                String? path = await FileManger.openFileSystem(
-                  fileType: widget.fileType,
-                  allowedExtensions: widget.allowedExtensions,
-                  allowExtensions: widget.allowExtensions ?? false,
-                );
+                String? path;
+                if (Platform.isAndroid || Platform.isIOS) {
+                  path = await FileManger.openFileSystem(
+                    fileType: widget.fileType,
+                    allowedExtensions: widget.allowedExtensions,
+                    allowExtensions: widget.allowExtensions ?? false,
+                  );
+                } else {
+                  path = await FileManger.openCamera();
+                }
                 if (path == FileManger.NO_SELECTED) {
                   Commons.toastMessage(context, path!);
                 } else {
