@@ -96,8 +96,10 @@ class _MMainScreenState extends State<MMainScreen> {
               await widget.repository.authentication.signOut();
               Routes.popAndPushNamed(context, Routes.SPLASH_PAGE);
             },
+            backgroundColor: CustomColors.primarycolor,
             child: Icon(
               Icons.output_outlined,
+              color: CustomColors.white,
             ),
           ),
         );
