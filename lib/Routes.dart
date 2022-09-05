@@ -61,8 +61,8 @@ class Routes {
         return _MaterialPageRoute(MPaymentScreen());
       case APPOINMENT_DONE_PAGE:
         return _MaterialPageRoute(MAppoinmentDoneScreen());
-      case WEB_CAMERA_PAGE:
-        return _MaterialPageRoute(WebImageCapturePage());
+      // case WEB_CAMERA_PAGE:
+      //   return _MaterialPageRoute(WebImageCapturePage());
       default:
         MSplashScreen();
     }
