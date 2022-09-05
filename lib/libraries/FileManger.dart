@@ -209,14 +209,14 @@ class _ImageViewerState extends State<_ImageViewer> {
           ? Image.file(
               widget.file,
               fit: widget.fit,
-              width: widget.height,
-              height: widget.width,
+              width: widget.width,
+              height: widget.height,
             )
           : Image.network(
               widget.file.path,
               fit: widget.fit,
-              width: widget.height,
-              height: widget.width,
+              width: widget.width,
+              height: widget.height,
             ),
     );
   }

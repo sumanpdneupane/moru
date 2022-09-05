@@ -187,7 +187,7 @@ class LoadImageGridViewWidget extends StatelessWidget {
     );
   }
 
-  Widget imageView(File file, height) {
+  Widget imageView(File file, height, context) {
     return Container(
       padding: EdgeInsets.all(6),
       child: ClipRRect(
@@ -195,7 +195,7 @@ class LoadImageGridViewWidget extends StatelessWidget {
         child: FileManger.loadImageFile(
           file: file,
           height: height,
-          width: height,
+          width: MediaQuery.of(context).size.width,
         ),
       ),
     );
@@ -243,7 +243,7 @@ class LoadImageGridViewWidget extends StatelessWidget {
             //fit: StackFit.expand,
             children: [
               imageBackground(height),
-              imageView(photoModels[index].file!, height),
+              imageView(photoModels[index].file!, height, context),
               removeImageView(index)
             ],
           );

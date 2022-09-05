@@ -12,6 +12,9 @@ import 'package:moru/uis/mobile/instructions/pages/MAppoinmentDoneScreen.dart';
 import 'package:moru/uis/mobile/instructions/pages/MPaymentScreen.dart';
 import 'package:moru/uis/mobile/instructions/pages/MQuestionnarie1Screen.dart';
 import 'package:moru/uis/mobile/instructions/pages/MQuestionnarie2Screen.dart';
+import 'package:moru/uis/mobile/instructions/pages/MQuestionnarie3Screen.dart';
+import 'package:moru/uis/mobile/instructions/pages/MQuestionnarie4Screen.dart';
+import 'package:moru/uis/mobile/instructions/pages/MQuestionnarie5Screen.dart';
 import 'package:moru/uis/mobile/instructions/pages/MUploadImageScreen.dart';
 import 'package:moru/uis/mobile/login/MLoginScreen.dart';
 import 'package:moru/uis/mobile/signup/MSignupScreen.dart';
@@ -26,8 +29,11 @@ class Routes {
   static const String CHECKUP_READY_PAGE = "MCheckupReadyScreen";
   static const String INSTRUCTION_PAGE = "MInstructionScreen";
   static const String UPLOAD_IMAGE_PAGE = "MUploadImageScreen";
-  static const String QUESTIONNARE_1_PAGE = "MQuestionnarie2Screen";
-  static const String QUESTIONNARE_2_PAGE = "MQuestionnarie1Screen";
+  static const String QUESTIONNARE_1_PAGE = "MQuestionnarie1Screen";
+  static const String QUESTIONNARE_2_PAGE = "MQuestionnarie2Screen";
+  static const String QUESTIONNARE_3_PAGE = "MQuestionnarie3Screen";
+  static const String QUESTIONNARE_4_PAGE = "MQuestionnarie4Screen";
+  static const String QUESTIONNARE_5_PAGE = "MQuestionnarie5Screen";
   static const String PAYMENT_PAGE = "MPaymentScreen";
   static const String APPOINMENT_DONE_PAGE = "MAppoinmentDoneScreen";
   static const String WEB_CAMERA_PAGE = "WebImageCapturePage";
@@ -54,9 +60,15 @@ class Routes {
       case UPLOAD_IMAGE_PAGE:
         return _MaterialPageRoute(MUploadImageScreen());
       case QUESTIONNARE_1_PAGE:
-        return _MaterialPageRoute(MQuestionnarie1Screen());
-      case QUESTIONNARE_2_PAGE:
         return _MaterialPageRoute(MQuestionnarie2Screen());
+      case QUESTIONNARE_2_PAGE:
+        return _MaterialPageRoute(MQuestionnarie1Screen());
+      case QUESTIONNARE_3_PAGE:
+        return _MaterialPageRoute(MQuestionnarie3Screen());
+      case QUESTIONNARE_4_PAGE:
+        return _MaterialPageRoute(MQuestionnarie4Screen());
+      case QUESTIONNARE_5_PAGE:
+        return _MaterialPageRoute(MQuestionnarie5Screen());
       case PAYMENT_PAGE:
         return _MaterialPageRoute(MPaymentScreen());
       case APPOINMENT_DONE_PAGE:
@@ -105,6 +117,6 @@ class Routes {
   }
 
   static String initialRoute() {
-    return Routes.SPLASH_PAGE;
+    return Routes.HOME_PAGE;
   }
 }

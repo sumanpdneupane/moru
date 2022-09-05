@@ -24,6 +24,7 @@ class MQuestionnarie2Screen extends StatefulWidget {
 class _MQuestionnarie2ScreenState extends State<MQuestionnarie2Screen> {
   TextEditingController fullDescriptionController = TextEditingController();
   String question = "Tell us why you would like to get a dental consultation ?";
+  int currentIndex = 1;
 
   saveToStore() {
     if (fullDescriptionController.text.isEmpty) {
@@ -31,16 +32,33 @@ class _MQuestionnarie2ScreenState extends State<MQuestionnarie2Screen> {
     } else {
       var appViewModel = Provider.of<AppViewModel>(context, listen: false);
       var model = appViewModel.getCreateCheckupModel();
-      model.questionaires!.add(
-        QuestionairesModel(
-          question: question,
-          answer: fullDescriptionController.text.trim(),
-        ),
-      );
+      if (model.questionaires!.length == 0) {
+        model.questionaires!.add(
+          QuestionairesModel(
+            question: question,
+            answer: fullDescriptionController.text.trim(),
+          ),
+        );
+      } else {
+        model.questionaires![0].question = question;
+        model.questionaires![0].answer = fullDescriptionController.text.trim();
+      }
+
       appViewModel.updateCreateCheckupModel(model);
 
       Routes.pushNamed(context, Routes.QUESTIONNARE_2_PAGE);
     }
+  }
+
+  @override
+  void initState() {
+    var appViewModel = Provider.of<AppViewModel>(context, listen: false);
+    var model = appViewModel.getCreateCheckupModel();
+    if (currentIndex <= model.questionaires!.length - 1) {
+      fullDescriptionController.text =
+          model.questionaires![currentIndex].answer!;
+    }
+    super.initState();
   }
 
   @override
@@ -88,7 +106,7 @@ class _MQuestionnarie2ScreenState extends State<MQuestionnarie2Screen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'most_important',
+          question,
           style: GoogleFonts.syne(
             fontSize: 17,
             fontWeight: FontWeight.w700,

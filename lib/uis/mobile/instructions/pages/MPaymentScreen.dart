@@ -9,8 +9,11 @@ import 'package:moru/custom_widgets/MyButton.dart';
 import 'package:moru/custom_widgets/MyInputField.dart';
 import 'package:moru/custom_widgets/back_button/BackButtonWidget.dart';
 import 'package:moru/custom_widgets/base_uis/BaseUIWidget.dart';
+import 'package:moru/model/AppViewModel.dart';
 import 'package:moru/uis/mobile/instructions/MInstructionScreen.dart';
+import 'package:moru/utils/Commons.dart';
 import 'package:moru/utils/CustomColors.dart';
+import 'package:provider/provider.dart';
 
 class MPaymentScreen extends StatefulWidget {
   const MPaymentScreen({Key? key}) : super(key: key);
@@ -26,6 +29,17 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
     setState(() {
       selected = index;
     });
+  }
+
+  @override
+  void initState() {
+    var appViewModel = Provider.of<AppViewModel>(context, listen: false);
+    var model = appViewModel.getCreateCheckupModel();
+    model.questionaires?.forEach((element) {
+      Commons.consoleLog("${element.question}----------> ${element.answer}");
+    });
+
+    super.initState();
   }
 
   @override
@@ -130,8 +144,7 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
                       fontSize: 15,
                       backgroundColor: CustomColors.primarycolor,
                       textColor: Colors.white,
-                      onTap: () {
-                      },
+                      onTap: () {},
                     ),
                     // child: MyButton(
                     //   btntxt: 'apply',

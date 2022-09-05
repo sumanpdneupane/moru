@@ -12,18 +12,23 @@ import 'package:moru/uis/mobile/instructions/MInstructionScreen.dart';
 import 'package:moru/utils/CustomColors.dart';
 import 'package:provider/provider.dart';
 
-class MQuestionnarie1Screen extends StatefulWidget {
-  const MQuestionnarie1Screen({Key? key}) : super(key: key);
+class MQuestionnarie4Screen extends StatefulWidget {
+  const MQuestionnarie4Screen({Key? key}) : super(key: key);
 
   @override
-  State<MQuestionnarie1Screen> createState() => _MQuestionnarie1ScreenState();
+  State<MQuestionnarie4Screen> createState() => _MQuestionnarie4ScreenState();
 }
 
-class _MQuestionnarie1ScreenState extends State<MQuestionnarie1Screen> {
-  String question = 'Are you in pain ?';
-  List<String> possibleAnswers = ['Yes, I’m in pain', 'No pain'];
+class _MQuestionnarie4ScreenState extends State<MQuestionnarie4Screen> {
+  String question = 'How would you describe your pain?';
+  List<String> possibleAnswers = [
+    'Burning',
+    'Stabbing',
+    'Tingling',
+    'Aching',
+  ];
   int? groupValue = 0;
-  int currentIndex = 1;
+  int currentIndex = 3;
 
   saveToStore() {
     var appViewModel = Provider.of<AppViewModel>(context, listen: false);
@@ -41,11 +46,7 @@ class _MQuestionnarie1ScreenState extends State<MQuestionnarie1Screen> {
     }
     appViewModel.updateCreateCheckupModel(model);
 
-    if (groupValue == 0) {
-      Routes.pushNamed(context, Routes.QUESTIONNARE_3_PAGE);
-    } else {
-      Routes.pushNamed(context, Routes.PAYMENT_PAGE);
-    }
+    Routes.pushNamed(context, Routes.QUESTIONNARE_5_PAGE);
   }
 
   @override
