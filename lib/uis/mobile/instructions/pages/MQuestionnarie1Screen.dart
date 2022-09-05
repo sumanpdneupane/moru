@@ -6,8 +6,11 @@ import 'package:moru/custom_widgets/ButtonWidget.dart';
 import 'package:moru/custom_widgets/FooterWidget.dart';
 import 'package:moru/custom_widgets/back_button/BackButtonWidget.dart';
 import 'package:moru/custom_widgets/base_uis/BaseUIWidget.dart';
+import 'package:moru/model/AppViewModel.dart';
+import 'package:moru/model/CaseModel.dart';
 import 'package:moru/uis/mobile/instructions/MInstructionScreen.dart';
 import 'package:moru/utils/CustomColors.dart';
+import 'package:provider/provider.dart';
 
 class MQuestionnarie1Screen extends StatefulWidget {
   const MQuestionnarie1Screen({Key? key}) : super(key: key);
@@ -17,7 +20,27 @@ class MQuestionnarie1Screen extends StatefulWidget {
 }
 
 class _MQuestionnarie1ScreenState extends State<MQuestionnarie1Screen> {
-  Object? groupValue = 0;
+  String question = 'Are you in pain ?';
+  List<String> possibleAnswers = ['Yes, I’m in pain', 'No pain'];
+  int? groupValue = 0;
+
+  saveToStore() {
+    if (groupValue == 0) {
+      Routes.pushNamed(context, Routes.PAYMENT_PAGE);
+    } else {
+      var appViewModel = Provider.of<AppViewModel>(context, listen: false);
+      var model = appViewModel.getCreateCheckupModel();
+      model.questionaires!.add(
+        QuestionairesModel(
+          question: question,
+          answer: possibleAnswers[groupValue!],
+        ),
+      );
+      appViewModel.updateCreateCheckupModel(model);
+
+      Routes.pushNamed(context, Routes.QUESTIONNARE_2_PAGE);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +71,7 @@ class _MQuestionnarie1ScreenState extends State<MQuestionnarie1Screen> {
             backgroundColor: CustomColors.primarycolor,
             textColor: Colors.white,
             onTap: () {
-              Routes.pushNamed(context, Routes.QUESTIONNARE_2_PAGE);
+              saveToStore();
             },
           ),
           const SizedBox(height: 24),
@@ -63,28 +86,24 @@ class _MQuestionnarie1ScreenState extends State<MQuestionnarie1Screen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        LocaleText(
-          'most_important',
+        Text(
+          question,
           style: GoogleFonts.syne(
             fontSize: 17,
             fontWeight: FontWeight.w700,
           ),
         ),
         SizedBox(height: 50),
-        Column(
-          children: [
-            radioButton(0, 'sensitive_teeth'),
-            SizedBox(height: 16),
-            radioButton(1, 'weak_or_chipping_teeth'),
-            SizedBox(height: 16),
-            radioButton(2, 'gum_care'),
-            SizedBox(height: 16),
-            radioButton(3, 'decay_and_preventing_holes'),
-            SizedBox(height: 16),
-            radioButton(4, 'whitening'),
-            SizedBox(height: 16),
-            radioButton(5, 'bad_breath'),
-          ],
+        ListView.builder(
+          itemCount: possibleAnswers.length,
+          itemBuilder: (c, i) {
+            return Column(
+              children: [
+                radioButton(i, possibleAnswers[i]),
+                SizedBox(height: 16),
+              ],
+            );
+          },
         ),
       ],
     );
@@ -108,7 +127,7 @@ class _MQuestionnarie1ScreenState extends State<MQuestionnarie1Screen> {
               ),
               value: value,
               groupValue: groupValue,
-              onChanged: ((value) {
+              onChanged: ((int? value) {
                 setState(() {
                   groupValue = value;
                 });
@@ -117,7 +136,7 @@ class _MQuestionnarie1ScreenState extends State<MQuestionnarie1Screen> {
             SizedBox(
               width: 10,
             ),
-            LocaleText(
+            Text(
               text,
               style: GoogleFonts.syne(
                 fontSize: 13,

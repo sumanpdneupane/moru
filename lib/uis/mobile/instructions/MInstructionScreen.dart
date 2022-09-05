@@ -14,25 +14,44 @@ import 'package:moru/custom_widgets/back_button/BackButtonWidget.dart';
 import 'package:moru/custom_widgets/base_uis/BaseUIWidget.dart';
 import 'package:moru/custom_widgets/dialogs/OpenCameraFileBottomDialog.dart';
 import 'package:moru/libraries/FileManger.dart';
+import 'package:moru/model/AppViewModel.dart';
+import 'package:moru/model/CaseModel.dart';
 import 'package:moru/uis/mobile/instructions/pages/MUploadImageScreen.dart';
 import 'package:moru/utils/Commons.dart';
 import 'package:moru/utils/CustomColors.dart';
 import 'package:moru/utils/MoruIcons.dart';
+import 'package:provider/provider.dart';
 
 class MInstructionScreen extends StatelessWidget {
   const MInstructionScreen({Key? key}) : super(key: key);
 
+  Future<void> addImageToModel(BuildContext context, String path) async {
+    var appViewModel = Provider.of<AppViewModel>(context, listen: false);
+    var model = appViewModel.getCreateCheckupModel();
+    model.photos!.add(
+      PhotoModel(
+        description: "",
+        url: "",
+        title: "",
+        status: PhotoModel.ACTIVE,
+        file: File(path),
+      ),
+    );
+    appViewModel.updateCreateCheckupModel(model);
+  }
+
   Future openCameraOrGallery(BuildContext context) async {
-    files = [];
+    //imageFiles = [];
     OpenCameraFileBottomDialog(
       context: context,
       fileType: FileType.image,
       allowExtensions: false,
-      callback: (String path) {
+      callback: (String path) async {
         if (path == FileManger.NO_SELECTED) {
           Commons.toastMessage(context, path);
         } else {
-          files.add(File(path));
+          //imageFiles.add(File(path));
+          await addImageToModel(context, path);
           Routes.pushNamed(context, Routes.UPLOAD_IMAGE_PAGE);
         }
       },
@@ -68,15 +87,6 @@ class MInstructionScreen extends StatelessWidget {
             textColor: Colors.white,
             onTap: () async {
               await openCameraOrGallery(context);
-              // files = [];
-              // String path = await FileManger.openCamera();
-              // if (path == FileManger.NO_SELECTED) {
-              //   Commons.toastMessage(context, path);
-              // } else {
-              //   files.add(File(path));
-              // }
-              //
-              // Routes.pushNamed(context, Routes.UPLOAD_IMAGE_PAGE);
             },
           ),
           const SizedBox(height: 24),

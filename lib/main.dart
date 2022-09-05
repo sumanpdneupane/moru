@@ -8,6 +8,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:moru/Routes.dart';
 import 'package:moru/libraries/WebImageCapturePage.dart';
+import 'package:moru/model/AppViewModel.dart';
 import 'package:moru/model/UserModel.dart';
 import 'package:moru/utils/Constants.dart';
 import 'package:provider/provider.dart';
@@ -80,6 +81,7 @@ class MyApp extends StatelessWidget {
       return MultiProvider(
         providers: [
           ChangeNotifierProvider.value(value: UserViewModel()),
+          ChangeNotifierProvider.value(value: AppViewModel()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,

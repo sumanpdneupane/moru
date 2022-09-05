@@ -26,8 +26,8 @@ class Routes {
   static const String CHECKUP_READY_PAGE = "MCheckupReadyScreen";
   static const String INSTRUCTION_PAGE = "MInstructionScreen";
   static const String UPLOAD_IMAGE_PAGE = "MUploadImageScreen";
-  static const String QUESTIONNARE_1_PAGE = "MQuestionnarie1Screen";
-  static const String QUESTIONNARE_2_PAGE = "MQuestionnarie2Screen";
+  static const String QUESTIONNARE_1_PAGE = "MQuestionnarie2Screen";
+  static const String QUESTIONNARE_2_PAGE = "MQuestionnarie1Screen";
   static const String PAYMENT_PAGE = "MPaymentScreen";
   static const String APPOINMENT_DONE_PAGE = "MAppoinmentDoneScreen";
   static const String WEB_CAMERA_PAGE = "WebImageCapturePage";

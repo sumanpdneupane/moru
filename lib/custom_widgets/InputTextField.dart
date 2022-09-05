@@ -9,12 +9,14 @@ class InputTextField extends StatelessWidget {
   Widget? prefixicon;
   Widget? suffixicon;
   int? maxLines;
+  TextEditingController? controller;
 
   InputTextField({
     Key? key,
     required this.heading,
     required this.hintText,
     required this.width,
+    required this.controller,
     this.prefixicon,
     this.suffixicon,
     this.maxLines = 1,
@@ -38,6 +40,7 @@ class InputTextField extends StatelessWidget {
       width: width,
       child: SizedBox(
         child: TextFormField(
+          controller: controller,
           keyboardType: TextInputType.emailAddress,
           maxLines: maxLines,
           decoration: InputDecoration(

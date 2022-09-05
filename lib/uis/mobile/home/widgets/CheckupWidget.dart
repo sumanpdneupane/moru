@@ -1,12 +1,50 @@
+
 import 'package:flutter/material.dart';
 import 'package:moru/Routes.dart';
 import 'package:moru/custom_widgets/grids/MyGrid.dart';
+import 'package:moru/model/AppViewModel.dart';
+import 'package:moru/model/CaseModel.dart';
 import 'package:moru/utils/Commons.dart';
 import 'package:moru/utils/CustomColors.dart';
 import 'package:moru/utils/MoruIcons.dart';
+import 'package:provider/provider.dart';
 
 class CheckupWidget extends StatelessWidget {
   const CheckupWidget({Key? key}) : super(key: key);
+
+  void routeToSingleIssue(BuildContext context) {
+    var appViewModel = Provider.of<AppViewModel>(context, listen: false);
+    var model = appViewModel.getCreateCheckupModel();
+
+    //refresh case model from begining
+    model = CaseModel();
+    //add min and max photo can be uploaded
+    model.lowerPhotoBoundSize = 1;
+    model.upperPhotoBoundSize = 2;
+    model.plan = CaseModel.SINGLE_ISSUE_PLAN;
+
+    appViewModel.updateCreateCheckupModel(model);
+
+    //Navigate
+    Routes.pushNamed(context, Routes.INSTRUCTION_PAGE);
+  }
+
+  void routeToFullAssessment(BuildContext context) {
+    var appViewModel = Provider.of<AppViewModel>(context, listen: false);
+    var model = appViewModel.getCreateCheckupModel();
+
+    //refresh case model from begining
+    model = CaseModel();
+    //add min and max photo can be uploaded
+    model.lowerPhotoBoundSize = 3;
+    model.upperPhotoBoundSize = double.minPositive.toInt();
+    model.plan = CaseModel.FULL_ASSESSMENT_PLAN;
+
+    appViewModel.updateCreateCheckupModel(model);
+
+    //Navigate
+    Routes.pushNamed(context, Routes.INSTRUCTION_PAGE);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +64,7 @@ class CheckupWidget extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: (() {
-                  Routes.pushNamed(context, Routes.INSTRUCTION_PAGE);
+                  routeToSingleIssue(context);
                 }),
                 child: MyGrid(
                   icon: Moru.teeth_cross,

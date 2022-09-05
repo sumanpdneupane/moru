@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:moru/custom_widgets/ButtonWidget.dart';
 import 'package:moru/libraries/FileManger.dart';
 import 'package:moru/utils/Commons.dart';
 import 'package:moru/utils/Constants.dart';
@@ -168,46 +169,96 @@ class _OpenDialogState extends State<_OpenDialog> {
           space2(),
           space2(),
           button(
-              text: Constants.OPEN_CAMERA,
-              textColor: CustomColors.white,
-              backgroundColor: CustomColors.green,
-              onTab: () async {
-                Navigator.pop(context);
-                if (kIsWeb) {
-                  //Routes.pushNamed(context, Routes.WEB_CAMERA_PAGE);
-                  Commons.toastMessage(context, "Comming soon for web");
+            text: Constants.OPEN_CAMERA,
+            textColor: CustomColors.white,
+            backgroundColor: CustomColors.green,
+            onTab: () async {
+              Navigator.pop(context);
+              if (kIsWeb) {
+                //Routes.pushNamed(context, Routes.WEB_CAMERA_PAGE);
+                Commons.toastMessage(context, "Comming soon for web");
+              } else {
+                String path = await FileManger.openCamera();
+                if (path == FileManger.NO_SELECTED) {
+                  Commons.toastMessage(context, path);
                 } else {
-                  String path = await FileManger.openCamera();
-                  if (path == FileManger.NO_SELECTED) {
-                    Commons.toastMessage(context, path);
-                  } else {
-                    widget.callback!(path);
-                  }
+                  widget.callback!(path);
                 }
-              }),
+              }
+            },
+          ),
+          // ButtonWidget(
+          //   name: Constants.OPEN_CAMERA,
+          //   height: 50,
+          //   width: MediaQuery.of(context).size.width * 0.87,
+          //   fontSize: 15,
+          //   backgroundColor: CustomColors.green,
+          //   textColor: CustomColors.white,
+          //   onTap: () async {
+          //     Navigator.pop(context);
+          //     if (kIsWeb) {
+          //       //Routes.pushNamed(context, Routes.WEB_CAMERA_PAGE);
+          //       Commons.toastMessage(context, "Comming soon for web");
+          //     } else {
+          //       String path = await FileManger.openCamera();
+          //       if (path == FileManger.NO_SELECTED) {
+          //         Commons.toastMessage(context, path);
+          //       } else {
+          //         widget.callback!(path);
+          //       }
+          //     }
+          //   },
+          // ),
           space1(),
           button(
-              text: Constants.OPEN_GALLERY,
-              textColor: CustomColors.black,
-              backgroundColor: CustomColors.greyLight,
-              onTab: () async {
-                Navigator.pop(context);
-                String? path;
-                if (Platform.isAndroid || Platform.isIOS) {
-                  path = await FileManger.openFileSystem(
-                    fileType: widget.fileType,
-                    allowedExtensions: widget.allowedExtensions,
-                    allowExtensions: widget.allowExtensions ?? false,
-                  );
-                } else {
-                  path = await FileManger.openCamera();
-                }
-                if (path == FileManger.NO_SELECTED) {
-                  Commons.toastMessage(context, path!);
-                } else {
-                  widget.callback!(path!);
-                }
-              }),
+            text: Constants.OPEN_GALLERY,
+            textColor: CustomColors.black,
+            backgroundColor: CustomColors.greyLight,
+            onTab: () async {
+              Navigator.pop(context);
+              String? path;
+              if (Platform.isAndroid || Platform.isIOS) {
+                path = await FileManger.openFileSystem(
+                  fileType: widget.fileType,
+                  allowedExtensions: widget.allowedExtensions,
+                  allowExtensions: widget.allowExtensions ?? false,
+                );
+              } else {
+                path = await FileManger.openCamera();
+              }
+              if (path == FileManger.NO_SELECTED) {
+                Commons.toastMessage(context, path!);
+              } else {
+                widget.callback!(path!);
+              }
+            },
+          ),
+          // ButtonWidget(
+          //   name: Constants.OPEN_GALLERY,
+          //   height: 50,
+          //   width: MediaQuery.of(context).size.width * 0.87,
+          //   fontSize: 15,
+          //   backgroundColor: CustomColors.greyLight,
+          //   textColor: CustomColors.black,
+          //   onTap: () async {
+          //     Navigator.pop(context);
+          //     String? path;
+          //     if (Platform.isAndroid || Platform.isIOS) {
+          //       path = await FileManger.openFileSystem(
+          //         fileType: widget.fileType,
+          //         allowedExtensions: widget.allowedExtensions,
+          //         allowExtensions: widget.allowExtensions ?? false,
+          //       );
+          //     } else {
+          //       path = await FileManger.openCamera();
+          //     }
+          //     if (path == FileManger.NO_SELECTED) {
+          //       Commons.toastMessage(context, path!);
+          //     } else {
+          //       widget.callback!(path!);
+          //     }
+          //   },
+          // ),
           space1(),
         ],
       ),

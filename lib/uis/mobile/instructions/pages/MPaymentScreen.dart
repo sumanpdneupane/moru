@@ -116,6 +116,7 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
                     child: InputTextField(
                       heading: "",
                       hintText: "",
+                      controller: TextEditingController(),
                       width: width,
                     ),
                   ),

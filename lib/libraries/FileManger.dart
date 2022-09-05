@@ -167,11 +167,13 @@ class FileManger {
     required File file,
     required double height,
     required double width,
+    BoxFit fit = BoxFit.fill,
   }) {
     return _ImageViewer(
       file: file,
       height: height,
       width: width,
+      fit: fit,
     );
   }
 }
@@ -185,12 +187,14 @@ class _ImageViewer extends StatefulWidget {
   final File file;
   final double height;
   final double width;
+  BoxFit fit;
 
   _ImageViewer({
     Key? key,
     required this.file,
     required this.height,
     required this.width,
+    this.fit = BoxFit.fill,
   }) : super(key: key);
 
   @override
@@ -204,15 +208,13 @@ class _ImageViewerState extends State<_ImageViewer> {
       child: universal.Platform.isAndroid || universal.Platform.isIOS
           ? Image.file(
               widget.file,
-              //fit: BoxFit.fill,
-              fit: BoxFit.contain,
+              fit: widget.fit,
               width: widget.height,
               height: widget.width,
             )
           : Image.network(
               widget.file.path,
-              //fit: BoxFit.fill,
-              fit: BoxFit.contain,
+              fit: widget.fit,
               width: widget.height,
               height: widget.width,
             ),
