@@ -1,5 +1,5 @@
-
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:moru/libraries/FileManger.dart';
@@ -173,11 +173,16 @@ class _OpenDialogState extends State<_OpenDialog> {
               backgroundColor: CustomColors.green,
               onTab: () async {
                 Navigator.pop(context);
-                String path = await FileManger.openCamera();
-                if (path == FileManger.NO_SELECTED) {
-                  Commons.toastMessage(context, path);
+                if (kIsWeb) {
+                  //Routes.pushNamed(context, Routes.WEB_CAMERA_PAGE);
+                  Commons.toastMessage(context, "Comming soon for web");
                 } else {
-                  widget.callback!(path);
+                  String path = await FileManger.openCamera();
+                  if (path == FileManger.NO_SELECTED) {
+                    Commons.toastMessage(context, path);
+                  } else {
+                    widget.callback!(path);
+                  }
                 }
               }),
           space1(),

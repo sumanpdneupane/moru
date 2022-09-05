@@ -24,25 +24,19 @@ class MInstructionScreen extends StatelessWidget {
 
   Future openCameraOrGallery(BuildContext context) async {
     files = [];
-
-    if (kIsWeb) {
-      //Routes.pushNamed(context, Routes.WEB_CAMERA_PAGE);
-      Commons.toastMessage(context, "Comming soon for web");
-    } else {
-      OpenCameraFileBottomDialog(
-        context: context,
-        fileType: FileType.image,
-        allowExtensions: false,
-        callback: (String path) {
-          if (path == FileManger.NO_SELECTED) {
-            Commons.toastMessage(context, path);
-          } else {
-            files.add(File(path));
-            Routes.pushNamed(context, Routes.UPLOAD_IMAGE_PAGE);
-          }
-        },
-      );
-    }
+    OpenCameraFileBottomDialog(
+      context: context,
+      fileType: FileType.image,
+      allowExtensions: false,
+      callback: (String path) {
+        if (path == FileManger.NO_SELECTED) {
+          Commons.toastMessage(context, path);
+        } else {
+          files.add(File(path));
+          Routes.pushNamed(context, Routes.UPLOAD_IMAGE_PAGE);
+        }
+      },
+    );
   }
 
   @override
