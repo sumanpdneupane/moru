@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:universal_io/io.dart' as universal;
+import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path/path.dart' as path;
 import 'package:file_picker/file_picker.dart';
@@ -50,6 +52,10 @@ class FileManger {
     }
     return result.files.single.path;
   }
+
+  // static Future<void> openWebCamera(){
+  //
+  // }
 
   static Future<File> compressFile(File file) async {
     if (getFileExtensionFromFile(file) == FileSystemType.IMAGE) {
@@ -156,9 +162,60 @@ class FileManger {
     //print('Extension: $_extenion');
     return _filename;
   }
+
+  static Widget loadImageFile({
+    required File file,
+    required double height,
+    required double width,
+  }) {
+    return _ImageViewer(
+      file: file,
+      height: height,
+      width: width,
+    );
+  }
 }
 
 class FileSystemType {
   static final String IMAGE = "IMAGE";
   static final String FILE = "FILE";
+}
+
+class _ImageViewer extends StatefulWidget {
+  final File file;
+  final double height;
+  final double width;
+
+  _ImageViewer({
+    Key? key,
+    required this.file,
+    required this.height,
+    required this.width,
+  }) : super(key: key);
+
+  @override
+  State<_ImageViewer> createState() => _ImageViewerState();
+}
+
+class _ImageViewerState extends State<_ImageViewer> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: universal.Platform.isAndroid || universal.Platform.isIOS
+          ? Image.file(
+              widget.file,
+              //fit: BoxFit.fill,
+              fit: BoxFit.contain,
+              width: widget.height,
+              height: widget.width,
+            )
+          : Image.network(
+              widget.file.path,
+              //fit: BoxFit.fill,
+              fit: BoxFit.contain,
+              width: widget.height,
+              height: widget.width,
+            ),
+    );
+  }
 }

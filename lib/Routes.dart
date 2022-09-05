@@ -1,6 +1,7 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:moru/libraries/WebImageCapturePage.dart';
 import 'package:moru/uis/mobile/MMainScreen.dart';
 import 'package:moru/uis/mobile/checkups/MCheckupScreen.dart';
 import 'package:moru/uis/mobile/checkups/pages/MCheckupReadyScreen.dart';
@@ -29,6 +30,7 @@ class Routes {
   static const String QUESTIONNARE_2_PAGE = "MQuestionnarie2Screen";
   static const String PAYMENT_PAGE = "MPaymentScreen";
   static const String APPOINMENT_DONE_PAGE = "MAppoinmentDoneScreen";
+  static const String WEB_CAMERA_PAGE = "WebImageCapturePage";
 
   static Route<dynamic>? generateRoutes(RouteSettings settings) {
     final args = settings.arguments;
@@ -59,6 +61,8 @@ class Routes {
         return _MaterialPageRoute(MPaymentScreen());
       case APPOINMENT_DONE_PAGE:
         return _MaterialPageRoute(MAppoinmentDoneScreen());
+      case WEB_CAMERA_PAGE:
+        return _MaterialPageRoute(WebImageCapturePage());
       default:
         MSplashScreen();
     }

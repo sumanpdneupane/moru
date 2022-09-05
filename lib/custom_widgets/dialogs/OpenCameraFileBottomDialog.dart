@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +6,7 @@ import 'package:moru/libraries/FileManger.dart';
 import 'package:moru/utils/Commons.dart';
 import 'package:moru/utils/Constants.dart';
 import 'package:moru/utils/CustomColors.dart';
+import 'package:universal_io/io.dart';
 
 /// Created by Suman Prasad Neupane on 3/10/2022.
 class OpenCameraFileBottomDialog {
@@ -209,3 +209,5 @@ class _OpenDialogState extends State<_OpenDialog> {
     );
   }
 }
+
+//https://pub.dev/packages/camera

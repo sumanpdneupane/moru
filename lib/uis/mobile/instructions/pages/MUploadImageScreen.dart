@@ -1,6 +1,6 @@
 import 'dart:io';
+import 'package:universal_io/io.dart' as universal;
 
-import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -127,13 +127,24 @@ class _MUploadImageScreenState extends State<MUploadImageScreen> {
       padding: EdgeInsets.all(6),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
-        child: Image.file(
-          file,
-          //fit: BoxFit.fill,
-          fit: BoxFit.contain,
-          width: height,
+        child: FileManger.loadImageFile(
+          file: file,
           height: height,
+          width: height,
         ),
+        // child: universal.Platform.isAndroid || universal.Platform.isIOS ? Image.file(
+        //   file,
+        //   //fit: BoxFit.fill,
+        //   fit: BoxFit.contain,
+        //   width: height,
+        //   height: height,
+        // ): Image.network(
+        //   file.path,
+        //   //fit: BoxFit.fill,
+        //   fit: BoxFit.contain,
+        //   width: height,
+        //   height: height,
+        // ),
       ),
     );
   }

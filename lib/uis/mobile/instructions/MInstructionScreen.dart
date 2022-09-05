@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:flutter_locales/flutter_locales.dart';
@@ -22,19 +24,25 @@ class MInstructionScreen extends StatelessWidget {
 
   Future openCameraOrGallery(BuildContext context) async {
     files = [];
-    OpenCameraFileBottomDialog(
-      context: context,
-      fileType: FileType.image,
-      allowExtensions: false,
-      callback: (String path) {
-        if (path == FileManger.NO_SELECTED) {
-          Commons.toastMessage(context, path);
-        } else {
-          files.add(File(path));
-          Routes.pushNamed(context, Routes.UPLOAD_IMAGE_PAGE);
-        }
-      },
-    );
+
+    if (kIsWeb) {
+      //Routes.pushNamed(context, Routes.WEB_CAMERA_PAGE);
+      Commons.toastMessage(context, "Comming soon for web");
+    } else {
+      OpenCameraFileBottomDialog(
+        context: context,
+        fileType: FileType.image,
+        allowExtensions: false,
+        callback: (String path) {
+          if (path == FileManger.NO_SELECTED) {
+            Commons.toastMessage(context, path);
+          } else {
+            files.add(File(path));
+            Routes.pushNamed(context, Routes.UPLOAD_IMAGE_PAGE);
+          }
+        },
+      );
+    }
   }
 
   @override

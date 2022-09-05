@@ -1,15 +1,17 @@
 import 'dart:async';
-import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:moru/Routes.dart';
+import 'package:moru/libraries/WebImageCapturePage.dart';
 import 'package:moru/model/UserModel.dart';
 import 'package:moru/utils/Constants.dart';
 import 'package:provider/provider.dart';
+import 'package:universal_io/prefer_universal/io.dart';
 
 Future<void> main() async {
   //runApp(const MyApp());
@@ -26,6 +28,7 @@ Future<void> main() async {
   // );
 
   WidgetsFlutterBinding.ensureInitialized();
+  cameras = await availableCameras();
   await Locales.init(['en', 'ar']);
   // await Firebase.initializeApp(
   //   options:
@@ -101,5 +104,6 @@ class MyApp extends StatelessWidget {
  *
  * flutter run -d chrome
  * flutter run -d chrome --web-renderer html // to run the app
+ * flutter run -d chrome --web-hostname localhost --web-port 54537
  * flutter build web --web-renderer html --release // to generate a production build
  */
