@@ -24,7 +24,7 @@ class _MAppoinmentDoneScreenState extends State<MAppoinmentDoneScreen> {
         width: width * 0.87,
         child: BackButtonWidget(
           onTap: () {
-            Routes.pop(context);
+            Routes.pushNamedAndRemoveUntil(context, Routes.HOME_PAGE);
           },
           localeText: "waiting_room",
         ),

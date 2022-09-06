@@ -28,7 +28,7 @@ class _MQuestionnarie5ScreenState extends State<MQuestionnarie5Screen> {
     'A year or more',
   ];
   int? groupValue = 0;
-  int currentIndex = 4;
+  int currentIndex = 3;
 
   saveToStore() {
     var appViewModel = Provider.of<AppViewModel>(context, listen: false);

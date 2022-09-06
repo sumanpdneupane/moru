@@ -1,8 +1,11 @@
 import 'dart:io';
 
+import 'package:moru/utils/Commons.dart';
+
 class CaseModel {
   String? uid;
 
+  String? createdBy;
   String? assignedTo;
   String? whatYouCanDo;
   String? replyFromDoctor;
@@ -44,9 +47,10 @@ class CaseModel {
     this.replyFromPatient,
     this.severityScale,
     this.createdDate,
+    this.createdBy,
     this.lastStatusUpdated,
     this.nextSteps,
-    this.coupon,
+    this.coupon = "",
     this.stripeResponse,
     this.totalCostOfPlan = 0,
     this.totalCostPaid = 0,
@@ -62,6 +66,40 @@ class CaseModel {
   }) {
     this.photos = photos == null ? [] : photos;
     this.questionaires = questionaires == null ? [] : questionaires;
+  }
+
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> data = Map();
+
+    // if (data["photos"] != null) {
+    //   //data["photos"] = photos.forEach((element) {element.t});
+    // }
+    data["createdBy"] = createdBy;
+    data["assignedTo"] = assignedTo;
+    data["createdDate"] = createdDate;
+    data["replyFromPatient"] = replyFromPatient;
+
+    if (stripeResponse != null) {
+      data["stripeResponse"] = stripeResponse;
+    }
+    data["totalCostOfPlan"] = totalCostOfPlan;
+    data["totalCostPaid"] = totalCostPaid;
+    data["discountAmount"] = discountAmount;
+    data["coupon"] = coupon;
+
+    data["plan"] = plan;
+    data["status"] = status;
+    data["discountAmount"] = discountAmount;
+
+    // questionaires?.forEach((element) {
+    //   Commons.consoleLog("${element.question}----------> ${element.answer}");
+    // });
+    if (questionaires != null) {
+      data["questionaires"] = questionaires!.map((element) {
+        return element.toJson();
+      });
+    }
+    return data;
   }
 }
 
@@ -97,6 +135,13 @@ class PhotoModel {
         status: this.status = status ?? this.status,
         file: this.file = file ?? this.file);
   }
+
+// Map<String, dynamic> toJson() {
+//   Map<String, dynamic> data = Map();
+//   data["question"] = question;
+//   data["answer"] = answer;
+//   return data;
+// }
 }
 
 class QuestionairesModel {
@@ -107,4 +152,11 @@ class QuestionairesModel {
     this.question,
     this.answer,
   });
+
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> data = Map();
+    data["question"] = question;
+    data["answer"] = answer;
+    return data;
+  }
 }

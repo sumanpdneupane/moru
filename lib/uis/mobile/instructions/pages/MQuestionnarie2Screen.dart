@@ -32,18 +32,19 @@ class _MQuestionnarie2ScreenState extends State<MQuestionnarie2Screen> {
     } else {
       var appViewModel = Provider.of<AppViewModel>(context, listen: false);
       var model = appViewModel.getCreateCheckupModel();
-      if (model.questionaires!.length == 0) {
-        model.questionaires!.add(
-          QuestionairesModel(
-            question: question,
-            answer: fullDescriptionController.text.trim(),
-          ),
-        );
-      } else {
-        model.questionaires![0].question = question;
-        model.questionaires![0].answer = fullDescriptionController.text.trim();
-      }
+      // if (model.questionaires!.length == 0) {
+      //   model.questionaires!.add(
+      //     QuestionairesModel(
+      //       question: question,
+      //       answer: fullDescriptionController.text.trim(),
+      //     ),
+      //   );
+      // } else {
+      //   model.questionaires![0].question = question;
+      //   model.questionaires![0].answer = fullDescriptionController.text.trim();
+      // }
 
+      model.replyFromPatient = fullDescriptionController.text.trim();
       appViewModel.updateCreateCheckupModel(model);
 
       Routes.pushNamed(context, Routes.QUESTIONNARE_2_PAGE);
@@ -54,9 +55,13 @@ class _MQuestionnarie2ScreenState extends State<MQuestionnarie2Screen> {
   void initState() {
     var appViewModel = Provider.of<AppViewModel>(context, listen: false);
     var model = appViewModel.getCreateCheckupModel();
-    if (currentIndex <= model.questionaires!.length - 1) {
-      fullDescriptionController.text =
-          model.questionaires![currentIndex].answer!;
+    // if (currentIndex <= model.questionaires!.length - 1) {
+    //   fullDescriptionController.text =
+    //       model.questionaires![currentIndex].answer!;
+    // }
+
+    if(model.replyFromPatient != null) {
+      fullDescriptionController.text = model.replyFromPatient!;
     }
     super.initState();
   }

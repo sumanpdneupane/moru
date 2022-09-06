@@ -28,7 +28,7 @@ class _MQuestionnarie4ScreenState extends State<MQuestionnarie4Screen> {
     'Aching',
   ];
   int? groupValue = 0;
-  int currentIndex = 3;
+  int currentIndex = 2;
 
   saveToStore() {
     var appViewModel = Provider.of<AppViewModel>(context, listen: false);

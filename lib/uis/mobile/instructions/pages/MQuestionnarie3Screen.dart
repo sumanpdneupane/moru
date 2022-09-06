@@ -29,7 +29,7 @@ class _MQuestionnarie3ScreenState extends State<MQuestionnarie3Screen> {
     'Worst pain'
   ];
   int? groupValue = 0;
-  int currentIndex = 2;
+  int currentIndex = 1;
 
   saveToStore() {
     var appViewModel = Provider.of<AppViewModel>(context, listen: false);

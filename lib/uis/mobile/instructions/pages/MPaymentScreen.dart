@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_locales/flutter_locales.dart';
@@ -11,12 +14,14 @@ import 'package:moru/custom_widgets/MyInputField.dart';
 import 'package:moru/custom_widgets/back_button/BackButtonWidget.dart';
 import 'package:moru/custom_widgets/base_uis/BaseUIWidget.dart';
 import 'package:moru/model/AppViewModel.dart';
+import 'package:moru/model/CaseModel.dart';
 import 'package:moru/model/UserModel.dart';
 import 'package:moru/services/Repository.dart';
 import 'package:moru/uis/mobile/instructions/MInstructionScreen.dart';
 import 'package:moru/utils/Commons.dart';
 import 'package:moru/utils/CustomColors.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class MPaymentScreen extends StatefulWidget {
   const MPaymentScreen({Key? key}) : super(key: key);
@@ -52,7 +57,7 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
   }
 
   Future getPaymentAmount() async {
-    EasyLoading.show(status: 'Login...');
+    EasyLoading.show(status: 'Fetching price...');
     var appViewModel = Provider.of<AppViewModel>(context, listen: false);
     var model = appViewModel.getCreateCheckupModel();
     var paymentableAmount =
@@ -65,24 +70,46 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
   }
 
   Future payWithStripe() async {
-    //Routes.pushNamed(context, Routes.APPOINMENT_DONE_PAGE);
+    EasyLoading.show(status: 'Paying...');
     var userViewModel = Provider.of<UserViewModel>(context, listen: false);
     var user = userViewModel.getModel();
-
     var appViewModel = Provider.of<AppViewModel>(context, listen: false);
     var model = appViewModel.getCreateCheckupModel();
 
-    Map<String, dynamic> data = Map();
-    data["card"] = {
-      "number": cardNoController.text.trim(),
-      "exp_year": int.parse(yearController.text.trim()),
-      "exp_month": int.parse(monthController.text.trim()),
-      "cvc": cvvController.text.trim(),
+    Map<String, dynamic> data = {
+      "data": {
+        "card": {
+          "number": cardNoController.text.trim(),
+          "exp_year": int.parse(yearController.text.trim()),
+          "exp_month": int.parse(monthController.text.trim()),
+          "cvc": cvvController.text.trim(),
+        },
+        "amount": model.totalCostPaid,
+        "description": "${user.fullname} - ${user.email} - ${model.plan}",
+      },
     };
-    data["amount"] = model.totalCostPaid;
-    data["description"] = "${user.fullname} - ${user.email} - ${model.plan}";
 
-    await repository.paymentApi.payWithProduct(data);
+    var jsonResponse =
+        await repository.paymentApi.payWithProduct(data, context);
+
+    if (jsonResponse.containsKey("error")) {
+      EasyLoading.dismiss();
+      Commons.toastMessage(context, "Please enter valid informatin");
+    } else {
+      model.stripeResponse = jsonResponse;
+      model.createdDate = Timestamp.now().toDate();
+      appViewModel.updateCreateCheckupModel(model);
+
+      //save
+      Commons.consoleLog("model----------> ${model.toJson()}");
+
+      await repository.cases.post(data: model.toJson());
+      model = CaseModel();
+      appViewModel.updateCreateCheckupModel(model);
+
+      EasyLoading.dismiss();
+      Routes.pushNamedAndRemoveUntil(context, Routes.APPOINMENT_DONE_PAGE);
+    }
   }
 
   @override

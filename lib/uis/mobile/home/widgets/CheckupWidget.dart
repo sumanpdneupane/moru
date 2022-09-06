@@ -1,9 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:moru/Routes.dart';
 import 'package:moru/custom_widgets/grids/MyGrid.dart';
 import 'package:moru/model/AppViewModel.dart';
 import 'package:moru/model/CaseModel.dart';
+import 'package:moru/model/UserModel.dart';
 import 'package:moru/utils/Commons.dart';
 import 'package:moru/utils/CustomColors.dart';
 import 'package:moru/utils/MoruIcons.dart';
@@ -13,6 +13,7 @@ class CheckupWidget extends StatelessWidget {
   const CheckupWidget({Key? key}) : super(key: key);
 
   void routeToSingleIssue(BuildContext context) {
+    var userViewModel = Provider.of<UserViewModel>(context, listen: false);
     var appViewModel = Provider.of<AppViewModel>(context, listen: false);
     var model = appViewModel.getCreateCheckupModel();
 
@@ -24,6 +25,9 @@ class CheckupWidget extends StatelessWidget {
     model.plan = CaseModel.SINGLE_ISSUE_PLAN;
     model.priceId = "price_1LZC7LDXe16sDQVN287FtFur";
     model.productId = "prod_MHle6zMmxr5Mik";
+    model.assignedTo = "uid2";
+    model.status = "pending";
+    model.createdBy = userViewModel.getModel().uid;
 
     appViewModel.updateCreateCheckupModel(model);
 
@@ -32,6 +36,7 @@ class CheckupWidget extends StatelessWidget {
   }
 
   void routeToFullAssessment(BuildContext context) {
+    var userViewModel = Provider.of<UserViewModel>(context, listen: false);
     var appViewModel = Provider.of<AppViewModel>(context, listen: false);
     var model = appViewModel.getCreateCheckupModel();
 
@@ -43,6 +48,9 @@ class CheckupWidget extends StatelessWidget {
     model.plan = CaseModel.FULL_ASSESSMENT_PLAN;
     model.priceId = "price_1LZC7pDXe16sDQVND8b3cPGD";
     model.productId = "prod_MHlfxSndZMsJpX";
+    model.assignedTo = "uid2";
+    model.status = "pending";
+    model.createdBy = userViewModel.getModel().uid;
 
     appViewModel.updateCreateCheckupModel(model);
 
@@ -78,7 +86,7 @@ class CheckupWidget extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: (() {
-                  //Routes.pushNamed(context, Routes.INSTRUCTION_PAGE);
+                  routeToFullAssessment(context);
                 }),
                 child: MyGrid(
                   icon: Moru.smile,

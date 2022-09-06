@@ -117,6 +117,6 @@ class Routes {
   }
 
   static String initialRoute() {
-    return Routes.HOME_PAGE;
+    return Routes.SPLASH_PAGE;
   }
 }

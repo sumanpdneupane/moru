@@ -23,7 +23,7 @@ class _MQuestionnarie1ScreenState extends State<MQuestionnarie1Screen> {
   String question = 'Are you in pain ?';
   List<String> possibleAnswers = ['Yes, I’m in pain', 'No pain'];
   int? groupValue = 0;
-  int currentIndex = 1;
+  int currentIndex = 0;
 
   saveToStore() {
     var appViewModel = Provider.of<AppViewModel>(context, listen: false);
