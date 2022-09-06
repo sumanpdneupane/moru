@@ -112,14 +112,19 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
     //save
     Commons.consoleLog("model----------> ${model.toJson()}");
     List<Future> allFutures = [];
-    model.photos?.forEach((photo) {
-      allFutures.add(uploadFile(photo.file!, user.uid));
-    });
+    // model.photos?.forEach((photo) {
+    //
+    // });
+    for (var i = 0; i < model.photos!.length; i++) {
+      allFutures.add(uploadFile(model.photos![i].file!, user.uid));
+    }
     var allImages = await Future.wait(allFutures);
     print(allImages);
 
     for (var i = 0; i < allImages.length; i++) {
       model.photos![i].url = allImages[i];
+      model.photos![i].title = "";
+      model.photos![i].description = "";
     }
     await repository.cases.post(data: model.toJson());
     model = CaseModel();

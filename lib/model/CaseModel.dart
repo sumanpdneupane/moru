@@ -107,6 +107,12 @@ class CaseModel {
         return element.toJson();
       });
     }
+
+    if (photos != null) {
+      data["photos"] = photos!.map((element) {
+        return element.toJson();
+      });
+    }
     return data;
   }
 
@@ -131,10 +137,10 @@ class PhotoModel {
   static String REJECTED = "rejected";
 
   PhotoModel({
-    required this.description,
-    required this.status,
-    required this.title,
+    this.description = "",
+    this.title = "",
     required this.url,
+    this.status = "active",
     this.file = null,
   });
 
@@ -157,6 +163,8 @@ class PhotoModel {
     Map<String, dynamic> data = Map();
     data["description"] = description;
     data["title"] = title;
+    data["url"] = url;
+    data["status"] = status;
     return data;
   }
 }
