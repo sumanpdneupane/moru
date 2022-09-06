@@ -13,9 +13,9 @@ class CaseModel {
   DateTime? lastStatusUpdated;
   String? nextSteps;
 
-  int? totalCostOfPlan;
-  int? totalCostPaid;
-  int? discountAmount;
+  double? totalCostOfPlan;
+  double? totalCostPaid;
+  double? discountAmount;
   String? priceId;
   String? productId;
   String? coupon;
@@ -48,9 +48,9 @@ class CaseModel {
     this.nextSteps,
     this.coupon,
     this.stripeResponse,
-    this.totalCostOfPlan,
-    this.totalCostPaid,
-    this.discountAmount,
+    this.totalCostOfPlan = 0,
+    this.totalCostPaid = 0,
+    this.discountAmount = 0,
     this.plan,
     this.status,
     this.lowerPhotoBoundSize = 1,

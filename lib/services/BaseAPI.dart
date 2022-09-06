@@ -50,13 +50,15 @@ class BaseAPI {
     var url = Uri.https(
       ApiUrls.BASE_URL.replaceAll("https://", ""),
       destinationUrl,
+      //body,
     );
     print("ApiUrl----------> ${url}");
 
-    var response = await http.post(
-      url,
-      body: body,
-    );
+    Map<String, String>? headers = new Map();
+    headers["Content-Type"] = "application/json";
+    headers["Accept"] = "application/json";
+
+    var response = await http.post(url, body: body, headers: headers);
     print('Response body${url}-------->:\n ${response.body}');
 
     //Response and converter

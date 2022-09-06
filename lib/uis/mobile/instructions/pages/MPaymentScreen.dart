@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:moru/Routes.dart';
@@ -10,6 +11,7 @@ import 'package:moru/custom_widgets/MyInputField.dart';
 import 'package:moru/custom_widgets/back_button/BackButtonWidget.dart';
 import 'package:moru/custom_widgets/base_uis/BaseUIWidget.dart';
 import 'package:moru/model/AppViewModel.dart';
+import 'package:moru/model/UserModel.dart';
 import 'package:moru/services/Repository.dart';
 import 'package:moru/uis/mobile/instructions/MInstructionScreen.dart';
 import 'package:moru/utils/Commons.dart';
@@ -26,6 +28,10 @@ class MPaymentScreen extends StatefulWidget {
 class _MPaymentScreenState extends State<MPaymentScreen> {
   Repository repository = Repository();
   int selected = 0;
+  TextEditingController cardNoController = TextEditingController();
+  TextEditingController yearController = TextEditingController();
+  TextEditingController monthController = TextEditingController();
+  TextEditingController cvvController = TextEditingController();
 
   void onchange(int index) {
     setState(() {
@@ -40,15 +46,43 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
     model.questionaires?.forEach((element) {
       Commons.consoleLog("${element.question}----------> ${element.answer}");
     });
-    getPayment();
 
+    getPaymentAmount();
     super.initState();
   }
 
-  getPayment(){
+  Future getPaymentAmount() async {
+    EasyLoading.show(status: 'Login...');
     var appViewModel = Provider.of<AppViewModel>(context, listen: false);
     var model = appViewModel.getCreateCheckupModel();
-    repository.paymentApi.getProduct(model.priceId!);
+    var paymentableAmount =
+        await repository.paymentApi.getProduct(model.priceId!);
+    print("paymentableAmount---> ${paymentableAmount}");
+    model.totalCostOfPlan = paymentableAmount;
+    model.totalCostPaid = paymentableAmount;
+    appViewModel.updateCreateCheckupModel(model);
+    EasyLoading.dismiss();
+  }
+
+  Future payWithStripe() async {
+    //Routes.pushNamed(context, Routes.APPOINMENT_DONE_PAGE);
+    var userViewModel = Provider.of<UserViewModel>(context, listen: false);
+    var user = userViewModel.getModel();
+
+    var appViewModel = Provider.of<AppViewModel>(context, listen: false);
+    var model = appViewModel.getCreateCheckupModel();
+
+    Map<String, dynamic> data = Map();
+    data["card"] = {
+      "number": cardNoController.text.trim(),
+      "exp_year": int.parse(yearController.text.trim()),
+      "exp_month": int.parse(monthController.text.trim()),
+      "cvc": cvvController.text.trim(),
+    };
+    data["amount"] = model.totalCostPaid;
+    data["description"] = "${user.fullname} - ${user.email} - ${model.plan}";
+
+    await repository.paymentApi.payWithProduct(data);
   }
 
   @override
@@ -80,7 +114,7 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
             backgroundColor: CustomColors.primarycolor,
             textColor: Colors.white,
             onTap: () {
-              Routes.pushNamed(context, Routes.APPOINMENT_DONE_PAGE);
+              payWithStripe();
             },
           ),
           const SizedBox(height: 24),
@@ -105,14 +139,7 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(
-                    '24',
-                    style: TextStyle(
-                      fontSize: 34,
-                      fontWeight: FontWeight.w600,
-                      color: CustomColors.primarycolor,
-                    ),
-                  ),
+                  PaymentAmountWidget(),
                   Text(
                     'AED',
                     style: TextStyle(
@@ -262,31 +289,41 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
               const SizedBox(height: 20),
               MyInputField(
                 width: width,
-                controller: TextEditingController(),
+                controller: cardNoController,
                 heading: 'Card Number',
               ),
               const SizedBox(height: 20),
-              MyInputField(
-                width: width,
-                controller: TextEditingController(),
-                heading: 'Card Holder',
-              ),
-              const SizedBox(height: 20),
+              // MyInputField(
+              //   width: width,
+              //   controller: TextEditingController(),
+              //   heading: 'Card Holder',
+              // ),
+              // const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Expanded(
                     child: MyInputField(
                       width: width,
-                      controller: TextEditingController(),
-                      heading: 'Expiration Date',
+                      controller: yearController,
+                      keyboardType: TextInputType.number,
+                      heading: 'Expiration Year',
                     ),
                   ),
                   SizedBox(width: 32),
                   Expanded(
                     child: MyInputField(
                       width: width,
-                      controller: TextEditingController(),
+                      controller: monthController,
+                      keyboardType: TextInputType.number,
+                      heading: 'Expiration Month',
+                    ),
+                  ),
+                  SizedBox(width: 32),
+                  Expanded(
+                    child: MyInputField(
+                      width: width,
+                      controller: cvvController,
                       heading: 'CVV',
                     ),
                   ),
@@ -297,6 +334,30 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
           ),
         ),
       ],
+    );
+  }
+}
+
+//TODO: to show data
+class PaymentAmountWidget extends StatelessWidget {
+  const PaymentAmountWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<AppViewModel>(
+      builder: (ctx, data, Widget? child) {
+        var amount = data.getCreateCheckupModel().totalCostOfPlan;
+        amount = amount! / 100;
+
+        return Text(
+          "${amount}",
+          style: TextStyle(
+            fontSize: 34,
+            fontWeight: FontWeight.w600,
+            color: CustomColors.primarycolor,
+          ),
+        );
+      },
     );
   }
 }
