@@ -1,10 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:moru/Routes.dart';
 import 'package:moru/custom_widgets/ButtonWidget.dart';
 import 'package:moru/custom_widgets/FooterWidget.dart';
@@ -13,6 +17,7 @@ import 'package:moru/custom_widgets/MyButton.dart';
 import 'package:moru/custom_widgets/MyInputField.dart';
 import 'package:moru/custom_widgets/back_button/BackButtonWidget.dart';
 import 'package:moru/custom_widgets/base_uis/BaseUIWidget.dart';
+import 'package:moru/libraries/FileManger.dart';
 import 'package:moru/model/AppViewModel.dart';
 import 'package:moru/model/CaseModel.dart';
 import 'package:moru/model/UserModel.dart';
@@ -102,13 +107,42 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
 
       //save
       Commons.consoleLog("model----------> ${model.toJson()}");
+      List<Future> allFutures = [];
+      model.photos?.forEach((photo) {
+        allFutures.add(uploadFile(photo.file!, user.uid));
+      });
+      var allImages = await Future.wait(allFutures);
+      print(allImages);
 
-      await repository.cases.post(data: model.toJson());
-      model = CaseModel();
-      appViewModel.updateCreateCheckupModel(model);
+      for (var i = 0; i < allImages.length; i++) {
+        model.photos![i].url = allImages[i];
+      }
+      // await repository.cases.post(data: model.toJson());
+      // model = CaseModel();
+      // appViewModel.updateCreateCheckupModel(model);
 
       EasyLoading.dismiss();
-      Routes.pushNamedAndRemoveUntil(context, Routes.APPOINMENT_DONE_PAGE);
+      // Routes.pushNamedAndRemoveUntil(context, Routes.APPOINMENT_DONE_PAGE);
+    }
+  }
+
+  Future<String> uploadFile(File file, String? uid) async {
+    try {
+      final _firebaseStorage = FirebaseStorage.instance;
+      Uint8List imageData = await XFile(file.path).readAsBytes();
+      print(
+          'cases/${uid}/${DateTime.now().millisecond}-${FileManger.getFileName(file.path)}.jpeg');
+      var snapshot = await _firebaseStorage
+          .ref()
+          .child(
+              'cases/${uid}/${DateTime.now().millisecond}-${FileManger.getFileName(file.path)}')
+          .putData(imageData)
+          .whenComplete(() => null);
+      var downloadUrl = await snapshot.ref.getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      print(e);
+      return '';
     }
   }
 
