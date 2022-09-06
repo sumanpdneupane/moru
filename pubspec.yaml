@@ -29,6 +29,9 @@ dependencies:
   #State management
   provider: 6.0.3
 
+  #REST ful api
+  http: 0.13.5
+
 
   #Image Picker, File Picker, Camera, Compressor and Path
   file_picker: 5.0.1

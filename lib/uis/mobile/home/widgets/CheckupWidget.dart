@@ -22,6 +22,8 @@ class CheckupWidget extends StatelessWidget {
     model.lowerPhotoBoundSize = 1;
     model.upperPhotoBoundSize = 2;
     model.plan = CaseModel.SINGLE_ISSUE_PLAN;
+    model.priceId = "price_1LZC7LDXe16sDQVN287FtFur";
+    model.productId = "prod_MHle6zMmxr5Mik";
 
     appViewModel.updateCreateCheckupModel(model);
 
@@ -39,6 +41,8 @@ class CheckupWidget extends StatelessWidget {
     model.lowerPhotoBoundSize = 3;
     model.upperPhotoBoundSize = double.minPositive.toInt();
     model.plan = CaseModel.FULL_ASSESSMENT_PLAN;
+    model.priceId = "price_1LZC7pDXe16sDQVND8b3cPGD";
+    model.productId = "prod_MHlfxSndZMsJpX";
 
     appViewModel.updateCreateCheckupModel(model);
 

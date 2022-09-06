@@ -10,6 +10,7 @@ import 'package:moru/custom_widgets/MyInputField.dart';
 import 'package:moru/custom_widgets/back_button/BackButtonWidget.dart';
 import 'package:moru/custom_widgets/base_uis/BaseUIWidget.dart';
 import 'package:moru/model/AppViewModel.dart';
+import 'package:moru/services/Repository.dart';
 import 'package:moru/uis/mobile/instructions/MInstructionScreen.dart';
 import 'package:moru/utils/Commons.dart';
 import 'package:moru/utils/CustomColors.dart';
@@ -23,6 +24,7 @@ class MPaymentScreen extends StatefulWidget {
 }
 
 class _MPaymentScreenState extends State<MPaymentScreen> {
+  Repository repository = Repository();
   int selected = 0;
 
   void onchange(int index) {
@@ -38,8 +40,15 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
     model.questionaires?.forEach((element) {
       Commons.consoleLog("${element.question}----------> ${element.answer}");
     });
+    getPayment();
 
     super.initState();
+  }
+
+  getPayment(){
+    var appViewModel = Provider.of<AppViewModel>(context, listen: false);
+    var model = appViewModel.getCreateCheckupModel();
+    repository.paymentApi.getProduct(model.priceId!);
   }
 
   @override
