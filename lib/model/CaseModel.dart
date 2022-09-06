@@ -109,6 +109,15 @@ class CaseModel {
     }
     return data;
   }
+
+  double? getNewPrice(){
+    if (discountPercentage! > 0) {
+      var totalCostPaid =
+          totalCostOfPlan! - (totalCostOfPlan! * discountPercentage!) / 100;
+      return totalCostOfPlan! - totalCostPaid;
+    }
+    return totalCostOfPlan;
+  }
 }
 
 class PhotoModel {

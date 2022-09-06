@@ -91,7 +91,7 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
             "exp_month": int.parse(monthController.text.trim()),
             "cvc": cvvController.text.trim(),
           },
-          "amount": model.totalCostPaid,
+          "amount": model.getNewPrice(), //model.totalCostPaid,
           "description": "${user.fullname} - ${user.email} - ${model.plan}",
         },
       };
@@ -107,7 +107,7 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
     }
 
     model.createdDate = Timestamp.now().toDate();
-    appViewModel.updateCreateCheckupModel(model);
+    //appViewModel.updateCreateCheckupModel(model);
 
     //save
     Commons.consoleLog("model----------> ${model.toJson()}");
@@ -285,9 +285,9 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
                           SizedBox(width: 24),
                           Expanded(
                             child: Text(
-                              "Freenze (${discount} % off)",
+                              "Freenze (${discount}% off)",
                               style: TextStyle(
-                                fontSize: 24,
+                                fontSize: 17,
                                 fontWeight: FontWeight.w600,
                                 color: CustomColors.black,
                               ),
@@ -311,7 +311,7 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
                                 child: Text(
                                   'Remove',
                                   style: GoogleFonts.syne(
-                                      fontSize: 20,
+                                      fontSize: 17,
                                       color: CustomColors.red,
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -490,7 +490,7 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
                           width: width,
                           controller: yearController,
                           keyboardType: TextInputType.number,
-                          heading: 'Expiration Year',
+                          heading: 'Year',
                         ),
                       ),
                       SizedBox(width: 32),
@@ -499,7 +499,7 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
                           width: width,
                           controller: monthController,
                           keyboardType: TextInputType.number,
-                          heading: 'Expiration Month',
+                          heading: 'Month',
                         ),
                       ),
                       SizedBox(width: 32),
@@ -561,37 +561,3 @@ class PaymentAmountWidget extends StatelessWidget {
     );
   }
 }
-
-// if (discount > 0) {
-//          return Container(
-//            //width: MediaQuery.of(context).size.width,
-//            decoration: BoxDecoration(
-//              borderRadius: BorderRadius.circular(16),
-//              color: CustomColors.white,
-//              boxShadow: [
-//                BoxShadow(
-//                  color: Colors.grey,
-//                  offset: Offset(0.0, 1.0), //(x,y)
-//                  blurRadius: 6.0,
-//                ),
-//              ],
-//            ),
-//            child: Row(
-//              children: [
-//                Icon(
-//                  Icons.ac_unit,
-//                  color: CustomColors.green,
-//                  size: 25,
-//                ),
-//                Text(
-//                  "Freenze (${discount} % off)",
-//                  style: TextStyle(
-//                    fontSize: 34,
-//                    fontWeight: FontWeight.w600,
-//                    color: CustomColors.primarycolor,
-//                  ),
-//                ),
-//              ],
-//            ),
-//          );
-//        }

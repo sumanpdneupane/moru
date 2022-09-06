@@ -36,6 +36,9 @@ class InputTextField extends StatelessWidget {
     //     ),
     //   ],
     // );
+    double topP = maxLines! > 1 ? 16 : 8;
+    double bottomP = maxLines! > 1 ? 16 : 8;
+
     return Container(
       width: width,
       child: SizedBox(
@@ -60,8 +63,8 @@ class InputTextField extends StatelessWidget {
             contentPadding: const EdgeInsets.only(
               left: 20,
               right: 20,
-              top: 8,
-              bottom: 8,
+              top: 12,
+              bottom: 12,
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
