@@ -91,7 +91,7 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
             "exp_month": int.parse(monthController.text.trim()),
             "cvc": cvvController.text.trim(),
           },
-          "amount": model.getNewPrice(), //model.totalCostPaid,
+          "amount": model.getNewTotalCostPaid(),
           "description": "${user.fullname} - ${user.email} - ${model.plan}",
         },
       };
@@ -324,6 +324,7 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
                     );
                   }
                   return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       LocaleText(
                         'Promocode',

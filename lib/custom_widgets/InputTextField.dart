@@ -63,8 +63,8 @@ class InputTextField extends StatelessWidget {
             contentPadding: const EdgeInsets.only(
               left: 20,
               right: 20,
-              top: 12,
-              bottom: 12,
+              top: 20,
+              bottom: 20,
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),

@@ -110,11 +110,11 @@ class CaseModel {
     return data;
   }
 
-  double? getNewPrice(){
+  double? getNewTotalCostPaid() {
     if (discountPercentage! > 0) {
       var totalCostPaid =
           totalCostOfPlan! - (totalCostOfPlan! * discountPercentage!) / 100;
-      return totalCostOfPlan! - totalCostPaid;
+      return totalCostPaid;
     }
     return totalCostOfPlan;
   }
@@ -153,12 +153,12 @@ class PhotoModel {
         file: this.file = file ?? this.file);
   }
 
-// Map<String, dynamic> toJson() {
-//   Map<String, dynamic> data = Map();
-//   data["question"] = question;
-//   data["answer"] = answer;
-//   return data;
-// }
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> data = Map();
+    data["description"] = description;
+    data["title"] = title;
+    return data;
+  }
 }
 
 class QuestionairesModel {
