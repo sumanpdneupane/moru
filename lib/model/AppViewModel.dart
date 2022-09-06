@@ -3,6 +3,7 @@ import 'package:moru/model/CaseModel.dart';
 
 class AppViewModel with ChangeNotifier {
   CaseModel _createCheckupModel = CaseModel();
+  List<CaseModel> _getAllCheckupModels = [];
 
   void updateCreateCheckupModel(CaseModel model) {
     _createCheckupModel = model;
@@ -11,5 +12,14 @@ class AppViewModel with ChangeNotifier {
 
   CaseModel getCreateCheckupModel() {
     return _createCheckupModel;
+  }
+
+  void updateAllCheckupModel(List<CaseModel> models) {
+    _getAllCheckupModels = models;
+    notifyListeners();
+  }
+
+  List<CaseModel> getAllCheckupModel() {
+    return _getAllCheckupModels;
   }
 }

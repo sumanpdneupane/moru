@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:moru/utils/Commons.dart';
 
 class CaseModel {
@@ -32,8 +33,8 @@ class CaseModel {
   String? status; //pending/reportReady/needUpdate
 
   //For photo
-  int lowerPhotoBoundSize;
-  int upperPhotoBoundSize;
+  int lowerPhotoBoundSize = 0;
+  int upperPhotoBoundSize = 0;
   List<PhotoModel>? photos;
 
   List<QuestionairesModel>? questionaires;
@@ -70,12 +71,53 @@ class CaseModel {
     this.questionaires = questionaires == null ? [] : questionaires;
   }
 
+  CaseModel.fromJson(String uid, Map<dynamic, dynamic> json) {
+    this.uid = uid;
+    if (json != null && json.length > 0) {
+      this.assignedTo = json["assignedTo"];
+      this.whatYouCanDo = json["whatYouCanDo"];
+      this.replyFromDoctor = json["replyFromDoctor"];
+      this.replyFromPatient = json["replyFromPatient"];
+
+      this.severityScale = json["severityScale"];
+      this.createdBy = json["createdBy"];
+
+      var createdDate = json['createdDate'] as Timestamp;
+      this.createdDate = createdDate != null ? createdDate.toDate() : null;
+      this.lastStatusUpdated = json["lastStatusUpdated"];
+
+      this.nextSteps = json["nextSteps"];
+      this.coupon = json["coupon"];
+      this.stripeResponse = json["stripeResponse"];
+      this.totalCostOfPlan = json["totalCostOfPlan"];
+      this.totalCostPaid = json["totalCostPaid"];
+
+      this.discountAmount = json["discountAmount"];
+      this.plan = json["plan"];
+      this.status = json["status"];
+
+      if (json["photos"] != null) {
+        this.photos = <PhotoModel>[];
+        json["photos"].forEach((v) {
+          this.photos?.add(new PhotoModel.fromJson(v));
+        });
+      }
+
+      if (json["questionaires"] != null) {
+        this.questionaires = <QuestionairesModel>[];
+        json["questionaires"].forEach((v) {
+          this.questionaires?.add(new QuestionairesModel.fromJson(v));
+        });
+      }
+      //this.questionaires = json["questionaires"];
+      this.recommendedProducts = json["recommendedProducts"];
+      this.recommendedTreatments = json["recommendedTreatments"];
+    }
+  }
+
   Map<String, dynamic> toJson() {
     Map<String, dynamic> data = Map();
 
-    // if (data["photos"] != null) {
-    //   //data["photos"] = photos.forEach((element) {element.t});
-    // }
     data["createdBy"] = createdBy;
     data["assignedTo"] = assignedTo;
     data["createdDate"] = createdDate;
@@ -159,6 +201,16 @@ class PhotoModel {
         file: this.file = file ?? this.file);
   }
 
+  PhotoModel.fromJson(Map<dynamic, dynamic> json) {
+    if (json != null && json.length > 0) {
+      this.description = json["description"];
+      this.title = json["title"];
+      this.url = json["url"];
+      this.status = json["status"];
+    }
+  }
+
+
   Map<String, dynamic> toJson() {
     Map<String, dynamic> data = Map();
     data["description"] = description;
@@ -177,6 +229,13 @@ class QuestionairesModel {
     this.question,
     this.answer,
   });
+
+  QuestionairesModel.fromJson(Map<dynamic, dynamic> json) {
+    if (json != null && json.length > 0) {
+      this.question = json["question"];
+      this.answer = json["answer"];
+    }
+  }
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> data = Map();

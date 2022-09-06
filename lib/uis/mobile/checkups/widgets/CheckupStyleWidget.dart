@@ -69,7 +69,7 @@ class CheckupStyleWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          LocaleText(
+                          Text(
                             date,
                             style: GoogleFonts.syne(
                               fontSize: 15,
@@ -84,7 +84,7 @@ class CheckupStyleWidget extends StatelessWidget {
                                 color: dotColor,
                               ),
                               SizedBox(width: 5),
-                              LocaleText(
+                              Text(
                                 title2,
                                 style: GoogleFonts.syne(
                                   fontSize: 13,
@@ -121,8 +121,8 @@ class CheckupStyleWidget extends StatelessWidget {
                             ),
                           ),
                         )
-                      : LocaleText(
-                          'empty',
+                      : Text(
+                          '',
                           style: GoogleFonts.syne(
                             fontSize: 12,
                             color: Color(0xff6B779A),
