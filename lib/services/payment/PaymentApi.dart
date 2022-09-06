@@ -55,4 +55,25 @@ class PaymentApi extends BaseAPI {
         convert.jsonDecode(response.body) as Map<String, dynamic>;
     return jsonResponse;
   }
+
+  Future<dynamic> getPromocode(Map<String, dynamic> data) async {
+    final url = Uri.parse(
+      ApiUrls.BASE_URL + ApiUrls.GET_PROMO_CODE,
+    );
+    final headers = {
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+    final json = jsonEncode(data);
+    print("json---> ${json}");
+    final response = await http.post(url, headers: headers, body: json);
+    print('Status code: ${response.statusCode}');
+    print('Body: ${response.body}');
+
+    //{"result":{"success":true,"data":{"id":"promo_1LexY8DXe16sDQVNVlWx3O5C","code":"DIS100","amount_off":null,"percentage_off":100,"currency":null}}}
+
+    //Response and converter
+    var jsonResponse =
+    convert.jsonDecode(response.body) as Map<String, dynamic>;
+    return jsonResponse;
+  }
 }

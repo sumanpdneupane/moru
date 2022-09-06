@@ -19,6 +19,7 @@ class CaseModel {
   double? totalCostOfPlan;
   double? totalCostPaid;
   double? discountAmount;
+  double? discountPercentage;
   String? priceId;
   String? productId;
   String? coupon;
@@ -55,6 +56,7 @@ class CaseModel {
     this.totalCostOfPlan = 0,
     this.totalCostPaid = 0,
     this.discountAmount = 0,
+    this.discountPercentage = 0,
     this.plan,
     this.status,
     this.lowerPhotoBoundSize = 1,
@@ -82,9 +84,15 @@ class CaseModel {
     if (stripeResponse != null) {
       data["stripeResponse"] = stripeResponse;
     }
+    if (discountPercentage! > 0) {
+      totalCostPaid =
+          totalCostOfPlan! - (totalCostOfPlan! * discountPercentage!) / 100;
+      discountAmount = totalCostOfPlan! - totalCostPaid!;
+    }
     data["totalCostOfPlan"] = totalCostOfPlan;
     data["totalCostPaid"] = totalCostPaid;
     data["discountAmount"] = discountAmount;
+
     data["coupon"] = coupon;
 
     data["plan"] = plan;
