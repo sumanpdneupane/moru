@@ -170,31 +170,34 @@ class _OpenDialogState extends State<_OpenDialog> {
             child: addYourFile(),
           ),
           space2(),
-          space2(),
-          button(
-            text: Constants.OPEN_CAMERA,
-            textColor: CustomColors.white,
-            backgroundColor: CustomColors.green,
-            onTab: () async {
-              Navigator.pop(context);
-              if (kIsWeb) {
-                //Routes.pushNamed(context, Routes.WEB_CAMERA_PAGE);
-                Commons.toastMessage(context, "Comming soon for web");
-              } else {
-                Uint8List? byte = await FileManger.openCamera();
-                if (byte == null) {
-                  Commons.toastMessage(context, FileManger.NO_SELECTED);
-                } else {
-                  widget.callback!(byte);
-                }
-              }
-            },
-          ),
+          !kIsWeb ? space2() : Container(),
+          !kIsWeb
+              ? button(
+                  text: Constants.OPEN_CAMERA,
+                  textColor: CustomColors.white,
+                  backgroundColor: CustomColors.green,
+                  onTab: () async {
+                    Navigator.pop(context);
+                    if (kIsWeb) {
+                      //Routes.pushNamed(context, Routes.WEB_CAMERA_PAGE);
+                      Commons.toastMessage(context, "Comming soon for web");
+                    } else {
+                      Uint8List? byte = await FileManger.openCamera();
+                      if (byte == null) {
+                        Commons.toastMessage(context, FileManger.NO_SELECTED);
+                      } else {
+                        widget.callback!(byte);
+                      }
+                    }
+                  },
+                )
+              : Container(),
           space1(),
           button(
-            text: Constants.OPEN_GALLERY,
-            textColor: CustomColors.black,
-            backgroundColor: CustomColors.greyLight,
+            text: !kIsWeb ? Constants.OPEN_GALLERY : Constants.CHOOSE_PHOTO,
+            textColor: !kIsWeb ? CustomColors.black : CustomColors.white,
+            backgroundColor:
+                !kIsWeb ? CustomColors.greyLight : CustomColors.primarycolor,
             onTab: () async {
               Navigator.pop(context);
               Uint8List? byte;

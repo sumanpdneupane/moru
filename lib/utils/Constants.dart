@@ -6,6 +6,7 @@ class Constants{
   //Camera or Gallery
   static String get OPEN_CAMERA => "Open Camera";
   static String get OPEN_GALLERY => "Open Gallery";
+  static String get CHOOSE_PHOTO => "Choose Photo";
   static String get CAMER_OR_GALLERY => "Open camera to take photos and open gallery to select image and file.";
 
 }
