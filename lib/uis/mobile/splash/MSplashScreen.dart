@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moru/Routes.dart';
@@ -46,7 +47,23 @@ class _MSplashScreenState extends State<MSplashScreen> {
   @override
   void initState() {
     super.initState();
-    silentLogin();
+    init();
+  }
+
+  init() async {
+    String uid = await repository.getUserIdFromLocal();
+    print("Splash----------> ${uid}");
+    if (uid != null && uid != "") {
+      bool result = await loginUser(uid: uid);
+
+      if (result) {
+        Routes.popAndPushNamed(context, Routes.HOME_PAGE);
+      } else {
+        Routes.popAndPushNamed(context, Routes.LOGIN_PAGE);
+      }
+    } else {
+      silentLogin();
+    }
   }
 
   @override
