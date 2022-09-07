@@ -198,15 +198,22 @@ class _OpenDialogState extends State<_OpenDialog> {
             onTab: () async {
               Navigator.pop(context);
               Uint8List? byte;
-              if (!kIsWeb) {
-                byte = await FileManger.openFileSystem(
-                  fileType: widget.fileType,
-                  allowedExtensions: widget.allowedExtensions,
-                  allowExtensions: widget.allowExtensions ?? false,
-                );
-              } else {
-                byte = await FileManger.openCamera();
-              }
+              // if (!kIsWeb) {
+              //   byte = await FileManger.openFileSystem(
+              //     fileType: widget.fileType,
+              //     allowedExtensions: widget.allowedExtensions,
+              //     allowExtensions: widget.allowExtensions ?? false,
+              //   );
+              // }
+              // else {
+              //   byte = await FileManger.openCamera();
+              // }
+              byte = await FileManger.openFileSystem(
+                fileType: widget.fileType,
+                allowedExtensions: widget.allowedExtensions,
+                allowExtensions: widget.allowExtensions ?? false,
+              );
+
               if (byte == "") {
                 Commons.toastMessage(context, FileManger.NO_SELECTED);
               } else {
