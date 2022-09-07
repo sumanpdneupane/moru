@@ -25,7 +25,7 @@ class CheckupWidget extends StatelessWidget {
     model.plan = CaseModel.SINGLE_ISSUE_PLAN;
     model.priceId = "price_1LZC7LDXe16sDQVN287FtFur";
     model.productId = "prod_MHle6zMmxr5Mik";
-    model.assignedTo = "uid2";
+    model.assignedTo = "HsqX5doxlZgWpmV6WKrILVvkeE92";
     model.status = "pending";
     model.createdBy = userViewModel.getModel().uid;
 
@@ -48,7 +48,7 @@ class CheckupWidget extends StatelessWidget {
     model.plan = CaseModel.FULL_ASSESSMENT_PLAN;
     model.priceId = "price_1LZC7pDXe16sDQVND8b3cPGD";
     model.productId = "prod_MHlfxSndZMsJpX";
-    model.assignedTo = "uid2";
+    model.assignedTo = "HsqX5doxlZgWpmV6WKrILVvkeE92";
     model.status = "pending";
     model.createdBy = userViewModel.getModel().uid;
 
