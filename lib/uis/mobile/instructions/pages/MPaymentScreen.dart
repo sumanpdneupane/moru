@@ -110,13 +110,12 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
     //appViewModel.updateCreateCheckupModel(model);
 
     //save
-    Commons.consoleLog("model----------> ${model.toJson()}");
     List<Future> allFutures = [];
     // model.photos?.forEach((photo) {
     //
     // });
     for (var i = 0; i < model.photos!.length; i++) {
-      allFutures.add(uploadFile(model.photos![i].file!, user.uid));
+      allFutures.add(uploadFile(model.photos![i].bytes!, user.uid));
     }
     var allImages = await Future.wait(allFutures);
     print(allImages);
@@ -126,6 +125,9 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
       model.photos![i].title = "";
       model.photos![i].description = "";
     }
+
+    Commons.consoleLog("model----------> ${model.toJson()}");
+
     await repository.cases.post(data: model.toJson());
     model = CaseModel();
     appViewModel.updateCreateCheckupModel(model);
@@ -134,17 +136,23 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
     Routes.pushNamedAndRemoveUntil(context, Routes.APPOINMENT_DONE_PAGE);
   }
 
-  Future<String> uploadFile(File file, String? uid) async {
+  Future<String> uploadFile(Uint8List byte, String? uid) async {
     try {
       final _firebaseStorage = FirebaseStorage.instance;
-      Uint8List imageData = await XFile(file.path).readAsBytes();
-      print(
-          'cases/${uid}/${DateTime.now().millisecond}-${FileManger.getFileName(file.path)}.jpeg');
+      //Uint8List imageData = await XFile(file.path).readAsBytes();
+      // print(
+      //     'cases/${uid}/${DateTime.now().millisecond}-${FileManger.getFileName(file.path)}.jpeg');
+      print('cases/${uid}/${DateTime.now().microsecondsSinceEpoch}-moru.jpeg');
       var snapshot = await _firebaseStorage
           .ref()
           .child(
-              'cases/${uid}/${DateTime.now().millisecond}-${FileManger.getFileName(file.path)}')
-          .putData(imageData)
+              'cases/${uid}/${DateTime.now().microsecondsSinceEpoch}-moru.jpeg')
+          .putData(
+            byte,
+            SettableMetadata(
+              contentType: 'image/jpeg',
+            ),
+          )
           .whenComplete(() => null);
       var downloadUrl = await snapshot.ref.getDownloadURL();
       return downloadUrl;

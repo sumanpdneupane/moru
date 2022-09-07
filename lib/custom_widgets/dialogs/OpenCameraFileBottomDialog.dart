@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +19,7 @@ class OpenCameraFileBottomDialog {
     FileType? fileType,
     List<String>? allowedExtensions,
     bool? allowExtensions,
-    Function(String path)? callback,
+    Function(Uint8List bytes)? callback,
   }) {
     showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -35,7 +37,7 @@ class OpenCameraFileBottomDialog {
 }
 
 class _OpenDialog extends StatefulWidget {
-  final Function(String path)? callback;
+  final Function(Uint8List bytes)? callback;
   final FileType? fileType;
   final List<String>? allowedExtensions;
   bool? allowExtensions;
@@ -179,37 +181,15 @@ class _OpenDialogState extends State<_OpenDialog> {
                 //Routes.pushNamed(context, Routes.WEB_CAMERA_PAGE);
                 Commons.toastMessage(context, "Comming soon for web");
               } else {
-                String path = await FileManger.openCamera();
-                if (path == FileManger.NO_SELECTED) {
-                  Commons.toastMessage(context, path);
+                Uint8List? byte = await FileManger.openCamera();
+                if (byte == null) {
+                  Commons.toastMessage(context, FileManger.NO_SELECTED);
                 } else {
-                  widget.callback!(path);
+                  widget.callback!(byte);
                 }
               }
             },
           ),
-          // ButtonWidget(
-          //   name: Constants.OPEN_CAMERA,
-          //   height: 50,
-          //   width: MediaQuery.of(context).size.width * 0.87,
-          //   fontSize: 15,
-          //   backgroundColor: CustomColors.green,
-          //   textColor: CustomColors.white,
-          //   onTap: () async {
-          //     Navigator.pop(context);
-          //     if (kIsWeb) {
-          //       //Routes.pushNamed(context, Routes.WEB_CAMERA_PAGE);
-          //       Commons.toastMessage(context, "Comming soon for web");
-          //     } else {
-          //       String path = await FileManger.openCamera();
-          //       if (path == FileManger.NO_SELECTED) {
-          //         Commons.toastMessage(context, path);
-          //       } else {
-          //         widget.callback!(path);
-          //       }
-          //     }
-          //   },
-          // ),
           space1(),
           button(
             text: Constants.OPEN_GALLERY,
@@ -217,49 +197,23 @@ class _OpenDialogState extends State<_OpenDialog> {
             backgroundColor: CustomColors.greyLight,
             onTab: () async {
               Navigator.pop(context);
-              String? path;
+              Uint8List? byte;
               if (!kIsWeb) {
-                path = await FileManger.openFileSystem(
+                byte = await FileManger.openFileSystem(
                   fileType: widget.fileType,
                   allowedExtensions: widget.allowedExtensions,
                   allowExtensions: widget.allowExtensions ?? false,
                 );
               } else {
-                path = await FileManger.openCamera();
+                byte = await FileManger.openCamera();
               }
-              if (path == FileManger.NO_SELECTED) {
-                Commons.toastMessage(context, path!);
+              if (byte == "") {
+                Commons.toastMessage(context, FileManger.NO_SELECTED);
               } else {
-                widget.callback!(path!);
+                widget.callback!(byte!);
               }
             },
           ),
-          // ButtonWidget(
-          //   name: Constants.OPEN_GALLERY,
-          //   height: 50,
-          //   width: MediaQuery.of(context).size.width * 0.87,
-          //   fontSize: 15,
-          //   backgroundColor: CustomColors.greyLight,
-          //   textColor: CustomColors.black,
-          //   onTap: () async {
-          //     Navigator.pop(context);
-          //     String? path;
-          //     if (Platform.isAndroid || Platform.isIOS) {
-          //       path = await FileManger.openFileSystem(
-          //         fileType: widget.fileType,
-          //         allowedExtensions: widget.allowedExtensions,
-          //         allowExtensions: widget.allowExtensions ?? false,
-          //       );
-          //     } else {
-          //       path = await FileManger.openCamera();
-          //     }
-          //     if (path == FileManger.NO_SELECTED) {
-          //       Commons.toastMessage(context, path!);
-          //     } else {
-          //       widget.callback!(path!);
-          //     }
-          //   },
-          // ),
           space1(),
         ],
       ),

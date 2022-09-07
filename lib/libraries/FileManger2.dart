@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
-import 'package:flutter/foundation.dart';
 import 'package:universal_io/io.dart' as universal;
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -9,36 +7,22 @@ import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
-class MFile {
-  Uint8List? bytes;
-  String? name = "";
-
-  MFile({
-    required this.bytes,
-    required this.name,
-  });
-}
-
 class FileManger {
   static String NO_SELECTED = "Image/file is not selected.";
 
-  static Future<Uint8List?> openCamera() async {
+  static Future<String> openCamera() async {
     final picker = ImagePicker();
-    XFile? pickedFile = await picker.pickImage(source: ImageSource.camera);
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
     // used getImage() instead of deprecated pickImage
 
-    if (pickedFile != null) {
-      if (kIsWeb) {
-        return await pickedFile.readAsBytes();
-      } else {
-        return await File(pickedFile.path).readAsBytesSync();
-      }
+    if (pickedFile == null) {
+      return NO_SELECTED;
+    } else {
+      return pickedFile.path;
     }
-
-    return null;
   }
 
-  static Future<Uint8List?> openFileSystem({
+  static Future<String?> openFileSystem({
     FileType? fileType,
     required bool allowExtensions,
     List<String>? allowedExtensions,
@@ -63,16 +47,10 @@ class FileManger {
       );
     }
 
-    //return result.files.single.path;
-    if (result != null) {
-      if (kIsWeb) {
-        return await result.files.single.bytes;
-      } else {
-        return await File(result.files.single.path!).readAsBytesSync();
-      }
+    if (result == null) {
+      return NO_SELECTED;
     }
-
-    return null;
+    return result.files.single.path;
   }
 
   // static Future<void> openWebCamera(){
@@ -186,13 +164,13 @@ class FileManger {
   }
 
   static Widget loadImageFile({
-    required Uint8List bytes,
+    required File file,
     required double height,
     required double width,
     BoxFit fit = BoxFit.fill,
   }) {
     return _ImageViewer(
-      bytes: bytes,
+      file: file,
       height: height,
       width: width,
       fit: fit,
@@ -206,14 +184,14 @@ class FileSystemType {
 }
 
 class _ImageViewer extends StatefulWidget {
-  final Uint8List bytes;
+  final File file;
   final double height;
   final double width;
   BoxFit fit;
 
   _ImageViewer({
     Key? key,
-    required this.bytes,
+    required this.file,
     required this.height,
     required this.width,
     this.fit = BoxFit.fill,
@@ -227,25 +205,19 @@ class _ImageViewerState extends State<_ImageViewer> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Image.memory(
-        widget.bytes,
-        fit: widget.fit,
-        width: widget.width,
-        height: widget.height,
-      ),
-      // child: universal.Platform.isAndroid || universal.Platform.isIOS
-      //     ? Image.file(
-      //         widget.bytes,
-      //         fit: widget.fit,
-      //         width: widget.width,
-      //         height: widget.height,
-      //       )
-      //     : Image.network(
-      //         widget.bytes.path,
-      //         fit: widget.fit,
-      //         width: widget.width,
-      //         height: widget.height,
-      //       ),
+      child: universal.Platform.isAndroid || universal.Platform.isIOS
+          ? Image.file(
+              widget.file,
+              fit: widget.fit,
+              width: widget.width,
+              height: widget.height,
+            )
+          : Image.network(
+              widget.file.path,
+              fit: widget.fit,
+              width: widget.width,
+              height: widget.height,
+            ),
     );
   }
 }

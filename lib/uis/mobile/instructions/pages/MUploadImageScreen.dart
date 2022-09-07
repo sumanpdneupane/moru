@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:moru/model/AppViewModel.dart';
 import 'package:moru/model/CaseModel.dart';
 import 'package:provider/provider.dart';
@@ -34,11 +35,11 @@ class _MUploadImageScreenState extends State<MUploadImageScreen> {
       context: context,
       fileType: FileType.image,
       allowExtensions: false,
-      callback: (String path) {
-        if (path == FileManger.NO_SELECTED) {
-          Commons.toastMessage(context, path);
+      callback: (Uint8List bytes) {
+        if (bytes == null) {
+          Commons.toastMessage(context, FileManger.NO_SELECTED);
         } else {
-          addImageToModel(context, path);
+          addImageToModel(context, bytes);
         }
       },
     );
@@ -136,7 +137,7 @@ class _MUploadImageScreenState extends State<MUploadImageScreen> {
     return true;
   }
 
-  Future<void> addImageToModel(BuildContext context, String path) async {
+  Future<void> addImageToModel(BuildContext context, Uint8List bytes) async {
     var appViewModel = Provider.of<AppViewModel>(context, listen: false);
     var model = appViewModel.getCreateCheckupModel();
     model.photos!.add(
@@ -145,7 +146,7 @@ class _MUploadImageScreenState extends State<MUploadImageScreen> {
         url: "",
         title: "",
         status: PhotoModel.ACTIVE,
-        file: File(path),
+        bytes: bytes,
       ),
     );
     appViewModel.updateCreateCheckupModel(model);
@@ -187,13 +188,13 @@ class LoadImageGridViewWidget extends StatelessWidget {
     );
   }
 
-  Widget imageView(File file, height, context) {
+  Widget imageView(Uint8List bytes, height, context) {
     return Container(
       padding: EdgeInsets.all(6),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
         child: FileManger.loadImageFile(
-          file: file,
+          bytes: bytes,
           height: height,
           width: MediaQuery.of(context).size.width,
         ),
@@ -243,7 +244,7 @@ class LoadImageGridViewWidget extends StatelessWidget {
             //fit: StackFit.expand,
             children: [
               imageBackground(height),
-              imageView(photoModels[index].file!, height, context),
+              imageView(photoModels[index].bytes!, height, context),
               removeImageView(index)
             ],
           );

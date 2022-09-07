@@ -37,28 +37,32 @@ Future<void> main() async {
   // );
   if (!kIsWeb) {
     await Firebase.initializeApp(
-      options: FirebaseOptions(
-        apiKey: "AIzaSyBoIq1GbM-DMiWVZdC9LKxEmtW43htkaF0",
-        appId: "1:524010047131:web:cd294471a31292b995683e",
-        messagingSenderId: "524010047131",
-        projectId: "web-rtc-6f95e",
-      ),
+      // options: FirebaseOptions(
+      //   apiKey: "AIzaSyBoIq1GbM-DMiWVZdC9LKxEmtW43htkaF0",
+      //   appId: "1:524010047131:web:cd294471a31292b995683e",
+      //   messagingSenderId: "524010047131",
+      //   projectId: "web-rtc-6f95e",
+      // ),
     );
   } else {
     await Firebase.initializeApp(
       options: FirebaseOptions(
-        // apiKey: "AIzaSyBoIq1GbM-DMiWVZdC9LKxEmtW43htkaF0",
-        // appId: "1:524010047131:web:cd294471a31292b995683e",
-        // messagingSenderId: "524010047131",
-        // projectId: "web-rtc-6f95e",
-        apiKey: "AIzaSyA8w-t6MahHcpjk0pifVSZXiLSKSeGHZh8",
-        authDomain: "moruapp-1.firebaseapp.com",
-        databaseURL: "https://moruapp-1-default-rtdb.firebaseio.com",
-        projectId: "moruapp-1",
-        storageBucket: "moruapp-1.appspot.com",
-        messagingSenderId: "1022602170770",
-        appId: "1:1022602170770:web:8986635f3378bc82f9b14b",
-        measurementId: "G-BC00HQZ7GC",
+        // apiKey: "AIzaSyA8w-t6MahHcpjk0pifVSZXiLSKSeGHZh8",
+        // authDomain: "moruapp-1.firebaseapp.com",
+        // databaseURL: "https://moruapp-1-default-rtdb.firebaseio.com",
+        // projectId: "moruapp-1",
+        // storageBucket: "moruapp-1.appspot.com",
+        // messagingSenderId: "1022602170770",
+        // appId: "1:1022602170770:web:8986635f3378bc82f9b14b",
+        // measurementId: "G-BC00HQZ7GC",
+          apiKey: "AIzaSyBoIq1GbM-DMiWVZdC9LKxEmtW43htkaF0",
+          authDomain: "web-rtc-6f95e.firebaseapp.com",
+          databaseURL: "https://web-rtc-6f95e.firebaseio.com",
+          projectId: "web-rtc-6f95e",
+          storageBucket: "web-rtc-6f95e.appspot.com",
+          messagingSenderId: "524010047131",
+          appId: "1:524010047131:web:cd294471a31292b995683e",
+          measurementId: "G-6S9E7LTG34"
       ),
     );
   }

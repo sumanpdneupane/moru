@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:moru/utils/Commons.dart';
@@ -173,7 +174,7 @@ class PhotoModel {
   String? title;
   String? url;
   String? status; //active/rejected
-  File? file;
+  Uint8List? bytes;
 
   static String ACTIVE = "active";
   static String REJECTED = "rejected";
@@ -183,7 +184,7 @@ class PhotoModel {
     this.title = "",
     required this.url,
     this.status = "active",
-    this.file = null,
+    this.bytes = null,
   });
 
   PhotoModel copyWith({
@@ -191,14 +192,14 @@ class PhotoModel {
     String? title,
     String? url,
     String? status, //active/rejected
-    File? file,
+    Uint8List? bytes,
   }) {
     return PhotoModel(
         description: this.description = description ?? this.description,
         title: this.title = title ?? this.title,
         url: this.url = url ?? this.url,
         status: this.status = status ?? this.status,
-        file: this.file = file ?? this.file);
+        bytes: this.bytes = bytes ?? this.bytes);
   }
 
   PhotoModel.fromJson(Map<dynamic, dynamic> json) {

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 //import 'package:camera/camera.dart';
 import 'package:file_picker/file_picker.dart';
@@ -25,7 +26,7 @@ import 'package:provider/provider.dart';
 class MInstructionScreen extends StatelessWidget {
   const MInstructionScreen({Key? key}) : super(key: key);
 
-  Future<void> addImageToModel(BuildContext context, String path) async {
+  Future<void> addImageToModel(BuildContext context, Uint8List? byte) async {
     var appViewModel = Provider.of<AppViewModel>(context, listen: false);
     var model = appViewModel.getCreateCheckupModel();
     model.photos!.add(
@@ -34,7 +35,7 @@ class MInstructionScreen extends StatelessWidget {
         url: "",
         title: "",
         status: PhotoModel.ACTIVE,
-        file: File(path),
+        bytes: byte,
       ),
     );
     appViewModel.updateCreateCheckupModel(model);
@@ -46,12 +47,12 @@ class MInstructionScreen extends StatelessWidget {
       context: context,
       fileType: FileType.image,
       allowExtensions: false,
-      callback: (String path) async {
-        if (path == FileManger.NO_SELECTED) {
-          Commons.toastMessage(context, path);
+      callback: (Uint8List? byte) async {
+        if (byte == null) {
+          Commons.toastMessage(context, FileManger.NO_SELECTED);
         } else {
           //imageFiles.add(File(path));
-          await addImageToModel(context, path);
+          await addImageToModel(context, byte);
           Routes.pushNamed(context, Routes.UPLOAD_IMAGE_PAGE);
         }
       },
