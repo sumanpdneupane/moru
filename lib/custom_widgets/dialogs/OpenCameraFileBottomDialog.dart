@@ -8,6 +8,7 @@ import 'package:moru/utils/Commons.dart';
 import 'package:moru/utils/Constants.dart';
 import 'package:moru/utils/CustomColors.dart';
 import 'package:universal_io/io.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 /// Created by Suman Prasad Neupane on 3/10/2022.
 class OpenCameraFileBottomDialog {
@@ -217,7 +218,7 @@ class _OpenDialogState extends State<_OpenDialog> {
             onTab: () async {
               Navigator.pop(context);
               String? path;
-              if (Platform.isAndroid || Platform.isIOS) {
+              if (!kIsWeb) {
                 path = await FileManger.openFileSystem(
                   fileType: widget.fileType,
                   allowedExtensions: widget.allowedExtensions,
