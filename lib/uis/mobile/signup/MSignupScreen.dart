@@ -9,9 +9,11 @@ import 'package:moru/custom_widgets/ButtonWidget.dart';
 import 'package:moru/custom_widgets/MyCheckBox.dart';
 import 'package:moru/custom_widgets/MyInputField.dart';
 import 'package:moru/custom_widgets/MyWrapButton.dart';
+import 'package:moru/model/UserModel.dart';
 import 'package:moru/services/Repository.dart';
 import 'package:moru/utils/Commons.dart';
 import 'package:moru/utils/CustomColors.dart';
+import 'package:provider/provider.dart';
 
 class MSignupScreen extends StatefulWidget {
   const MSignupScreen({Key? key}) : super(key: key);
@@ -77,9 +79,23 @@ class _MSignupScreenState extends State<MSignupScreen> {
           return false;
         } else {
           Commons.toastMessage(context, "Account created successfully.");
-          return true;
+          return await loginUser(uid: userCredential.user!.uid);
         }
       }
+    }
+  }
+
+  Future<bool> loginUser({required String? uid}) async {
+    UserModel? userModel =
+        await repository.users.getCurrentUserInfo(userId: uid);
+    if (userModel != null) {
+      Provider.of<UserViewModel>(context, listen: false).update(userModel);
+      repository.saveUserIdToLocal(uid: uid!);
+      //Commons.toastMessage(context, "Login successully");
+      return true;
+    } else {
+      Commons.toastMessage(context, "Failed to Login");
+      return false;
     }
   }
 
@@ -139,6 +155,7 @@ class _MSignupScreenState extends State<MSignupScreen> {
                 MyInputField(
                   heading: "Password",
                   controller: passwordController,
+                  obscureText: true,
                   width: width,
                 ),
                 SizedBox(
@@ -147,6 +164,7 @@ class _MSignupScreenState extends State<MSignupScreen> {
                 MyInputField(
                   heading: "Confirm Password",
                   controller: re_passwordController,
+                  obscureText: true,
                   width: width,
                 ),
                 // SizedBox(
@@ -235,10 +253,7 @@ class _MSignupScreenState extends State<MSignupScreen> {
                     bool result = await signup();
                     EasyLoading.dismiss();
                     if (result) {
-                      Routes.popAndPushNamed(
-                        context,
-                        Routes.LOGIN_PAGE,
-                      );
+                      Routes.popAndPushNamed(context, Routes.HOME_PAGE);
                     }
                   },
                 ),

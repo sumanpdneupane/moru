@@ -11,6 +11,7 @@ class CasesApi extends FirebaseInterface {
     try {
       final casesColl = getInstance.collection("cases");
       await casesColl.add(data!);
+      Commons.consoleLog("CasesApi::post----> success");
       return true;
     } catch (e) {
       Commons.consoleLog("CasesApi::post----> ${e}");

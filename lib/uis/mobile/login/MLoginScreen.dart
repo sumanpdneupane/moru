@@ -131,6 +131,7 @@ class _MLoginScreenState extends State<MLoginScreen> {
               MyInputField(
                 heading: "Password",
                 controller: passwordController,
+                obscureText: true,
                 width: width,
               ),
               SizedBox(height: 15),

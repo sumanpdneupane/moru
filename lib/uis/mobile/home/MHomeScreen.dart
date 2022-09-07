@@ -76,12 +76,18 @@ class HomePgeBody extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    String url = "https://firebasestorage.googleapis.com/v0/b/web-rtc-6f95e.appspot.com/o/cases%2FGdqpE6Q4boTUUK5P6Mf0VQipuoS2%2F1662570587254000-moru.jpeg?alt=media&token=d198a81f-de90-4482-9c7f-d3b70544a91d";
 
     return ResponsiveBuilder(builder: (context, SizingInformation) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 32),
+          // Image.network(
+          //   height: 200,
+          //   width: 300,
+          //   url,
+          // ),
           HowItWorkWidget(),
           Visibility(
             visible: false,
@@ -191,7 +197,9 @@ class CheckupStyle extends StatelessWidget {
           shrinkWrap: true,
           scrollDirection: Axis.vertical,
           itemBuilder: (BuildContext context, int index) {
-            String date = model[index].createdDate!.day.toString() + "th of" + DateFormat(" MMM y").format(model[index].createdDate!);
+            String date = model[index].createdDate!.day.toString() +
+                "th of" +
+                DateFormat(" MMM y").format(model[index].createdDate!);
 
             return Container(
               margin: EdgeInsets.only(bottom: 8),

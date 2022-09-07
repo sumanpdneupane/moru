@@ -8,6 +8,7 @@ class MyInputField extends StatelessWidget {
   Widget? suffixicon;
   TextEditingController? controller;
   TextInputType? keyboardType;
+  bool? obscureText;
 
   MyInputField({
     Key? key,
@@ -15,7 +16,8 @@ class MyInputField extends StatelessWidget {
     required this.width,
     required this.controller,
     this.suffixicon,
-    this.keyboardType: TextInputType.emailAddress
+    this.keyboardType: TextInputType.emailAddress,
+    this.obscureText: false,
   }) : super(key: key);
 
   @override
@@ -43,6 +45,7 @@ class MyInputField extends StatelessWidget {
                 child: TextFormField(
                   controller: controller,
                   keyboardType: keyboardType,
+                  obscureText: obscureText!,
                   decoration: InputDecoration(
                     suffixIcon: suffixicon,
                     focusedBorder: const OutlineInputBorder(
