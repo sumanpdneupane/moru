@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:flutter/foundation.dart' show kIsWeb;
 //import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -34,7 +34,7 @@ Future<void> main() async {
   // await Firebase.initializeApp(
   //   options:
   // );
-  if (Platform.isAndroid || Platform.isIOS) {
+  if (!kIsWeb) {
     await Firebase.initializeApp();
   } else {
     await Firebase.initializeApp(
