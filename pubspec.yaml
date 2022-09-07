@@ -28,6 +28,7 @@ dependencies:
 
   #State management
   provider: 6.0.3
+  shared_preferences: 2.0.15
 
   #REST ful api
   http: 0.13.5

@@ -93,6 +93,7 @@ class _MMainScreenState extends State<MMainScreen> {
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () async {
+              await widget.repository.saveUserIdToLocal(uid: "");
               await widget.repository.authentication.signOut();
               Routes.popAndPushNamed(context, Routes.SPLASH_PAGE);
             },

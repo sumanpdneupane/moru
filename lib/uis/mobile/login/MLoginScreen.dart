@@ -31,6 +31,7 @@ class _MLoginScreenState extends State<MLoginScreen> {
         await repository.users.getCurrentUserInfo(userId: uid);
     if (userModel != null) {
       Provider.of<UserViewModel>(context, listen: false).update(userModel);
+      repository.saveUserIdToLocal(uid: uid!);
       Routes.popAndPushNamed(context, Routes.HOME_PAGE);
       Commons.toastMessage(context, "Login successully");
       return true;

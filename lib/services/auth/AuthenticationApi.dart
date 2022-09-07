@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:moru/firebase/FirebaseAuthentication.dart';
 import 'package:moru/utils/Commons.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthenticationApi {
   FirebaseAuthentication firebaseAuthentication = FirebaseAuthentication();
@@ -71,7 +72,7 @@ class AuthenticationApi {
   Future<String> silentLogin() async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     final User? currentUser = _auth.currentUser;
-    if(currentUser != null){
+    if (currentUser != null) {
       return currentUser.uid;
     }
     return "";

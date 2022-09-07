@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart' show kIsWeb;
+
 //import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -35,22 +36,30 @@ Future<void> main() async {
   //   options:
   // );
   if (!kIsWeb) {
-    await Firebase.initializeApp();
+    await Firebase.initializeApp(
+      options: FirebaseOptions(
+        apiKey: "AIzaSyBoIq1GbM-DMiWVZdC9LKxEmtW43htkaF0",
+        appId: "1:524010047131:web:cd294471a31292b995683e",
+        messagingSenderId: "524010047131",
+        projectId: "web-rtc-6f95e",
+      ),
+    );
   } else {
     await Firebase.initializeApp(
       options: FirebaseOptions(
-          // apiKey: "AIzaSyBoIq1GbM-DMiWVZdC9LKxEmtW43htkaF0",
-          // appId: "1:524010047131:web:cd294471a31292b995683e",
-          // messagingSenderId: "524010047131",
-          // projectId: "web-rtc-6f95e",
-          apiKey: "AIzaSyA8w-t6MahHcpjk0pifVSZXiLSKSeGHZh8",
-          authDomain: "moruapp-1.firebaseapp.com",
-          databaseURL: "https://moruapp-1-default-rtdb.firebaseio.com",
-          projectId: "moruapp-1",
-          storageBucket: "moruapp-1.appspot.com",
-          messagingSenderId: "1022602170770",
-          appId: "1:1022602170770:web:8986635f3378bc82f9b14b",
-          measurementId: "G-BC00HQZ7GC"),
+        // apiKey: "AIzaSyBoIq1GbM-DMiWVZdC9LKxEmtW43htkaF0",
+        // appId: "1:524010047131:web:cd294471a31292b995683e",
+        // messagingSenderId: "524010047131",
+        // projectId: "web-rtc-6f95e",
+        apiKey: "AIzaSyA8w-t6MahHcpjk0pifVSZXiLSKSeGHZh8",
+        authDomain: "moruapp-1.firebaseapp.com",
+        databaseURL: "https://moruapp-1-default-rtdb.firebaseio.com",
+        projectId: "moruapp-1",
+        storageBucket: "moruapp-1.appspot.com",
+        messagingSenderId: "1022602170770",
+        appId: "1:1022602170770:web:8986635f3378bc82f9b14b",
+        measurementId: "G-BC00HQZ7GC",
+      ),
     );
   }
 
