@@ -8,6 +8,7 @@ import 'package:moru/Routes.dart';
 import 'package:moru/custom_widgets/ButtonWidget.dart';
 import 'package:moru/custom_widgets/FooterWidget.dart';
 import 'package:moru/custom_widgets/back_button/BackButtonWidget.dart';
+import 'package:moru/model/CaseModel.dart';
 import 'package:moru/uis/mobile/MMainScreen.dart';
 import 'package:moru/uis/mobile/checkups/dialog/ResubmitPhotosDialog.dart';
 import 'package:moru/uis/mobile/checkups/widgets/CheckupActionWidget.dart';
@@ -722,6 +723,7 @@ class CheckUp2Body extends StatelessWidget {
               dotColor: CustomColors.green,
               icon: Moru.smile,
               showReport: false,
+              caseModel: CaseModel(),
             ),
             const SizedBox(height: 8),
             CheckupActionWidget(

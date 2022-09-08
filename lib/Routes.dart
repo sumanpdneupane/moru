@@ -78,7 +78,7 @@ class Routes {
         return _MaterialPageRoute(MAppoinmentDoneScreen());
       case CHAT_PAGE:
         return _MaterialPageRoute(
-          MChatScreen(user: olivia),
+          MChatScreen(),
         );
       // case WEB_CAMERA_PAGE:
       //   return _MaterialPageRoute(WebImageCapturePage());
@@ -124,6 +124,6 @@ class Routes {
   }
 
   static String initialRoute() {
-    return Routes.CHAT_PAGE;
+    return Routes.SPLASH_PAGE;
   }
 }

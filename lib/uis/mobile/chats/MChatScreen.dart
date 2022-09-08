@@ -1,27 +1,151 @@
+import 'dart:typed_data';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:moru/Routes.dart';
 import 'package:moru/custom_widgets/MyInputField.dart';
 import 'package:moru/custom_widgets/base_uis/BaseUIWidget.dart';
+import 'package:moru/custom_widgets/dialogs/OpenCameraFileBottomDialog.dart';
+import 'package:moru/libraries/FileManger.dart';
+import 'package:moru/model/AppViewModel.dart';
 import 'package:moru/model/MessageModel.dart';
 import 'package:moru/model/UserModel.dart';
+import 'package:moru/utils/Commons.dart';
 import 'package:moru/utils/CustomColors.dart';
 import 'package:moru/utils/MoruIcons.dart';
 import 'package:moru/model/MessageModel.dart';
+import 'package:provider/provider.dart';
+import 'package:moru/model/CaseModel.dart';
 
 class MChatScreen extends StatefulWidget {
-  UserModel? user;
-
-  MChatScreen({
-    this.user,
-  });
+  MChatScreen();
 
   @override
   _MChatScreenState createState() => _MChatScreenState();
 }
 
 class _MChatScreenState extends State<MChatScreen> {
+  TextEditingController messageController = TextEditingController();
+  CaseModel? caseModel;
+  UserModel? currentUser;
+  String fullName = "";
+  String? photo;
+
+  @override
+  void initState() {
+    var userViewModel = Provider.of<UserViewModel>(context, listen: false);
+    currentUser = userViewModel.getModel();
+
+    var viewModel = Provider.of<AppViewModel>(context, listen: false);
+    caseModel = viewModel.getSingleCaseCheckupModel();
+
+    print("caseModel--initState---------> ${caseModel!.id}");
+
+    getDoctor();
+    super.initState();
+  }
+
+  getDoctor() async {
+    var doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(caseModel!.assignedTo)
+        .get();
+
+    Map data = doc.data() as Map;
+    fullName = data["fullName"];
+    photo = data["photo"];
+    setState(() {});
+  }
+
+  Future<void> sendMessage() async {
+    var currentUserViewModel =
+        Provider.of<UserViewModel>(context, listen: false);
+    var model = currentUserViewModel.getModel();
+
+    if (messageController.text.isNotEmpty) {
+      MessageModel messageModel = MessageModel(
+        receivedBy: "uid2",
+        sendBy: model.uid,
+        type: "text",
+        caseId: caseModel!.id,
+        value: messageController.text.trim(),
+        createdDate: Timestamp.now().toDate(),
+      );
+      await FirebaseFirestore.instance.collection('chats').add(
+            messageModel.toJson(),
+          );
+      messageController.text = "";
+    }
+  }
+
+  Future openCameraOrGallery(BuildContext context) async {
+    OpenCameraFileBottomDialog(
+      context: context,
+      fileType: FileType.image,
+      allowExtensions: false,
+      callback: (Uint8List bytes) async {
+        if (bytes == null) {
+          Commons.toastMessage(context, FileManger.NO_SELECTED);
+        } else {
+          EasyLoading.show(status: 'Uploading...');
+          var currentUserViewModel =
+              Provider.of<UserViewModel>(context, listen: false);
+          var model = currentUserViewModel.getModel();
+
+          String imageUrl = await uploadFile(bytes, caseModel!.id);
+          if (imageUrl == "") {
+            EasyLoading.dismiss();
+            return;
+          }
+          MessageModel messageModel = MessageModel(
+            receivedBy: "uid2",
+            sendBy: model.uid,
+            type: "photo",
+            caseId: caseModel!.id,
+            value: imageUrl,
+            createdDate: Timestamp.now().toDate(),
+          );
+
+          await FirebaseFirestore.instance
+              .collection('chats')
+              .add(messageModel.toJson());
+          EasyLoading.dismiss();
+          //Commons.toastMessage(context, "Image sent");
+        }
+      },
+    );
+  }
+
+  Future<String> uploadFile(Uint8List byte, String? caseId) async {
+    try {
+      final _firebaseStorage = FirebaseStorage.instance;
+      print(
+          'chats/${caseId}/${DateTime.now().microsecondsSinceEpoch}-moru.jpeg');
+      var snapshot = await _firebaseStorage
+          .ref()
+          .child(
+              'chats/${caseId}/${DateTime.now().microsecondsSinceEpoch}-moru.jpeg')
+          .putData(
+            byte,
+            SettableMetadata(
+              contentType: 'image/jpeg',
+            ),
+          )
+          .whenComplete(() => null);
+      var downloadUrl = await snapshot.ref.getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      print(e);
+      return '';
+    }
+  }
+
   Widget _buildMessageComposer() {
     return Container(
       height: 70.0,
@@ -33,11 +157,13 @@ class _MChatScreenState extends State<MChatScreen> {
             icon: Icon(Icons.add),
             color: Theme.of(context).primaryColor,
             iconSize: 25.0,
-            onPressed: () {},
+            onPressed: () {
+              openCameraOrGallery(context);
+            },
           ),
           Expanded(
             child: TextField(
-              onChanged: (value) {},
+              controller: messageController,
               textCapitalization: TextCapitalization.sentences,
               decoration: InputDecoration(
                 hintText: "Write a message... ",
@@ -64,7 +190,9 @@ class _MChatScreenState extends State<MChatScreen> {
             icon: Icon(Icons.send),
             color: Theme.of(context).primaryColor,
             iconSize: 25.0,
-            onPressed: () {},
+            onPressed: () {
+              sendMessage();
+            },
           ),
         ],
       ),
@@ -72,7 +200,7 @@ class _MChatScreenState extends State<MChatScreen> {
   }
 
   Widget _buildMessage(MessageModel message, bool isMe) {
-    final msg = message.text != null && message.text != ""
+    final msg = message.type == "text"
         ? Container(
             width: MediaQuery.of(context).size.width * 0.55,
             margin: isMe
@@ -98,9 +226,9 @@ class _MChatScreenState extends State<MChatScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  message.text != null && message.text != ""
+                  message.value != null && message.value != ""
                       ? Text(
-                          "${message.text}",
+                          "${message.value}",
                           style: GoogleFonts.syne(
                             fontSize: 16.0,
                             fontWeight: FontWeight.normal,
@@ -116,7 +244,7 @@ class _MChatScreenState extends State<MChatScreen> {
           )
         : Container();
 
-    final image = message.image != null && message.image != ""
+    final image = message.type == "photo"
         ? Container(
             width: MediaQuery.of(context).size.width * 0.55,
             margin: isMe
@@ -142,14 +270,14 @@ class _MChatScreenState extends State<MChatScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  message.image != null && message.image != ""
+                  message.value != null && message.value != ""
                       ? Container(
                           height: 130,
                           //margin: EdgeInsets.only(right: 8),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             image: DecorationImage(
-                              image: NetworkImage(message.image!),
+                              image: NetworkImage(message.value!),
                               fit: BoxFit.fill,
                             ),
                           ),
@@ -162,7 +290,7 @@ class _MChatScreenState extends State<MChatScreen> {
         : Container();
 
     final time = Text(
-      "${message.time}",
+      "${DateFormat("h:mm a").format(message.createdDate!)}",
       style: GoogleFonts.syne(
         fontSize: 14.0,
         fontWeight: FontWeight.normal,
@@ -190,12 +318,6 @@ class _MChatScreenState extends State<MChatScreen> {
         SizedBox(height: 32),
       ],
     );
-  }
-
-  @override
-  void initState() {
-    widget.user = olivia;
-    super.initState();
   }
 
   @override
@@ -232,27 +354,41 @@ class _MChatScreenState extends State<MChatScreen> {
                       child: Icon(Icons.arrow_back),
                     ),
                   ),
-                  SizedBox(width: 24),
-                  Container(
-                    height: 42,
-                    width: 42,
-                    decoration: BoxDecoration(
-                      color: Colors.amber,
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    child: Icon(
-                      Icons.person,
-                      color: Colors.white,
-                      size: 17,
-                    ),
-                  ),
+                  SizedBox(width: 16),
+                  // Container(
+                  //   height: 42,
+                  //   width: 42,
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.amber,
+                  //     borderRadius: BorderRadius.circular(24),
+                  //   ),
+                  //   child: Icon(
+                  //     Icons.person,
+                  //     color: Colors.white,
+                  //     size: 17,
+                  //   ),
+                  // ),
+                  photo != null && photo != ""
+                      ? Container(
+                          height: 40,
+                          width: 40,
+                          //margin: EdgeInsets.only(right: 8),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            image: DecorationImage(
+                              image: NetworkImage(photo!),
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        )
+                      : Container(),
                   SizedBox(width: 8),
                   Container(
                     height: 36,
                     //padding: EdgeInsets.all(8),
                     alignment: Alignment.center,
                     child: Text(
-                      "Dr. Mariam",
+                      "${fullName}",
                       textAlign: TextAlign.center,
                       style: GoogleFonts.syne(
                         fontSize: 15,
@@ -271,16 +407,50 @@ class _MChatScreenState extends State<MChatScreen> {
                   color: Colors.white,
                 ),
                 child: ClipRRect(
-                  child: ListView.builder(
-                      reverse: true,
-                      padding: EdgeInsets.only(top: 15.0),
-                      itemCount: messages.length,
-                      itemBuilder: (context, index) {
-                        final MessageModel message = messages[index];
-                        final bool isMe =
-                            message.sender!.uid == currentUser.uid;
-                        return _buildMessage(message, isMe);
-                      }),
+                  child: StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection('chats')
+                        .where("caseId", isEqualTo: caseModel!.id)
+                        .snapshots(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (!snapshot.hasData) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+
+                      if (snapshot.data!.docs.length < 1) {
+                        return Container();
+                      }
+
+                      List<MessageModel> messages =
+                          snapshot.data!.docs.map((doc) {
+                        Map data = doc.data() as Map;
+                        return new MessageModel.fromJson(doc.id, data);
+                      }).toList();
+
+                      messages.sort((a, b) {
+                        return b.createdDate!.compareTo(a.createdDate!);
+                      });
+
+                      return ListView.builder(
+                        reverse: true,
+                        padding: EdgeInsets.only(top: 15.0),
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          final MessageModel message = messages[index];
+                          final bool isMe = message.sendBy == currentUser!.uid;
+
+                          print(
+                            "QuerySnapshot----------> ${isMe}----${currentUser!.uid}--\n${message.toJson()}",
+                          );
+
+                          return _buildMessage(message, isMe);
+                        },
+                      );
+                    },
+                  ),
                 ),
               ),
             ),

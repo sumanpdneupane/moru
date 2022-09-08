@@ -3,8 +3,11 @@ import 'package:flutter_locales/flutter_locales.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:moru/Routes.dart';
+import 'package:moru/model/AppViewModel.dart';
+import 'package:moru/model/CaseModel.dart';
 import 'package:moru/utils/CustomColors.dart';
 import 'package:moru/utils/MoruIcons.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class CheckupStyleWidget extends StatelessWidget {
@@ -12,6 +15,7 @@ class CheckupStyleWidget extends StatelessWidget {
   Color boxcolor, dotColor;
   bool showReport;
   IconData icon;
+  CaseModel caseModel;
 
   CheckupStyleWidget({
     Key? key,
@@ -22,6 +26,7 @@ class CheckupStyleWidget extends StatelessWidget {
     this.dotColor = CustomColors.yellow,
     this.icon = Moru.smile,
     this.showReport = false,
+    required this.caseModel,
   }) : super(key: key);
 
   @override
@@ -32,6 +37,10 @@ class CheckupStyleWidget extends StatelessWidget {
     return ResponsiveBuilder(builder: (context, SizingInformation) {
       return GestureDetector(
         onTap: () {
+          print("caseModel---build-----------> ${caseModel.id}");
+          var viewModel = Provider.of<AppViewModel>(context, listen: false);
+          viewModel.updateSingleCaseCheckupModel(caseModel);
+
           Routes.pushNamed(context, Routes.CHECKUP_READY_PAGE);
         },
         child: SizedBox(

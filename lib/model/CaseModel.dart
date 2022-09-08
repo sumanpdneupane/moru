@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:moru/utils/Commons.dart';
 
 class CaseModel {
-  String? uid;
+  String? id;
 
   String? createdBy;
   String? assignedTo;
@@ -43,7 +43,7 @@ class CaseModel {
   List<String>? recommendedTreatments = [];
 
   CaseModel({
-    this.uid,
+    this.id,
     this.assignedTo,
     this.whatYouCanDo,
     this.replyFromDoctor,
@@ -73,7 +73,7 @@ class CaseModel {
   }
 
   CaseModel.fromJson(String uid, Map<dynamic, dynamic> json) {
-    this.uid = uid;
+    this.id = uid;
     if (json != null && json.length > 0) {
       this.assignedTo = json["assignedTo"];
       this.whatYouCanDo = json["whatYouCanDo"];
