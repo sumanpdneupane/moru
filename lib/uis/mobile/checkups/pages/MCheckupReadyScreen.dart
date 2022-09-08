@@ -76,7 +76,9 @@ class MCheckupReadyScreen extends StatelessWidget {
                 backgroundColor: CustomColors.primarycolor,
                 textColor: Colors.white,
                 prefixIconPath: "assets/icons/message.png",
-                onTap: () {},
+                onTap: () {
+                  Routes.pushNamed(context, Routes.CHAT_PAGE);
+                },
               ),
               const SizedBox(height: 24),
             ],
@@ -507,8 +509,8 @@ class CheckUp2Body extends StatelessWidget {
               ),
               Container(
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  color: Colors.white,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey,
@@ -523,7 +525,7 @@ class CheckUp2Body extends StatelessWidget {
                   margin: EdgeInsets.all(4),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
-                    color:CustomColors.primarycolor,
+                    color: CustomColors.primarycolor,
                   ),
                 ),
               )

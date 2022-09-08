@@ -12,7 +12,7 @@ class CaseModel {
   String? whatYouCanDo;
   String? replyFromDoctor;
   String? replyFromPatient;
-  int? severityScale;
+  var severityScale;
 
   DateTime? createdDate;
   DateTime? lastStatusUpdated;
@@ -90,10 +90,10 @@ class CaseModel {
       this.nextSteps = json["nextSteps"];
       this.coupon = json["coupon"];
       this.stripeResponse = json["stripeResponse"];
-      this.totalCostOfPlan = json["totalCostOfPlan"];
-      this.totalCostPaid = json["totalCostPaid"];
+      this.totalCostOfPlan = double.parse("${json["totalCostOfPlan"]}");
+      this.totalCostPaid = double.parse("${json["totalCostPaid"]}");
 
-      this.discountAmount = json["discountAmount"];
+      this.discountAmount = double.parse("${json["discountAmount"]}");
       this.plan = json["plan"];
       this.status = json["status"];
 
@@ -210,7 +210,6 @@ class PhotoModel {
       this.status = json["status"];
     }
   }
-
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> data = Map();

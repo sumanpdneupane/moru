@@ -6,6 +6,7 @@ class UserModel {
   String? fullname;
   String? email;
   String? role;
+  String? imageUrl;
   DateTime? createdDate;
 
   UserModel(
@@ -14,13 +15,16 @@ class UserModel {
     this.email,
     this.role,
     this.createdDate,
+    this.imageUrl,
   );
+
 
   UserModel copyWith({
     String? uid,
     String? fullname,
     String? email,
     String? role,
+    String? imageUrl,
     DateTime? createdDate,
   }) {
     return UserModel(
@@ -28,7 +32,8 @@ class UserModel {
         this.fullname = fullname ?? this.fullname,
         this.email = email ?? this.email,
         this.role = role ?? this.role,
-        this.createdDate = createdDate ?? this.createdDate);
+        this.createdDate = createdDate ?? this.createdDate,
+        this.imageUrl = imageUrl ?? this.imageUrl);
   }
 
   UserModel.fromJson(String uid, Map<dynamic, dynamic> json) {
@@ -39,6 +44,7 @@ class UserModel {
       this.role = json["role"];
       var createdDate = json['createdDate'] as Timestamp;
       this.createdDate = createdDate != null ? createdDate.toDate() : null;
+      this.imageUrl = json.containsKey("imageUrl") ? json['imageUrl'] : null;
     }
   }
 
@@ -53,7 +59,7 @@ class UserModel {
 }
 
 class UserViewModel with ChangeNotifier {
-  UserModel _model = UserModel("", "", "", "", null);
+  UserModel _model = UserModel("", "", "", "", null, "");
 
   void update(UserModel userModel) {
     _model = userModel;
@@ -64,7 +70,6 @@ class UserViewModel with ChangeNotifier {
     return _model;
   }
 }
-
 
 //TODO: provider
 //https://www.geeksforgeeks.org/flutter-using-nested-models-and-providers/
@@ -86,8 +91,6 @@ class UserViewModel with ChangeNotifier {
 //         },
 //       ),
 //2.   Provider.of<UserViewModel>(context, listen: false).update(userModel);
-
-
 
 //TODO: to show data
 //class UserNameWidget extends StatelessWidget {

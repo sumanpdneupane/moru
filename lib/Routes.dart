@@ -2,7 +2,9 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moru/libraries/WebImageCapturePage.dart';
+import 'package:moru/model/MessageModel.dart';
 import 'package:moru/uis/mobile/MMainScreen.dart';
+import 'package:moru/uis/mobile/chats/MChatScreen.dart';
 import 'package:moru/uis/mobile/checkups/MCheckupScreen.dart';
 import 'package:moru/uis/mobile/checkups/pages/MCheckupReadyScreen.dart';
 import 'package:moru/uis/mobile/forgot_password/MForgotPasswordScreen.dart';
@@ -37,6 +39,7 @@ class Routes {
   static const String PAYMENT_PAGE = "MPaymentScreen";
   static const String APPOINMENT_DONE_PAGE = "MAppoinmentDoneScreen";
   static const String WEB_CAMERA_PAGE = "WebImageCapturePage";
+  static const String CHAT_PAGE = "MChatScreen";
 
   static Route<dynamic>? generateRoutes(RouteSettings settings) {
     final args = settings.arguments;
@@ -73,6 +76,10 @@ class Routes {
         return _MaterialPageRoute(MPaymentScreen());
       case APPOINMENT_DONE_PAGE:
         return _MaterialPageRoute(MAppoinmentDoneScreen());
+      case CHAT_PAGE:
+        return _MaterialPageRoute(
+          MChatScreen(user: olivia),
+        );
       // case WEB_CAMERA_PAGE:
       //   return _MaterialPageRoute(WebImageCapturePage());
       default:
@@ -117,6 +124,6 @@ class Routes {
   }
 
   static String initialRoute() {
-    return Routes.SPLASH_PAGE;
+    return Routes.CHAT_PAGE;
   }
 }
