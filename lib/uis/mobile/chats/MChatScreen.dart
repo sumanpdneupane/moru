@@ -70,7 +70,7 @@ class _MChatScreenState extends State<MChatScreen> {
 
     if (messageController.text.isNotEmpty) {
       MessageModel messageModel = MessageModel(
-        receivedBy: "uid2",
+        receivedBy: "HsqX5doxlZgWpmV6WKrILVvkeE92",
         sendBy: model.uid,
         type: "text",
         caseId: caseModel!.id,
@@ -104,7 +104,7 @@ class _MChatScreenState extends State<MChatScreen> {
             return;
           }
           MessageModel messageModel = MessageModel(
-            receivedBy: "uid2",
+            receivedBy: "HsqX5doxlZgWpmV6WKrILVvkeE92",
             sendBy: model.uid,
             type: "photo",
             caseId: caseModel!.id,
