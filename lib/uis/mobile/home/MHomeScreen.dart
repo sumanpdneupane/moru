@@ -76,7 +76,8 @@ class HomePgeBody extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    String url = "https://firebasestorage.googleapis.com/v0/b/web-rtc-6f95e.appspot.com/o/cases%2FGdqpE6Q4boTUUK5P6Mf0VQipuoS2%2F1662570587254000-moru.jpeg?alt=media&token=d198a81f-de90-4482-9c7f-d3b70544a91d";
+    String url =
+        "https://firebasestorage.googleapis.com/v0/b/web-rtc-6f95e.appspot.com/o/cases%2FGdqpE6Q4boTUUK5P6Mf0VQipuoS2%2F1662570587254000-moru.jpeg?alt=media&token=d198a81f-de90-4482-9c7f-d3b70544a91d";
 
     return ResponsiveBuilder(builder: (context, SizingInformation) {
       return Column(
@@ -201,6 +202,8 @@ class CheckupStyle extends StatelessWidget {
                 "th of" +
                 DateFormat(" MMM y").format(model[index].createdDate!);
 
+            print("caseids------------> ${model[index].id}");
+
             return Container(
               margin: EdgeInsets.only(bottom: 8),
               child: CheckupStyleWidget(
@@ -208,6 +211,7 @@ class CheckupStyle extends StatelessWidget {
                 title: "full_assessment",
                 title2: "${model[index].status!.toUpperCase()}",
                 dotColor: CustomColors.yellow,
+                caseModel: model[index],
               ),
             );
           },

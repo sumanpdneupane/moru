@@ -5,14 +5,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:moru/utils/Commons.dart';
 
 class CaseModel {
-  String? uid;
+  String? id;
 
   String? createdBy;
   String? assignedTo;
   String? whatYouCanDo;
   String? replyFromDoctor;
   String? replyFromPatient;
-  int? severityScale;
+  var severityScale;
 
   DateTime? createdDate;
   DateTime? lastStatusUpdated;
@@ -43,7 +43,7 @@ class CaseModel {
   List<String>? recommendedTreatments = [];
 
   CaseModel({
-    this.uid,
+    this.id,
     this.assignedTo,
     this.whatYouCanDo,
     this.replyFromDoctor,
@@ -73,7 +73,7 @@ class CaseModel {
   }
 
   CaseModel.fromJson(String uid, Map<dynamic, dynamic> json) {
-    this.uid = uid;
+    this.id = uid;
     if (json != null && json.length > 0) {
       this.assignedTo = json["assignedTo"];
       this.whatYouCanDo = json["whatYouCanDo"];
@@ -90,10 +90,10 @@ class CaseModel {
       this.nextSteps = json["nextSteps"];
       this.coupon = json["coupon"];
       this.stripeResponse = json["stripeResponse"];
-      this.totalCostOfPlan = json["totalCostOfPlan"];
-      this.totalCostPaid = json["totalCostPaid"];
+      this.totalCostOfPlan = double.parse("${json["totalCostOfPlan"]}");
+      this.totalCostPaid = double.parse("${json["totalCostPaid"]}");
 
-      this.discountAmount = json["discountAmount"];
+      this.discountAmount = double.parse("${json["discountAmount"]}");
       this.plan = json["plan"];
       this.status = json["status"];
 
@@ -210,7 +210,6 @@ class PhotoModel {
       this.status = json["status"];
     }
   }
-
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> data = Map();

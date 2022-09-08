@@ -8,6 +8,7 @@ import 'package:moru/Routes.dart';
 import 'package:moru/custom_widgets/ButtonWidget.dart';
 import 'package:moru/custom_widgets/FooterWidget.dart';
 import 'package:moru/custom_widgets/back_button/BackButtonWidget.dart';
+import 'package:moru/model/CaseModel.dart';
 import 'package:moru/uis/mobile/MMainScreen.dart';
 import 'package:moru/uis/mobile/checkups/dialog/ResubmitPhotosDialog.dart';
 import 'package:moru/uis/mobile/checkups/widgets/CheckupActionWidget.dart';
@@ -76,7 +77,9 @@ class MCheckupReadyScreen extends StatelessWidget {
                 backgroundColor: CustomColors.primarycolor,
                 textColor: Colors.white,
                 prefixIconPath: "assets/icons/message.png",
-                onTap: () {},
+                onTap: () {
+                  Routes.pushNamed(context, Routes.CHAT_PAGE);
+                },
               ),
               const SizedBox(height: 24),
             ],
@@ -507,8 +510,8 @@ class CheckUp2Body extends StatelessWidget {
               ),
               Container(
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  color: Colors.white,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey,
@@ -523,7 +526,7 @@ class CheckUp2Body extends StatelessWidget {
                   margin: EdgeInsets.all(4),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
-                    color:CustomColors.primarycolor,
+                    color: CustomColors.primarycolor,
                   ),
                 ),
               )
@@ -720,6 +723,7 @@ class CheckUp2Body extends StatelessWidget {
               dotColor: CustomColors.green,
               icon: Moru.smile,
               showReport: false,
+              caseModel: CaseModel(),
             ),
             const SizedBox(height: 8),
             CheckupActionWidget(
