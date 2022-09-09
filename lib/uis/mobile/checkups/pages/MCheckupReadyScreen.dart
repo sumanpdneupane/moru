@@ -762,6 +762,22 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
       );
     }
 
+    Future<List<Map>> fetchAllTreatments(List<String> productIds) async {
+      try {
+        List<Future<Map>> allFutures = [];
+        productIds.forEach((productId) {
+          allFutures.add(FirebaseFirestore.instance
+              .collection("treatments")
+              .doc(productId)
+              .get()
+              .then((value) => value.data()!));
+        });
+        return await Future.wait(allFutures);
+      } catch (e) {
+        return [];
+      }
+    }
+
     Widget treatmentCostWidget() {
       if (caseModel == null ||
           caseModel!.recommendedTreatments == null ||
@@ -781,47 +797,65 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
             ),
           ),
           SizedBox(height: 12),
-          ListView.builder(
-            //padding: const EdgeInsets.all(16),
-            itemCount: 3,
-            physics: NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                margin: EdgeInsets.only(top: 4, bottom: 4),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        child: Text(
-                          "Treatment ${index + 1}",
-                          style: GoogleFonts.syne(
-                            fontSize: 14,
-                            fontWeight: FontWeight.normal,
-                            color: CustomColors.inputfillColor,
+          FutureBuilder<List<Map>>(
+              future: fetchAllTreatments(caseModel!.recommendedTreatments!),
+              builder: (context, snapshot) {
+                print(snapshot.connectionState);
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return const Text('Error');
+                  } else if (snapshot.hasData) {
+                    return ListView.builder(
+                      //padding: const EdgeInsets.all(16),
+                      itemCount: snapshot.data!.length,
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (BuildContext context, int index) {
+                        var treatment = snapshot.data![index];
+                        return Container(
+                          margin: EdgeInsets.only(top: 4, bottom: 4),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  child: Text(
+                                    "${treatment['name']}",
+                                    style: GoogleFonts.syne(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.normal,
+                                      color: CustomColors.inputfillColor,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  child: Text(
+                                    "${treatment['price']} AED",
+                                    style: GoogleFonts.syne(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.normal,
+                                      color: CustomColors.inputfillColor,
+                                    ),
+                                  ),
+                                  alignment: Alignment.center,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        child: Text(
-                          "${(index + 1) * 459} AED",
-                          style: GoogleFonts.syne(
-                            fontSize: 14,
-                            fontWeight: FontWeight.normal,
-                            color: CustomColors.inputfillColor,
-                          ),
-                        ),
-                        alignment: Alignment.center,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
+                        );
+                      },
+                    );
+                  } else {
+                    return const Text('Empty data');
+                  }
+                } else {
+                  return Text('State: ${snapshot.connectionState}');
+                }
+              }),
         ],
       );
     }
