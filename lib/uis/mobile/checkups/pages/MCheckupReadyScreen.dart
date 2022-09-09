@@ -631,7 +631,7 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
 
     Widget whatCanYouDo() {
       double scaleWidth = width - 64;
-      double severityScale = 8;
+      double severityScale = caseModel!.severityScale;
       double scaleVale = 0.0;
       if (severityScale == 0) {
         scaleVale = 0.0;
@@ -991,7 +991,8 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
                     dotColor: caseModel!.status!.formateCaseStatusColor,
                     icon: caseModel!.status!.formateCaseStatusIcon,
                     boxcolor: caseModel!.status!.formateCaseStatusBackground,
-                    showReport: caseModel!.status!.formateCaseStatusStr == "REPORT READY",
+                    showReport: caseModel!.status!.formateCaseStatusStr ==
+                        "REPORT READY",
                     caseModel: caseModel!,
                   )
                 : Container(),
