@@ -1,14 +1,18 @@
 import 'dart:ui';
 import 'package:card_swiper/card_swiper.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:moru/Routes.dart';
 import 'package:moru/custom_widgets/ButtonWidget.dart';
 import 'package:moru/custom_widgets/FooterWidget.dart';
 import 'package:moru/custom_widgets/back_button/BackButtonWidget.dart';
+import 'package:moru/model/AppViewModel.dart';
 import 'package:moru/model/CaseModel.dart';
+import 'package:moru/model/UserModel.dart';
 import 'package:moru/uis/mobile/MMainScreen.dart';
 import 'package:moru/uis/mobile/checkups/dialog/ResubmitPhotosDialog.dart';
 import 'package:moru/uis/mobile/checkups/widgets/CheckupActionWidget.dart';
@@ -16,6 +20,7 @@ import 'package:moru/uis/mobile/checkups/widgets/CheckupStyleWidget.dart';
 import 'package:moru/utils/CustomColors.dart';
 import 'package:moru/utils/MoruIcons.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class MCheckupReadyScreen extends StatelessWidget {
@@ -87,46 +92,58 @@ class MCheckupReadyScreen extends StatelessWidget {
         );
       },
     );
-
-    // return MMainScreen(
-    //   selectedIndex: 1,
-    //   child: CheckUp2Body(),
-    //   bottomSheet: FooterWidget(
-    //     children: [
-    //       const SizedBox(height: 12),
-    //       ButtonWidget(
-    //         name: "Chat with a doctor",
-    //         height: 50,
-    //         width: width * 0.87,
-    //         fontSize: 15,
-    //         backgroundColor: CustomColors.primarycolor,
-    //         textColor: Colors.white,
-    //         prefixIconPath: "assets/icons/message.png",
-    //         onTap: () {},
-    //       ),
-    //       const SizedBox(height: 24),
-    //     ],
-    //   ),
-    // );
   }
 }
 
-class CheckUp2Body extends StatelessWidget {
+class CheckUp2Body extends StatefulWidget {
   const CheckUp2Body({Key? key}) : super(key: key);
+
+  @override
+  State<CheckUp2Body> createState() => _CheckUp2BodyState();
+}
+
+class _CheckUp2BodyState extends State<CheckUp2Body> {
+  CaseModel? caseModel;
+  UserModel? currentUser;
+  UserModel? doctor;
+
+  @override
+  void initState() {
+    var userViewModel = Provider.of<UserViewModel>(context, listen: false);
+    currentUser = userViewModel.getModel();
+
+    var viewModel = Provider.of<AppViewModel>(context, listen: false);
+    caseModel = viewModel.getSingleCaseCheckupModel();
+
+    print("caseModel--initState---------> ${caseModel!.id}");
+    getDoctorInfo();
+    super.initState();
+  }
+
+  Future getDoctorInfo() async {
+    var doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(caseModel!.assignedTo)
+        .get();
+
+    Map data = doc.data() as Map;
+    doctor = UserModel.fromJson(doc.id, data);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    List<PhotoModel> photosLists = [
-      PhotoModel('assets/images/card1.png', false),
-      PhotoModel('assets/images/card2.png', true),
-      PhotoModel('assets/images/card2.png', false),
-      PhotoModel('assets/images/card1.png', true),
-    ];
 
-    Widget photoHorizontalList(List<PhotoModel> photos) {
+    Widget photoHorizontalList() {
       double size = 88;
+      List<PhotoModel> photos = [];
+
+      if (caseModel != null && caseModel!.photos != null) {
+        photos = caseModel!.photos!;
+      }
+
       return Container(
         height: size + 10,
         child: ListView.builder(
@@ -143,11 +160,12 @@ class CheckUp2Body extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                     image: DecorationImage(
-                      image: AssetImage(photos[index].url),
+                      image: NetworkImage(photos[index].url!),
+                      fit: BoxFit.fill,
                     ),
                   ),
                 ),
-                !photos[index].isVerified
+                photos[index].status! == PhotoModel.REJECTED
                     ? GestureDetector(
                         onTap: () {
                           ResubmitPhotosDialog(context: context);
@@ -709,6 +727,14 @@ class CheckUp2Body extends StatelessWidget {
       );
     }
 
+    String convertDateTime() {
+      String date = caseModel!.createdDate!.day.toString() +
+          "th of" +
+          DateFormat(" MMM y").format(caseModel!.createdDate!);
+      print("caseids------------> ${caseModel!.id}");
+      return date;
+    }
+
     return ResponsiveBuilder(
       builder: (context, SizingInformation) {
         return Column(
@@ -716,22 +742,26 @@ class CheckUp2Body extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 16),
-            CheckupStyleWidget(
-              date: "14th_of_May_2022",
-              title: "Emergency",
-              title2: "report_ready",
-              dotColor: CustomColors.green,
-              icon: Moru.smile,
-              showReport: false,
-              caseModel: CaseModel(),
-            ),
+            caseModel != null
+                ? CheckupStyleWidget(
+                    date: convertDateTime(),
+                    title: "Emergency",
+                    title2: "${caseModel!.status!.toUpperCase()}",
+                    dotColor: CustomColors.green,
+                    icon: Moru.smile,
+                    showReport: false,
+                    caseModel: caseModel!,
+                  )
+                : Container(),
             const SizedBox(height: 8),
-            CheckupActionWidget(
-              title: "Reviewed by Dr. Mariam",
-              title2: "King's College Hospital London",
-              boxcolor: CustomColors.orangeshade,
-              icon: Moru.person_add,
-            ),
+            doctor != null
+                ? CheckupActionWidget(
+                    title: "Reviewed by ${doctor!.fullname}",
+                    title2: "${doctor!.collegeAddress}",
+                    boxcolor: CustomColors.orangeshade,
+                    icon: Moru.person_add,
+                  )
+                : Container(),
             const SizedBox(height: 24),
             LocaleText(
               "photos",
@@ -741,7 +771,7 @@ class CheckUp2Body extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            photoHorizontalList(photosLists),
+            photoHorizontalList(),
             const SizedBox(height: 12),
             //resubmitPhotos(),
             reportWidget(),
@@ -763,11 +793,4 @@ class CheckUp2Body extends StatelessWidget {
       },
     );
   }
-}
-
-class PhotoModel {
-  final String url;
-  final bool isVerified;
-
-  PhotoModel(this.url, this.isVerified);
 }

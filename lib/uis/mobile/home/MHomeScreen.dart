@@ -224,6 +224,12 @@ class CheckupStyle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<AppViewModel>(builder: (ctx, data, Widget? child) {
       var model = data.getAllCheckupModel();
+
+      model.sort((a, b) {
+        return b.createdDate!.compareTo(a.createdDate!);
+      });
+
+
       return loadData(model);
     });
   }

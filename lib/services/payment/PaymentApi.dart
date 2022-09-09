@@ -31,13 +31,14 @@ class PaymentApi extends BaseAPI {
 
     double unit_amount = 0;
     if (result.containsKey("unit_amount")) {
-      unit_amount = result["unit_amount"];
+      unit_amount = double.parse("${result["unit_amount"]}");
     }
 
     return unit_amount;
   }
 
-  Future<dynamic> payWithProduct(Map<String, dynamic> data, BuildContext context) async {
+  Future<dynamic> payWithProduct(
+      Map<String, dynamic> data, BuildContext context) async {
     final url = Uri.parse(
       ApiUrls.BASE_URL + ApiUrls.STRIPE_PRODUCT_ODER_AMMOUNT,
     );
@@ -73,7 +74,7 @@ class PaymentApi extends BaseAPI {
 
     //Response and converter
     var jsonResponse =
-    convert.jsonDecode(response.body) as Map<String, dynamic>;
+        convert.jsonDecode(response.body) as Map<String, dynamic>;
     return jsonResponse;
   }
 }

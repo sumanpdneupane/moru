@@ -148,13 +148,13 @@ class CaseModel {
     if (questionaires != null) {
       data["questionaires"] = questionaires!.map((element) {
         return element.toJson();
-      });
+      }).toList();
     }
 
     if (photos != null) {
       data["photos"] = photos!.map((element) {
         return element.toJson();
-      });
+      }).toList();
     }
     return data;
   }
