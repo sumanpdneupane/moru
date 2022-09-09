@@ -2,7 +2,10 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:moru/utils/Commons.dart';
+import 'package:moru/utils/CustomColors.dart';
+import 'package:moru/utils/MoruIcons.dart';
 
 class CaseModel {
   String? id;
@@ -70,8 +73,10 @@ class CaseModel {
   }) {
     this.photos = photos == null ? [] : photos;
     this.questionaires = questionaires == null ? [] : questionaires;
-    this.recommendedProducts = recommendedProducts == null ? [] : recommendedProducts;
-    this.recommendedTreatments = recommendedTreatments == null ? [] : recommendedTreatments;
+    this.recommendedProducts =
+        recommendedProducts == null ? [] : recommendedProducts;
+    this.recommendedTreatments =
+        recommendedTreatments == null ? [] : recommendedTreatments;
   }
 
   CaseModel.fromJson(String uid, Map<dynamic, dynamic> json) {
@@ -244,5 +249,55 @@ class QuestionairesModel {
     data["question"] = question;
     data["answer"] = answer;
     return data;
+  }
+}
+
+extension MyStringExtension on String {
+  String get formateCaseStatusStr {
+    //pending/reportReady/needUpdate
+
+    if (this.toLowerCase() == "reportready") {
+      return "REPORT READY";
+    } else if (this.toLowerCase() == "needupdate") {
+      return "NEED UPDATE";
+    } else {
+      return this.toUpperCase();
+    }
+  }
+
+  Color get formateCaseStatusColor {
+    //pending/reportReady/needUpdate
+
+    if (this.toLowerCase() == "reportready") {
+      return CustomColors.green;
+    } else if (this.toLowerCase() == "needupdate") {
+      return CustomColors.red;
+    } else {
+      return CustomColors.yellow2;
+    }
+  }
+
+  IconData get formateCaseStatusIcon {
+    //pending/reportReady/needUpdate
+
+    if (this.toLowerCase() == "reportready") {
+      return Moru.smile;
+    } else if (this.toLowerCase() == "needupdate") {
+      return Moru.teeth_calen;
+    } else {
+      return Moru.teeth_cross;
+    }
+  }
+
+  Color get formateCaseStatusBackground {
+    //pending/reportReady/needUpdate
+
+    if (this.toLowerCase() == "reportready") {
+      return CustomColors.yellow2;
+    } else if (this.toLowerCase() == "needupdate") {
+      return CustomColors.red;
+    } else {
+      return CustomColors.primarycolor;
+    }
   }
 }

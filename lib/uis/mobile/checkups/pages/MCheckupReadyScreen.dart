@@ -916,10 +916,11 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
                 ? CheckupStyleWidget(
                     date: convertDateTime(),
                     title: "Emergency",
-                    title2: "${caseModel!.status!.toUpperCase()}",
-                    dotColor: CustomColors.green,
-                    icon: Moru.smile,
-                    showReport: false,
+                    title2: "${caseModel!.status!.formateCaseStatusStr}",
+                    dotColor: caseModel!.status!.formateCaseStatusColor,
+                    icon: caseModel!.status!.formateCaseStatusIcon,
+                    boxcolor: caseModel!.status!.formateCaseStatusBackground,
+                    showReport: caseModel!.status!.formateCaseStatusStr == "REPORT READY",
                     caseModel: caseModel!,
                   )
                 : Container(),

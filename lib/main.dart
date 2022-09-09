@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 //import 'package:camera/camera.dart';
@@ -37,24 +38,24 @@ Future<void> main() async {
   // );
   if (!kIsWeb) {
     await Firebase.initializeApp(
-      // options: FirebaseOptions(
-      //   apiKey: "AIzaSyBoIq1GbM-DMiWVZdC9LKxEmtW43htkaF0",
-      //   appId: "1:524010047131:web:cd294471a31292b995683e",
-      //   messagingSenderId: "524010047131",
-      //   projectId: "web-rtc-6f95e",
-      // ),
-    );
+        // options: FirebaseOptions(
+        //   apiKey: "AIzaSyBoIq1GbM-DMiWVZdC9LKxEmtW43htkaF0",
+        //   appId: "1:524010047131:web:cd294471a31292b995683e",
+        //   messagingSenderId: "524010047131",
+        //   projectId: "web-rtc-6f95e",
+        // ),
+        );
   } else {
     await Firebase.initializeApp(
       options: FirebaseOptions(
-        // apiKey: "AIzaSyA8w-t6MahHcpjk0pifVSZXiLSKSeGHZh8",
-        // authDomain: "moruapp-1.firebaseapp.com",
-        // databaseURL: "https://moruapp-1-default-rtdb.firebaseio.com",
-        // projectId: "moruapp-1",
-        // storageBucket: "moruapp-1.appspot.com",
-        // messagingSenderId: "1022602170770",
-        // appId: "1:1022602170770:web:8986635f3378bc82f9b14b",
-        // measurementId: "G-BC00HQZ7GC",
+          // apiKey: "AIzaSyA8w-t6MahHcpjk0pifVSZXiLSKSeGHZh8",
+          // authDomain: "moruapp-1.firebaseapp.com",
+          // databaseURL: "https://moruapp-1-default-rtdb.firebaseio.com",
+          // projectId: "moruapp-1",
+          // storageBucket: "moruapp-1.appspot.com",
+          // messagingSenderId: "1022602170770",
+          // appId: "1:1022602170770:web:8986635f3378bc82f9b14b",
+          // measurementId: "G-BC00HQZ7GC",
           apiKey: "AIzaSyBoIq1GbM-DMiWVZdC9LKxEmtW43htkaF0",
           authDomain: "web-rtc-6f95e.firebaseapp.com",
           databaseURL: "https://web-rtc-6f95e.firebaseio.com",
@@ -62,9 +63,9 @@ Future<void> main() async {
           storageBucket: "web-rtc-6f95e.appspot.com",
           messagingSenderId: "524010047131",
           appId: "1:524010047131:web:cd294471a31292b995683e",
-          measurementId: "G-6S9E7LTG34"
-      ),
+          measurementId: "G-6S9E7LTG34"),
     );
+    await FirebaseFirestore.instance.enablePersistence();
   }
 
   runApp(MyApp());
@@ -120,5 +121,6 @@ class MyApp extends StatelessWidget {
  * flutter run -d chrome
  * flutter run -d chrome --web-renderer html // to run the app
  * flutter run -d chrome --web-hostname localhost --web-port 54537
+ * flutter run -d edge --web-hostname localhost --web-port 54537
  * flutter build web --web-renderer html --release // to generate a production build
  */

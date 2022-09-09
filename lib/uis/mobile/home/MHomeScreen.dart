@@ -209,9 +209,13 @@ class CheckupStyle extends StatelessWidget {
               child: CheckupStyleWidget(
                 date: "${date}",
                 title: "full_assessment",
-                title2: "${model[index].status!.toUpperCase()}",
-                dotColor: CustomColors.yellow,
+                title2: "${model[index].status!.formateCaseStatusStr}",
+                dotColor: model[index].status!.formateCaseStatusColor,
+                icon: model[index].status!.formateCaseStatusIcon,
+                boxcolor: model[index].status!.formateCaseStatusBackground,
                 caseModel: model[index],
+                showReport:
+                    model[index].status!.formateCaseStatusStr == "REPORT READY",
               ),
             );
           },
@@ -228,7 +232,6 @@ class CheckupStyle extends StatelessWidget {
       model.sort((a, b) {
         return b.createdDate!.compareTo(a.createdDate!);
       });
-
 
       return loadData(model);
     });
