@@ -762,7 +762,7 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
       );
     }
 
-    Future<List<Map>> fetchAllTreatments(List<String> productIds) async {
+    Future<List<Map>> fetchAllTreatments(List<dynamic> productIds) async {
       try {
         List<Future<Map>> allFutures = [];
         productIds.forEach((productId) {
@@ -800,7 +800,6 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
           FutureBuilder<List<Map>>(
               future: fetchAllTreatments(caseModel!.recommendedTreatments!),
               builder: (context, snapshot) {
-                print(snapshot.connectionState);
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return CircularProgressIndicator();
                 } else if (snapshot.connectionState == ConnectionState.done) {
@@ -860,7 +859,23 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
       );
     }
 
-    Widget recommendedProductsItemWidget(int index) {
+    Future<List<Map>> fetchAllProducts(List<dynamic> productIds) async {
+      try {
+        List<Future<Map>> allFutures = [];
+        productIds.forEach((productId) {
+          allFutures.add(FirebaseFirestore.instance
+              .collection("products")
+              .doc(productId)
+              .get()
+              .then((value) => value.data()!));
+        });
+        return await Future.wait(allFutures);
+      } catch (e) {
+        return [];
+      }
+    }
+
+    Widget recommendedProductsItemWidget(Map product) {
       return Container(
         margin: EdgeInsets.only(left: 8, right: 8),
         child: Column(
@@ -871,13 +886,13 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 image: DecorationImage(
-                  image: AssetImage("assets/images/neurology.png"),
+                  image: NetworkImage("${product['photo']}"),
                 ),
               ),
             ),
             SizedBox(height: 8),
             Text(
-              "Oral-B Vitality 100 Cross Action Electric Toothbrush",
+              "${product['productName']}",
               textAlign: TextAlign.start,
               style: GoogleFonts.syne(
                 fontSize: 15,
@@ -901,6 +916,11 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
     }
 
     Widget recommendedProductsWidget() {
+      if (caseModel == null ||
+          caseModel!.recommendedProducts == null ||
+          caseModel!.recommendedProducts!.length < 1) {
+        return Container();
+      }
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -913,20 +933,37 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
             ),
           ),
           SizedBox(height: 20),
-          GridView.builder(
-            itemCount: 2,
-            physics: NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisExtent: 280,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 0,
-            ),
-            itemBuilder: (BuildContext context, int i) {
-              return recommendedProductsItemWidget(i);
-            },
-          ),
+          FutureBuilder<List<Map>>(
+              future: fetchAllProducts(caseModel!.recommendedProducts!),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return const Text('Error');
+                  } else if (snapshot.hasData) {
+                    return GridView.builder(
+                      itemCount: snapshot.data!.length,
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisExtent: 280,
+                        crossAxisSpacing: 8,
+                        mainAxisSpacing: 0,
+                      ),
+                      itemBuilder: (BuildContext context, int i) {
+                        return recommendedProductsItemWidget(snapshot.data![i]);
+                      },
+                    );
+                    ;
+                  } else {
+                    return const Text('Empty data');
+                  }
+                } else {
+                  return Text('State: ${snapshot.connectionState}');
+                }
+              }),
         ],
       );
     }
