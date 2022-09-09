@@ -39,8 +39,8 @@ class CaseModel {
   List<PhotoModel>? photos;
 
   List<QuestionairesModel>? questionaires;
-  List<String>? recommendedProducts = [];
-  List<String>? recommendedTreatments = [];
+  List<dynamic>? recommendedProducts = [];
+  List<dynamic>? recommendedTreatments = [];
 
   CaseModel({
     this.id,

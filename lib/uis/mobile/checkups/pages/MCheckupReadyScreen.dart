@@ -23,8 +23,22 @@ import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
-class MCheckupReadyScreen extends StatelessWidget {
+class MCheckupReadyScreen extends StatefulWidget {
   const MCheckupReadyScreen({Key? key}) : super(key: key);
+
+  @override
+  State<MCheckupReadyScreen> createState() => _MCheckupReadyScreenState();
+}
+
+class _MCheckupReadyScreenState extends State<MCheckupReadyScreen> {
+  CaseModel? caseModel;
+
+  @override
+  void initState() {
+    var viewModel = Provider.of<AppViewModel>(context, listen: false);
+    caseModel = viewModel.getSingleCaseCheckupModel();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,29 +85,131 @@ class MCheckupReadyScreen extends StatelessWidget {
               ],
             ),
           ),
-          bottomSheet: FooterWidget(
-            children: [
-              const SizedBox(height: 12),
-              ButtonWidget(
-                name: "Chat with a doctor",
-                height: 50,
-                width: width * 0.87,
-                fontSize: 15,
-                backgroundColor: CustomColors.primarycolor,
-                textColor: Colors.white,
-                prefixIconPath: "assets/icons/message.png",
-                onTap: () {
-                  Routes.pushNamed(context, Routes.CHAT_PAGE);
-                },
-              ),
-              const SizedBox(height: 24),
-            ],
-          ),
+          bottomSheet: chatButton(width, context),
         );
       },
     );
   }
+
+  Widget? chatButton(width, context) {
+    if (caseModel == null || caseModel!.createdDate == null) {
+      return null;
+    }
+
+    final createdDate = caseModel!.createdDate!;
+    final date2 = DateTime.now();
+    var difference = date2.difference(createdDate).inDays;
+
+    print("DateTimeDIfference---------> ${difference}");
+
+    if (difference > 3) {
+      return null;
+    }
+
+    return FooterWidget(
+      children: [
+        const SizedBox(height: 12),
+        ButtonWidget(
+          name: "Chat with a doctor",
+          height: 50,
+          width: width * 0.87,
+          fontSize: 15,
+          backgroundColor: CustomColors.primarycolor,
+          textColor: Colors.white,
+          prefixIconPath: "assets/icons/message.png",
+          onTap: () {
+            Routes.pushNamed(context, Routes.CHAT_PAGE);
+          },
+        ),
+        const SizedBox(height: 24),
+      ],
+    );
+  }
 }
+
+// class MCheckupReadyScreen extends StatelessWidget {
+//   const MCheckupReadyScreen({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     var width = MediaQuery.of(context).size.width;
+//
+//     return ResponsiveBuilder(
+//       builder: (context, SizingInformation) {
+//         return Scaffold(
+//           body: SafeArea(
+//             child: Column(
+//               children: [
+//                 SizedBox(height: 24),
+//                 Container(
+//                   width: MediaQuery.of(context).size.width * 0.87,
+//                   child: BackButtonWidget(
+//                     onTap: () {
+//                       Routes.pop(context);
+//                     },
+//                     localeText: "back_to_checkups",
+//                   ),
+//                 ),
+//                 Container(
+//                   height: 8,
+//                   color: Colors.transparent,
+//                 ),
+//                 Expanded(
+//                   child: SingleChildScrollView(
+//                     physics: AlwaysScrollableScrollPhysics(),
+//                     child: Row(
+//                       mainAxisSize: MainAxisSize.max,
+//                       crossAxisAlignment: CrossAxisAlignment.start,
+//                       mainAxisAlignment: MainAxisAlignment.center,
+//                       children: [
+//                         Container(
+//                           margin: EdgeInsets.only(top: 4),
+//                           alignment: Alignment.topCenter,
+//                           width: MediaQuery.of(context).size.width * 0.87,
+//                           child: CheckUp2Body(),
+//                         ),
+//                       ],
+//                     ),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//           bottomSheet: chatButton(width, context, caseM),
+//         );
+//       },
+//     );
+//   }
+//
+//   Widget chatButton(width, context) {
+//     final birthday = DateTime(1967, 10, 12);
+//     final date2 = DateTime.now();
+//     final difference = date2.difference(birthday).inDays;
+//
+//     if (difference > 3) {
+//       return Container();
+//     }
+//
+//     return FooterWidget(
+//       children: [
+//         const SizedBox(height: 12),
+//         ButtonWidget(
+//           name: "Chat with a doctor",
+//           height: 50,
+//           width: width * 0.87,
+//           fontSize: 15,
+//           backgroundColor: CustomColors.primarycolor,
+//           textColor: Colors.white,
+//           prefixIconPath: "assets/icons/message.png",
+//           onTap: () {
+//             Routes.pushNamed(context, Routes.CHAT_PAGE);
+//           },
+//         ),
+//         const SizedBox(height: 24),
+//       ],
+//     );
+//   }
+// }
 
 class CheckUp2Body extends StatefulWidget {
   const CheckUp2Body({Key? key}) : super(key: key);
