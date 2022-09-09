@@ -50,7 +50,12 @@ class UserModel {
   UserModel.fromJson(String uid, Map<dynamic, dynamic> json) {
     this.uid = uid;
     if (json != null && json.length > 0) {
-      this.fullname = json["fullname"];
+      if (json.containsKey("fullName")) {
+        this.fullname = json["fullName"];
+      }
+      if (json.containsKey("fullname")) {
+        this.fullname = json["fullname"];
+      }
       this.email = json["email"];
       this.role = json["role"];
       var createdDate = json['createdDate'] as Timestamp;
@@ -64,11 +69,11 @@ class UserModel {
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> data = Map();
-    data["fullname"] = fullname;
+    data["fullName"] = fullname;
     data["email"] = email;
     data["createdDate"] = createdDate;
     data["role"] = role;
-    data["photo"] = "";
+    data["photo"] = photo;
     return data;
   }
 }

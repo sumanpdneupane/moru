@@ -107,6 +107,8 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
   UserModel? currentUser;
   UserModel? doctor;
 
+  int whatISawIndex = 0;
+
   @override
   void initState() {
     var userViewModel = Provider.of<UserViewModel>(context, listen: false);
@@ -116,8 +118,20 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
     caseModel = viewModel.getSingleCaseCheckupModel();
 
     print("caseModel--initState---------> ${caseModel!.id}");
+    //getCaseDetailInfo();
     getDoctorInfo();
     super.initState();
+  }
+
+  Future getCaseDetailInfo() async {
+    var doc = await FirebaseFirestore.instance
+        .collection('cases')
+        .doc(caseModel!.id)
+        .get();
+
+    Map data = doc.data() as Map;
+    caseModel = CaseModel.fromJson(doc.id, data);
+    setState(() {});
   }
 
   Future getDoctorInfo() async {
@@ -128,6 +142,7 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
 
     Map data = doc.data() as Map;
     doctor = UserModel.fromJson(doc.id, data);
+    print("doctor---- > ${doctor!.toJson()}");
     setState(() {});
   }
 
@@ -160,7 +175,9 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                     image: DecorationImage(
-                      image: NetworkImage(photos[index].url!),
+                      image: NetworkImage(
+                        photos[index].url != null ? photos[index].url! : "",
+                      ),
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -326,6 +343,9 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
     }
 
     Widget replyFromDoctor() {
+      if (doctor == null) {
+        return Container();
+      }
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -339,7 +359,7 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
           ),
           SizedBox(height: 4),
           Text(
-            "None",
+            "${caseModel!.replyFromPatient}",
             style: GoogleFonts.syne(
               fontSize: 15,
               fontWeight: FontWeight.normal,
@@ -356,7 +376,7 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
           ),
           SizedBox(height: 4),
           Text(
-            "Dr Mariam Alzaabi",
+            "${doctor!.fullname != null ? doctor!.fullname! : ""}",
             style: GoogleFonts.syne(
               fontSize: 15,
               fontWeight: FontWeight.bold,
@@ -365,7 +385,7 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
           ),
           SizedBox(height: 2),
           Text(
-            "Licenced in Dubai, UAE",
+            "Licenced in ${doctor!.licensedFrom != null ? doctor!.licensedFrom : ""}",
             style: GoogleFonts.syne(
               fontSize: 15,
               fontWeight: FontWeight.normal,
@@ -374,7 +394,7 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
           ),
           SizedBox(height: 16),
           Text(
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
+            "${caseModel!.replyFromDoctor}",
             style: GoogleFonts.syne(
               fontSize: 14,
               fontWeight: FontWeight.normal,
@@ -386,6 +406,12 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
     }
 
     Widget whatIsawWidget() {
+      if (caseModel == null ||
+          caseModel!.photos == null ||
+          caseModel!.photos!.length < 1) {
+        return Container();
+      }
+
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -410,13 +436,13 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
                   child: Container(
                     height: 150,
                     child: Swiper(
-                      index: 0,
+                      index: whatISawIndex,
                       itemBuilder: (BuildContext context, int index) {
                         return Stack(
                           children: [
                             PhotoView.customChild(
                               child: Image.network(
-                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7WLVv1HbS-YtqKc2q7RfubcfHsSucy_lPXw&usqp=CAU",
+                                caseModel!.photos![index].url!,
                                 loadingBuilder: (BuildContext context,
                                     Widget child,
                                     ImageChunkEvent? loadingProgress) {
@@ -440,7 +466,11 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
                           ],
                         );
                       },
-                      itemCount: 3,
+                      onIndexChanged: (int index) {
+                        whatISawIndex = index;
+                        setState(() {});
+                      },
+                      itemCount: caseModel!.photos!.length,
                       curve: Curves.easeInOut,
                       indicatorLayout: PageIndicatorLayout.SCALE,
                       pagination: SwiperPagination(
@@ -457,7 +487,7 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
                   padding: EdgeInsets.all(12),
                   child: Center(
                     child: Text(
-                      "Moderate Overcrowding",
+                      "${caseModel!.photos![whatISawIndex].title!}",
                       textAlign: TextAlign.center,
                       style: GoogleFonts.syne(
                         fontSize: 12,
@@ -472,7 +502,7 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
           ),
           SizedBox(height: 16),
           Text(
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
+            "${caseModel!.photos![whatISawIndex].description!}",
             style: GoogleFonts.syne(
               fontSize: 14,
               fontWeight: FontWeight.normal,
@@ -484,6 +514,19 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
     }
 
     Widget whatCanYouDo() {
+      double scaleWidth = width - 64;
+      double severityScale = 8;
+      double scaleVale = 0.0;
+      if (severityScale == 0) {
+        scaleVale = 0.0;
+      } else if (severityScale == 10) {
+        scaleVale = scaleWidth;
+      } else {
+        //TODO need to calculate
+        severityScale = 10 - severityScale;
+        scaleVale = scaleWidth / severityScale;
+      }
+
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -506,11 +549,12 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
           ),
           SizedBox(height: 24),
           Stack(
-            alignment: Alignment.center,
+            //alignment: Alignment,
             children: [
               Container(
-                width: width,
+                width: scaleWidth,
                 height: 4.0,
+                margin: EdgeInsets.only(top: 8),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(2),
                   gradient: LinearGradient(
@@ -527,24 +571,28 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
                 ),
               ),
               Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      offset: Offset(0.0, 1.0), //(x,y)
-                      blurRadius: 6.0,
-                    ),
-                  ],
-                ),
+                width: scaleVale + 20,
+                alignment: Alignment.centerRight,
                 child: Container(
-                  width: 12.0,
-                  height: 12.0,
-                  margin: EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: CustomColors.primarycolor,
+                    borderRadius: BorderRadius.circular(16),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey,
+                        offset: Offset(0.0, 1.0), //(x,y)
+                        blurRadius: 6.0,
+                      ),
+                    ],
+                  ),
+                  child: Container(
+                    width: 12.0,
+                    height: 12.0,
+                    margin: EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: CustomColors.primarycolor,
+                    ),
                   ),
                 ),
               )
@@ -552,7 +600,7 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
           ),
           SizedBox(height: 24),
           Text(
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
+            "${caseModel!.whatYouCanDo}",
             style: GoogleFonts.syne(
               fontSize: 14,
               fontWeight: FontWeight.normal,
@@ -577,28 +625,34 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
           ),
           SizedBox(height: 16),
           Text(
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
+            "${caseModel!.nextSteps}",
             style: GoogleFonts.syne(
               fontSize: 14,
               fontWeight: FontWeight.normal,
               color: CustomColors.inputfillColor,
             ),
           ),
-          SizedBox(height: 16),
-          ButtonWidget(
-            name: "Find nearby dentist",
-            height: 50,
-            width: width,
-            fontSize: 19,
-            backgroundColor: CustomColors.primarycolor,
-            textColor: Colors.white,
-            onTap: () {},
-          ),
+          // SizedBox(height: 16),
+          // ButtonWidget(
+          //   name: "Find nearby dentist",
+          //   height: 50,
+          //   width: width,
+          //   fontSize: 19,
+          //   backgroundColor: CustomColors.primarycolor,
+          //   textColor: Colors.white,
+          //   onTap: () {},
+          // ),
         ],
       );
     }
 
     Widget treatmentCostWidget() {
+      if (caseModel == null ||
+          caseModel!.recommendedTreatments == null ||
+          caseModel!.recommendedTreatments!.length < 1) {
+        return Container();
+      }
+
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -681,16 +735,16 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
                 color: CustomColors.inputfillColor,
               ),
             ),
-            SizedBox(height: 20),
-            ButtonWidget(
-              name: "Buy",
-              height: 40,
-              width: width,
-              fontSize: 15,
-              backgroundColor: CustomColors.primarycolor,
-              textColor: Colors.white,
-              onTap: () {},
-            ),
+            // SizedBox(height: 20),
+            // ButtonWidget(
+            //   name: "Buy",
+            //   height: 40,
+            //   width: width,
+            //   fontSize: 15,
+            //   backgroundColor: CustomColors.primarycolor,
+            //   textColor: Colors.white,
+            //   onTap: () {},
+            // ),
           ],
         ),
       );
@@ -755,11 +809,12 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
                 : Container(),
             const SizedBox(height: 8),
             doctor != null
-                ? CheckupActionWidget(
+                ? CheckupDoctorWidget(
                     title: "Reviewed by ${doctor!.fullname}",
-                    title2: "${doctor!.collegeAddress}",
+                    title2: "${doctor!.collegeName} ${doctor!.collegeAddress}",
                     boxcolor: CustomColors.orangeshade,
                     icon: Moru.person_add,
+                    photo: doctor!.photo!,
                   )
                 : Container(),
             const SizedBox(height: 24),
@@ -774,20 +829,28 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
             photoHorizontalList(),
             const SizedBox(height: 12),
             //resubmitPhotos(),
-            reportWidget(),
-            const SizedBox(height: 24),
-            replyFromDoctor(),
-            const SizedBox(height: 32),
-            whatIsawWidget(),
-            SizedBox(height: 32),
-            whatCanYouDo(),
-            SizedBox(height: 32),
-            nextStep(),
-            SizedBox(height: 32),
-            treatmentCostWidget(),
-            SizedBox(height: 32),
-            recommendedProductsWidget(),
-            SizedBox(height: 120),
+            Container(),
+
+            caseModel!.status == "reportReady"
+                ? Column(
+                    children: [
+                      reportWidget(),
+                      const SizedBox(height: 24),
+                      replyFromDoctor(),
+                      const SizedBox(height: 32),
+                      whatIsawWidget(),
+                      SizedBox(height: 32),
+                      whatCanYouDo(),
+                      SizedBox(height: 32),
+                      nextStep(),
+                      SizedBox(height: 32),
+                      treatmentCostWidget(),
+                      SizedBox(height: 32),
+                      recommendedProductsWidget(),
+                      SizedBox(height: 120),
+                    ],
+                  )
+                : Column(),
           ],
         );
       },

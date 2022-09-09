@@ -45,31 +45,33 @@ class CaseModel {
   CaseModel({
     this.id,
     this.assignedTo,
-    this.whatYouCanDo,
-    this.replyFromDoctor,
-    this.replyFromPatient,
-    this.severityScale,
+    this.whatYouCanDo = "",
+    this.replyFromDoctor = "",
+    this.replyFromPatient = "",
+    this.severityScale = 0,
     this.createdDate,
     this.createdBy,
     this.lastStatusUpdated,
-    this.nextSteps,
+    this.nextSteps = "",
     this.coupon = "",
     this.stripeResponse,
     this.totalCostOfPlan = 0,
     this.totalCostPaid = 0,
     this.discountAmount = 0,
     this.discountPercentage = 0,
-    this.plan,
-    this.status,
+    this.plan = "",
+    this.status = "",
     this.lowerPhotoBoundSize = 1,
     this.upperPhotoBoundSize = 2,
     List<PhotoModel>? photos,
     List<QuestionairesModel>? questionaires,
-    this.recommendedProducts,
-    this.recommendedTreatments,
+    List<String>? recommendedProducts,
+    List<String>? recommendedTreatments,
   }) {
     this.photos = photos == null ? [] : photos;
     this.questionaires = questionaires == null ? [] : questionaires;
+    this.recommendedProducts = recommendedProducts == null ? [] : recommendedProducts;
+    this.recommendedTreatments = recommendedTreatments == null ? [] : recommendedTreatments;
   }
 
   CaseModel.fromJson(String uid, Map<dynamic, dynamic> json) {
