@@ -1,7 +1,11 @@
+import 'dart:typed_data';
 import 'dart:ui';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,6 +14,8 @@ import 'package:moru/Routes.dart';
 import 'package:moru/custom_widgets/ButtonWidget.dart';
 import 'package:moru/custom_widgets/FooterWidget.dart';
 import 'package:moru/custom_widgets/back_button/BackButtonWidget.dart';
+import 'package:moru/custom_widgets/dialogs/OpenCameraFileBottomDialog.dart';
+import 'package:moru/libraries/FileManger.dart';
 import 'package:moru/model/AppViewModel.dart';
 import 'package:moru/model/CaseModel.dart';
 import 'package:moru/model/UserModel.dart';
@@ -17,6 +23,7 @@ import 'package:moru/uis/mobile/MMainScreen.dart';
 import 'package:moru/uis/mobile/checkups/dialog/ResubmitPhotosDialog.dart';
 import 'package:moru/uis/mobile/checkups/widgets/CheckupActionWidget.dart';
 import 'package:moru/uis/mobile/checkups/widgets/CheckupStyleWidget.dart';
+import 'package:moru/utils/Commons.dart';
 import 'package:moru/utils/CustomColors.dart';
 import 'package:moru/utils/MoruIcons.dart';
 import 'package:photo_view/photo_view.dart';
@@ -262,6 +269,77 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
     setState(() {});
   }
 
+  Future<String> uploadFile(Uint8List byte, String? uid) async {
+    try {
+      final _firebaseStorage = FirebaseStorage.instance;
+      print('cases/${uid}/${DateTime.now().microsecondsSinceEpoch}-moru.jpeg');
+      var snapshot = await _firebaseStorage
+          .ref()
+          .child(
+              'cases/${uid}/${DateTime.now().microsecondsSinceEpoch}-moru.jpeg')
+          .putData(
+            byte,
+            SettableMetadata(
+              contentType: 'image/jpeg',
+            ),
+          )
+          .whenComplete(() => null);
+      var downloadUrl = await snapshot.ref.getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      print(e);
+      return '';
+    }
+  }
+
+  Future openCameraOrGallery(BuildContext context, int index) async {
+    OpenCameraFileBottomDialog(
+      context: context,
+      fileType: FileType.image,
+      allowExtensions: false,
+      callback: (Uint8List bytes) async {
+        ResubmitPhotosDialog(
+          bytes: bytes,
+          context: context,
+          onTab: () async {
+            Routes.pop(context);
+            if (bytes == null) {
+              Commons.toastMessage(context, FileManger.NO_SELECTED);
+            } else {
+              EasyLoading.show(status: 'Uploading...');
+              var currentUserViewModel =
+                  Provider.of<UserViewModel>(context, listen: false);
+              var model = currentUserViewModel.getModel();
+
+              String imageUrl = await uploadFile(bytes, caseModel!.id);
+              if (imageUrl == "") {
+                EasyLoading.dismiss();
+                return;
+              }
+              caseModel!.photos![index].url = imageUrl;
+              caseModel!.photos![index].status = "active";
+              Map<String, dynamic> data = Map();
+              if (caseModel!.photos != null) {
+                data["photos"] = caseModel!.photos!.map((element) {
+                  return element.toJson();
+                }).toList();
+              }
+
+              var collection = FirebaseFirestore.instance.collection('cases');
+              collection.doc(caseModel!.id).update(data).then((_) {
+                print('Success');
+              }).catchError((error) {
+                print('Failed: $error');
+              });
+
+              EasyLoading.dismiss();
+            }
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -301,7 +379,7 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
                 photos[index].status! == PhotoModel.REJECTED
                     ? GestureDetector(
                         onTap: () {
-                          ResubmitPhotosDialog(context: context);
+                          openCameraOrGallery(context, index);
                         },
                         child: Container(
                           height: size,
@@ -907,69 +985,91 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
 
     return ResponsiveBuilder(
       builder: (context, SizingInformation) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 16),
-            caseModel != null
-                ? CheckupStyleWidget(
-                    date: convertDateTime(),
-                    title: "Emergency",
-                    title2: "${caseModel!.status!.formateCaseStatusStr}",
-                    dotColor: caseModel!.status!.formateCaseStatusColor,
-                    icon: caseModel!.status!.formateCaseStatusIcon,
-                    boxcolor: caseModel!.status!.formateCaseStatusBackground,
-                    showReport: caseModel!.status!.formateCaseStatusStr == "REPORT READY",
-                    caseModel: caseModel!,
-                  )
-                : Container(),
-            const SizedBox(height: 8),
-            doctor != null
-                ? CheckupDoctorWidget(
-                    title: "Reviewed by ${doctor!.fullname}",
-                    title2: "${doctor!.collegeName} ${doctor!.collegeAddress}",
-                    boxcolor: CustomColors.orangeshade,
-                    icon: Moru.person_add,
-                    photo: doctor!.photo!,
-                  )
-                : Container(),
-            const SizedBox(height: 24),
-            LocaleText(
-              "photos",
-              style: GoogleFonts.syne(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            photoHorizontalList(),
-            const SizedBox(height: 12),
-            //resubmitPhotos(),
-            Container(),
+        return StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('cases')
+                .doc(caseModel!.id)
+                .snapshots(),
+            builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
 
-            caseModel!.status == "reportReady"
-                ? Column(
-                    children: [
-                      reportWidget(),
-                      const SizedBox(height: 24),
-                      replyFromDoctor(),
-                      const SizedBox(height: 32),
-                      whatIsawWidget(),
-                      SizedBox(height: 32),
-                      whatCanYouDo(),
-                      SizedBox(height: 32),
-                      nextStep(),
-                      SizedBox(height: 32),
-                      treatmentCostWidget(),
-                      SizedBox(height: 32),
-                      recommendedProductsWidget(),
-                      SizedBox(height: 120),
-                    ],
-                  )
-                : Column(),
-          ],
-        );
+              if (snapshot.data! == null || !snapshot.data!.exists) {
+                return Container();
+              }
+              Map data = snapshot.data!.data() as Map;
+              caseModel = new CaseModel.fromJson(caseModel!.id!, data);
+
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 16),
+                  caseModel != null
+                      ? CheckupStyleWidget(
+                          date: convertDateTime(),
+                          title: "Emergency",
+                          title2: "${caseModel!.status!.formateCaseStatusStr}",
+                          dotColor: caseModel!.status!.formateCaseStatusColor,
+                          icon: caseModel!.status!.formateCaseStatusIcon,
+                          boxcolor:
+                              caseModel!.status!.formateCaseStatusBackground,
+                          showReport: caseModel!.status!.formateCaseStatusStr ==
+                              "REPORT READY",
+                          caseModel: caseModel!,
+                        )
+                      : Container(),
+                  const SizedBox(height: 8),
+                  doctor != null
+                      ? CheckupDoctorWidget(
+                          title: "Reviewed by ${doctor!.fullname}",
+                          title2:
+                              "${doctor!.collegeName} ${doctor!.collegeAddress}",
+                          boxcolor: CustomColors.orangeshade,
+                          icon: Moru.person_add,
+                          photo: doctor!.photo!,
+                        )
+                      : Container(),
+                  const SizedBox(height: 24),
+                  LocaleText(
+                    "photos",
+                    style: GoogleFonts.syne(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  photoHorizontalList(),
+                  const SizedBox(height: 12),
+                  //resubmitPhotos(),
+                  Container(),
+
+                  caseModel!.status == "reportReady"
+                      ? Column(
+                          children: [
+                            reportWidget(),
+                            const SizedBox(height: 24),
+                            replyFromDoctor(),
+                            const SizedBox(height: 32),
+                            whatIsawWidget(),
+                            SizedBox(height: 32),
+                            whatCanYouDo(),
+                            SizedBox(height: 32),
+                            nextStep(),
+                            SizedBox(height: 32),
+                            treatmentCostWidget(),
+                            SizedBox(height: 32),
+                            recommendedProductsWidget(),
+                            SizedBox(height: 120),
+                          ],
+                        )
+                      : Column(),
+                ],
+              );
+            });
       },
     );
   }

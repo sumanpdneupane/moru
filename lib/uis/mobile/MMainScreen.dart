@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:moru/Routes.dart';
 import 'package:moru/services/Repository.dart';
+import 'package:moru/uis/mobile/contact/MContactScreen.dart';
 import 'package:moru/uis/mobile/home/MHomeScreen.dart';
 import 'package:moru/utils/CustomColors.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -19,7 +20,7 @@ class MMainScreen extends StatefulWidget {
   List<Widget> screens = [
     MHomeScreen(),
     MCheckupScreen(),
-    MCheckupScreen(),
+    MContactScreen(),
   ];
 
   MMainScreen({
