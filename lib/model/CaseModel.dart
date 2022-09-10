@@ -68,8 +68,8 @@ class CaseModel {
     this.upperPhotoBoundSize = 2,
     List<PhotoModel>? photos,
     List<QuestionairesModel>? questionaires,
-    List<String>? recommendedProducts,
-    List<String>? recommendedTreatments,
+    List<dynamic>? recommendedProducts,
+    List<dynamic>? recommendedTreatments,
   }) {
     this.photos = photos == null ? [] : photos;
     this.questionaires = questionaires == null ? [] : questionaires;

@@ -65,7 +65,9 @@ Future<void> main() async {
           appId: "1:524010047131:web:cd294471a31292b995683e",
           measurementId: "G-6S9E7LTG34"),
     );
-    await FirebaseFirestore.instance.enablePersistence();
+    try {
+      await FirebaseFirestore.instance.enablePersistence();
+    } catch (e) {}
   }
 
   runApp(MyApp());
