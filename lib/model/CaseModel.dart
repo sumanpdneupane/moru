@@ -9,6 +9,7 @@ import 'package:moru/utils/MoruIcons.dart';
 
 class CaseModel {
   String? id;
+  String? caseNo;
 
   String? createdBy;
   String? assignedTo;
@@ -47,6 +48,7 @@ class CaseModel {
 
   CaseModel({
     this.id,
+    this.caseNo = "",
     this.assignedTo,
     this.whatYouCanDo = "",
     this.replyFromDoctor = "",
@@ -82,6 +84,7 @@ class CaseModel {
   CaseModel.fromJson(String uid, Map<dynamic, dynamic> json) {
     this.id = uid;
     if (json != null && json.length > 0) {
+      this.caseNo = json["caseNo"] ?? "";
       this.assignedTo = json["assignedTo"];
       this.whatYouCanDo = json["whatYouCanDo"];
       this.replyFromDoctor = json["replyFromDoctor"];
@@ -126,6 +129,7 @@ class CaseModel {
   Map<String, dynamic> toJson() {
     Map<String, dynamic> data = Map();
 
+    data["caseNo"] = caseNo;
     data["createdBy"] = createdBy;
     data["assignedTo"] = assignedTo;
     data["createdDate"] = createdDate;
