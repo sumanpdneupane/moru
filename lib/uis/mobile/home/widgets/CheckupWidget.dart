@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:moru/Routes.dart';
 import 'package:moru/custom_widgets/grids/MyGrid.dart';
@@ -95,8 +96,13 @@ class CheckupWidget extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                onTap: () {
-                  Commons.toastMessage(context, "Comming Soon.");
+                onTap: () async {
+                  Commons.toastMessage(context, "Coming Soon.");
+                  await FirebaseFirestore.instance
+                      .collection("utils")
+                      .doc("clicks")
+                      .set({"videoConsultation": FieldValue.increment(1)},
+                          SetOptions(merge: true));
                 },
                 child: MyGrid(
                   icon: Moru.teeth_calen,

@@ -6,8 +6,11 @@ class UserModel {
   String? fullname;
   String? email;
   String? role;
-  String? imageUrl;
+  String? photo;
   DateTime? createdDate;
+  String? licensedFrom;
+  String? collegeName;
+  String? collegeAddress;
 
   UserModel(
     this.uid,
@@ -15,9 +18,11 @@ class UserModel {
     this.email,
     this.role,
     this.createdDate,
-    this.imageUrl,
+    this.photo,
+    this.licensedFrom,
+    this.collegeName,
+    this.collegeAddress,
   );
-
 
   UserModel copyWith({
     String? uid,
@@ -26,6 +31,9 @@ class UserModel {
     String? role,
     String? imageUrl,
     DateTime? createdDate,
+    String? licensedFrom,
+    String? collegeName,
+    String? collegeAddress,
   }) {
     return UserModel(
         this.uid = uid ?? this.uid,
@@ -33,33 +41,45 @@ class UserModel {
         this.email = email ?? this.email,
         this.role = role ?? this.role,
         this.createdDate = createdDate ?? this.createdDate,
-        this.imageUrl = imageUrl ?? this.imageUrl);
+        this.photo = imageUrl ?? this.photo,
+        this.licensedFrom = licensedFrom ?? this.licensedFrom,
+        this.collegeName = collegeName ?? this.collegeName,
+        this.collegeAddress = collegeAddress ?? this.collegeAddress);
   }
 
   UserModel.fromJson(String uid, Map<dynamic, dynamic> json) {
     this.uid = uid;
     if (json != null && json.length > 0) {
-      this.fullname = json["fullname"];
+      if (json.containsKey("fullName")) {
+        this.fullname = json["fullName"];
+      }
+      if (json.containsKey("fullname")) {
+        this.fullname = json["fullname"];
+      }
       this.email = json["email"];
       this.role = json["role"];
       var createdDate = json['createdDate'] as Timestamp;
       this.createdDate = createdDate != null ? createdDate.toDate() : null;
-      this.imageUrl = json.containsKey("imageUrl") ? json['imageUrl'] : null;
+      this.photo = json.containsKey("photo") ? json['photo'] : null;
+      this.licensedFrom = json["licensedFrom"];
+      this.collegeName = json["collegeName"];
+      this.collegeAddress = json["collegeAddress"];
     }
   }
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> data = Map();
-    data["fullname"] = fullname;
+    data["fullName"] = fullname;
     data["email"] = email;
     data["createdDate"] = createdDate;
     data["role"] = role;
+    data["photo"] = photo;
     return data;
   }
 }
 
 class UserViewModel with ChangeNotifier {
-  UserModel _model = UserModel("", "", "", "", null, "");
+  UserModel _model = UserModel("", "", "", "", null, "", "", "", "");
 
   void update(UserModel userModel) {
     _model = userModel;

@@ -11,7 +11,7 @@ class UserApi extends FirebaseInterface {
   }) async {
     //Here role is patient/admin
     Map<String, dynamic> data = Map();
-    data["fullname"] = fullname;
+    data["fullName"] = fullname;
     data["email"] = email;
     data["createdDate"] = createdDate;
     data["role"] = "patient";

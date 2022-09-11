@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 //import 'package:camera/camera.dart';
@@ -65,6 +66,9 @@ Future<void> main() async {
         // measurementId: "G-6S9E7LTG34"
       ),
     );
+    try {
+      await FirebaseFirestore.instance.enablePersistence();
+    } catch (e) {}
   }
 
   runApp(MyApp());
@@ -120,5 +124,6 @@ class MyApp extends StatelessWidget {
  * flutter run -d chrome
  * flutter run -d chrome --web-renderer html // to run the app
  * flutter run -d chrome --web-hostname localhost --web-port 54537
+ * flutter run -d edge --web-hostname localhost --web-port 54537
  * flutter build web --web-renderer html --release // to generate a production build
  */

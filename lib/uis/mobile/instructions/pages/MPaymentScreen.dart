@@ -125,6 +125,13 @@ class _MPaymentScreenState extends State<MPaymentScreen> {
       model.photos![i].title = "";
       model.photos![i].description = "";
     }
+    var doc = await FirebaseFirestore.instance
+        .collection('cases').get();
+
+    var cardLength = doc.size;
+    print("cardLength----------> ${cardLength}");
+    cardLength = cardLength + 1;
+    model.caseNo = cardLength.toString();
 
     Commons.consoleLog("model----------> ${model.toJson()}");
 

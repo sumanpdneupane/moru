@@ -2,10 +2,14 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:moru/utils/Commons.dart';
+import 'package:moru/utils/CustomColors.dart';
+import 'package:moru/utils/MoruIcons.dart';
 
 class CaseModel {
   String? id;
+  String? caseNo;
 
   String? createdBy;
   String? assignedTo;
@@ -39,42 +43,48 @@ class CaseModel {
   List<PhotoModel>? photos;
 
   List<QuestionairesModel>? questionaires;
-  List<String>? recommendedProducts = [];
-  List<String>? recommendedTreatments = [];
+  List<dynamic>? recommendedProducts = [];
+  List<dynamic>? recommendedTreatments = [];
 
   CaseModel({
     this.id,
+    this.caseNo = "",
     this.assignedTo,
-    this.whatYouCanDo,
-    this.replyFromDoctor,
-    this.replyFromPatient,
-    this.severityScale,
+    this.whatYouCanDo = "",
+    this.replyFromDoctor = "",
+    this.replyFromPatient = "",
+    this.severityScale = 0,
     this.createdDate,
     this.createdBy,
     this.lastStatusUpdated,
-    this.nextSteps,
+    this.nextSteps = "",
     this.coupon = "",
     this.stripeResponse,
     this.totalCostOfPlan = 0,
     this.totalCostPaid = 0,
     this.discountAmount = 0,
     this.discountPercentage = 0,
-    this.plan,
-    this.status,
+    this.plan = "",
+    this.status = "",
     this.lowerPhotoBoundSize = 1,
     this.upperPhotoBoundSize = 2,
     List<PhotoModel>? photos,
     List<QuestionairesModel>? questionaires,
-    this.recommendedProducts,
-    this.recommendedTreatments,
+    List<dynamic>? recommendedProducts,
+    List<dynamic>? recommendedTreatments,
   }) {
     this.photos = photos == null ? [] : photos;
     this.questionaires = questionaires == null ? [] : questionaires;
+    this.recommendedProducts =
+        recommendedProducts == null ? [] : recommendedProducts;
+    this.recommendedTreatments =
+        recommendedTreatments == null ? [] : recommendedTreatments;
   }
 
   CaseModel.fromJson(String uid, Map<dynamic, dynamic> json) {
     this.id = uid;
     if (json != null && json.length > 0) {
+      this.caseNo = json["caseNo"] ?? "";
       this.assignedTo = json["assignedTo"];
       this.whatYouCanDo = json["whatYouCanDo"];
       this.replyFromDoctor = json["replyFromDoctor"];
@@ -119,6 +129,7 @@ class CaseModel {
   Map<String, dynamic> toJson() {
     Map<String, dynamic> data = Map();
 
+    data["caseNo"] = caseNo;
     data["createdBy"] = createdBy;
     data["assignedTo"] = assignedTo;
     data["createdDate"] = createdDate;
@@ -148,13 +159,13 @@ class CaseModel {
     if (questionaires != null) {
       data["questionaires"] = questionaires!.map((element) {
         return element.toJson();
-      });
+      }).toList();
     }
 
     if (photos != null) {
       data["photos"] = photos!.map((element) {
         return element.toJson();
-      });
+      }).toList();
     }
     return data;
   }
@@ -242,5 +253,55 @@ class QuestionairesModel {
     data["question"] = question;
     data["answer"] = answer;
     return data;
+  }
+}
+
+extension MyStringExtension on String {
+  String get formateCaseStatusStr {
+    //pending/reportReady/needUpdate
+
+    if (this.toLowerCase() == "reportready") {
+      return "REPORT READY";
+    } else if (this.toLowerCase() == "needupdate") {
+      return "NEED UPDATE";
+    } else {
+      return this.toUpperCase();
+    }
+  }
+
+  Color get formateCaseStatusColor {
+    //pending/reportReady/needUpdate
+
+    if (this.toLowerCase() == "reportready") {
+      return CustomColors.green;
+    } else if (this.toLowerCase() == "needupdate") {
+      return CustomColors.red;
+    } else {
+      return CustomColors.yellow2;
+    }
+  }
+
+  IconData get formateCaseStatusIcon {
+    //pending/reportReady/needUpdate
+
+    if (this.toLowerCase() == "reportready") {
+      return Moru.smile;
+    } else if (this.toLowerCase() == "needupdate") {
+      return Moru.teeth_calen;
+    } else {
+      return Moru.teeth_cross;
+    }
+  }
+
+  Color get formateCaseStatusBackground {
+    //pending/reportReady/needUpdate
+
+    if (this.toLowerCase() == "reportready") {
+      return CustomColors.yellow2;
+    } else if (this.toLowerCase() == "needupdate") {
+      return CustomColors.red;
+    } else {
+      return CustomColors.primarycolor;
+    }
   }
 }

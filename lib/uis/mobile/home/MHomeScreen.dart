@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_locales/flutter_locales.dart';
@@ -209,9 +210,13 @@ class CheckupStyle extends StatelessWidget {
               child: CheckupStyleWidget(
                 date: "${date}",
                 title: "full_assessment",
-                title2: "${model[index].status!.toUpperCase()}",
-                dotColor: CustomColors.yellow,
+                title2: "${model[index].status!.formateCaseStatusStr}",
+                dotColor: model[index].status!.formateCaseStatusColor,
+                icon: model[index].status!.formateCaseStatusIcon,
+                boxcolor: model[index].status!.formateCaseStatusBackground,
                 caseModel: model[index],
+                showReport:
+                    model[index].status!.formateCaseStatusStr == "REPORT READY",
               ),
             );
           },
@@ -224,6 +229,11 @@ class CheckupStyle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<AppViewModel>(builder: (ctx, data, Widget? child) {
       var model = data.getAllCheckupModel();
+
+      model.sort((a, b) {
+        return b.createdDate!.compareTo(a.createdDate!);
+      });
+
       return loadData(model);
     });
   }

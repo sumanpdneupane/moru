@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,7 +9,11 @@ import 'package:moru/custom_widgets/ButtonWidget.dart';
 import 'package:moru/utils/CustomColors.dart';
 
 class ResubmitPhotosDialog {
-  ResubmitPhotosDialog({required BuildContext context}) {
+  ResubmitPhotosDialog({
+    required BuildContext context,
+    required Uint8List bytes,
+    required Function() onTab,
+  }) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -43,7 +49,7 @@ class ResubmitPhotosDialog {
                   height: 450,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/images/card4.png'),
+                      image: MemoryImage(bytes),
                       fit: BoxFit.cover,
                     ),
                     borderRadius: BorderRadius.circular(20),
@@ -51,7 +57,7 @@ class ResubmitPhotosDialog {
                 ),
                 SizedBox(height: 38),
                 ButtonWidget(
-                  name: "Resubmit",
+                  name: "Submit",
                   height: 50,
                   width: width * 0.87,
                   fontSize: 15,
@@ -59,7 +65,8 @@ class ResubmitPhotosDialog {
                   textColor: Colors.white,
                   prefixIconPath: "assets/icons/reload.png",
                   onTap: () {
-                    Routes.pop(context);
+                    //Routes.pop(context);
+                    onTab();
                   },
                 ),
               ],

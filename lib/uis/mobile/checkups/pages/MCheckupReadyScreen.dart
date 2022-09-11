@@ -1,25 +1,51 @@
+import 'dart:typed_data';
 import 'dart:ui';
 import 'package:card_swiper/card_swiper.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:moru/Routes.dart';
 import 'package:moru/custom_widgets/ButtonWidget.dart';
 import 'package:moru/custom_widgets/FooterWidget.dart';
 import 'package:moru/custom_widgets/back_button/BackButtonWidget.dart';
+import 'package:moru/custom_widgets/dialogs/OpenCameraFileBottomDialog.dart';
+import 'package:moru/libraries/FileManger.dart';
+import 'package:moru/model/AppViewModel.dart';
 import 'package:moru/model/CaseModel.dart';
+import 'package:moru/model/UserModel.dart';
 import 'package:moru/uis/mobile/MMainScreen.dart';
 import 'package:moru/uis/mobile/checkups/dialog/ResubmitPhotosDialog.dart';
 import 'package:moru/uis/mobile/checkups/widgets/CheckupActionWidget.dart';
 import 'package:moru/uis/mobile/checkups/widgets/CheckupStyleWidget.dart';
+import 'package:moru/utils/Commons.dart';
 import 'package:moru/utils/CustomColors.dart';
 import 'package:moru/utils/MoruIcons.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
-class MCheckupReadyScreen extends StatelessWidget {
+class MCheckupReadyScreen extends StatefulWidget {
   const MCheckupReadyScreen({Key? key}) : super(key: key);
+
+  @override
+  State<MCheckupReadyScreen> createState() => _MCheckupReadyScreenState();
+}
+
+class _MCheckupReadyScreenState extends State<MCheckupReadyScreen> {
+  CaseModel? caseModel;
+
+  @override
+  void initState() {
+    var viewModel = Provider.of<AppViewModel>(context, listen: false);
+    caseModel = viewModel.getSingleCaseCheckupModel();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,67 +92,269 @@ class MCheckupReadyScreen extends StatelessWidget {
               ],
             ),
           ),
-          bottomSheet: FooterWidget(
-            children: [
-              const SizedBox(height: 12),
-              ButtonWidget(
-                name: "Chat with a doctor",
-                height: 50,
-                width: width * 0.87,
-                fontSize: 15,
-                backgroundColor: CustomColors.primarycolor,
-                textColor: Colors.white,
-                prefixIconPath: "assets/icons/message.png",
-                onTap: () {
-                  Routes.pushNamed(context, Routes.CHAT_PAGE);
-                },
-              ),
-              const SizedBox(height: 24),
-            ],
-          ),
+          bottomSheet: chatButton(width, context),
         );
       },
     );
+  }
 
-    // return MMainScreen(
-    //   selectedIndex: 1,
-    //   child: CheckUp2Body(),
-    //   bottomSheet: FooterWidget(
-    //     children: [
-    //       const SizedBox(height: 12),
-    //       ButtonWidget(
-    //         name: "Chat with a doctor",
-    //         height: 50,
-    //         width: width * 0.87,
-    //         fontSize: 15,
-    //         backgroundColor: CustomColors.primarycolor,
-    //         textColor: Colors.white,
-    //         prefixIconPath: "assets/icons/message.png",
-    //         onTap: () {},
-    //       ),
-    //       const SizedBox(height: 24),
-    //     ],
-    //   ),
-    // );
+  Widget? chatButton(width, context) {
+    if (caseModel == null || caseModel!.createdDate == null) {
+      return null;
+    }
+
+    final createdDate = caseModel!.createdDate!;
+    final date2 = DateTime.now();
+    var difference = date2.difference(createdDate).inDays;
+
+    print("DateTimeDIfference---------> ${difference}");
+
+    if (difference > 3) {
+      return null;
+    }
+
+    return FooterWidget(
+      children: [
+        const SizedBox(height: 12),
+        ButtonWidget(
+          name: "Chat with a doctor",
+          height: 50,
+          width: width * 0.87,
+          fontSize: 15,
+          backgroundColor: CustomColors.primarycolor,
+          textColor: Colors.white,
+          prefixIconPath: "assets/icons/message.png",
+          onTap: () {
+            Routes.pushNamed(context, Routes.CHAT_PAGE);
+          },
+        ),
+        const SizedBox(height: 24),
+      ],
+    );
   }
 }
 
-class CheckUp2Body extends StatelessWidget {
+// class MCheckupReadyScreen extends StatelessWidget {
+//   const MCheckupReadyScreen({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     var width = MediaQuery.of(context).size.width;
+//
+//     return ResponsiveBuilder(
+//       builder: (context, SizingInformation) {
+//         return Scaffold(
+//           body: SafeArea(
+//             child: Column(
+//               children: [
+//                 SizedBox(height: 24),
+//                 Container(
+//                   width: MediaQuery.of(context).size.width * 0.87,
+//                   child: BackButtonWidget(
+//                     onTap: () {
+//                       Routes.pop(context);
+//                     },
+//                     localeText: "back_to_checkups",
+//                   ),
+//                 ),
+//                 Container(
+//                   height: 8,
+//                   color: Colors.transparent,
+//                 ),
+//                 Expanded(
+//                   child: SingleChildScrollView(
+//                     physics: AlwaysScrollableScrollPhysics(),
+//                     child: Row(
+//                       mainAxisSize: MainAxisSize.max,
+//                       crossAxisAlignment: CrossAxisAlignment.start,
+//                       mainAxisAlignment: MainAxisAlignment.center,
+//                       children: [
+//                         Container(
+//                           margin: EdgeInsets.only(top: 4),
+//                           alignment: Alignment.topCenter,
+//                           width: MediaQuery.of(context).size.width * 0.87,
+//                           child: CheckUp2Body(),
+//                         ),
+//                       ],
+//                     ),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//           bottomSheet: chatButton(width, context, caseM),
+//         );
+//       },
+//     );
+//   }
+//
+//   Widget chatButton(width, context) {
+//     final birthday = DateTime(1967, 10, 12);
+//     final date2 = DateTime.now();
+//     final difference = date2.difference(birthday).inDays;
+//
+//     if (difference > 3) {
+//       return Container();
+//     }
+//
+//     return FooterWidget(
+//       children: [
+//         const SizedBox(height: 12),
+//         ButtonWidget(
+//           name: "Chat with a doctor",
+//           height: 50,
+//           width: width * 0.87,
+//           fontSize: 15,
+//           backgroundColor: CustomColors.primarycolor,
+//           textColor: Colors.white,
+//           prefixIconPath: "assets/icons/message.png",
+//           onTap: () {
+//             Routes.pushNamed(context, Routes.CHAT_PAGE);
+//           },
+//         ),
+//         const SizedBox(height: 24),
+//       ],
+//     );
+//   }
+// }
+
+class CheckUp2Body extends StatefulWidget {
   const CheckUp2Body({Key? key}) : super(key: key);
+
+  @override
+  State<CheckUp2Body> createState() => _CheckUp2BodyState();
+}
+
+class _CheckUp2BodyState extends State<CheckUp2Body> {
+  CaseModel? caseModel;
+  UserModel? currentUser;
+  UserModel? doctor;
+
+  int whatISawIndex = 0;
+
+  @override
+  void initState() {
+    var userViewModel = Provider.of<UserViewModel>(context, listen: false);
+    currentUser = userViewModel.getModel();
+
+    var viewModel = Provider.of<AppViewModel>(context, listen: false);
+    caseModel = viewModel.getSingleCaseCheckupModel();
+
+    print("caseModel--initState---------> ${caseModel!.id}");
+    //getCaseDetailInfo();
+    getDoctorInfo();
+    super.initState();
+  }
+
+  Future getCaseDetailInfo() async {
+    var doc = await FirebaseFirestore.instance
+        .collection('cases')
+        .doc(caseModel!.id)
+        .get();
+
+    Map data = doc.data() as Map;
+    caseModel = CaseModel.fromJson(doc.id, data);
+    setState(() {});
+  }
+
+  Future getDoctorInfo() async {
+    var doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(caseModel!.assignedTo)
+        .get();
+
+    Map data = doc.data() as Map;
+    doctor = UserModel.fromJson(doc.id, data);
+    print("doctor---- > ${doctor!.toJson()}");
+    setState(() {});
+  }
+
+  Future<String> uploadFile(Uint8List byte, String? uid) async {
+    try {
+      final _firebaseStorage = FirebaseStorage.instance;
+      print('cases/${uid}/${DateTime.now().microsecondsSinceEpoch}-moru.jpeg');
+      var snapshot = await _firebaseStorage
+          .ref()
+          .child(
+              'cases/${uid}/${DateTime.now().microsecondsSinceEpoch}-moru.jpeg')
+          .putData(
+            byte,
+            SettableMetadata(
+              contentType: 'image/jpeg',
+            ),
+          )
+          .whenComplete(() => null);
+      var downloadUrl = await snapshot.ref.getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      print(e);
+      return '';
+    }
+  }
+
+  Future openCameraOrGallery(BuildContext context, int index) async {
+    OpenCameraFileBottomDialog(
+      context: context,
+      fileType: FileType.image,
+      allowExtensions: false,
+      callback: (Uint8List bytes) async {
+        ResubmitPhotosDialog(
+          bytes: bytes,
+          context: context,
+          onTab: () async {
+            Routes.pop(context);
+            if (bytes == null) {
+              Commons.toastMessage(context, FileManger.NO_SELECTED);
+            } else {
+              EasyLoading.show(status: 'Uploading...');
+              var currentUserViewModel =
+                  Provider.of<UserViewModel>(context, listen: false);
+              var model = currentUserViewModel.getModel();
+
+              String imageUrl = await uploadFile(bytes, caseModel!.id);
+              if (imageUrl == "") {
+                EasyLoading.dismiss();
+                return;
+              }
+              caseModel!.photos![index].url = imageUrl;
+              caseModel!.photos![index].status = "active";
+              caseModel!.status = "pending";
+              Map<String, dynamic> data = Map();
+              if (caseModel!.photos != null) {
+                data["photos"] = caseModel!.photos!.map((element) {
+                  return element.toJson();
+                }).toList();
+              }
+              data["status"] = "pending";
+
+              var collection = FirebaseFirestore.instance.collection('cases');
+              collection.doc(caseModel!.id).update(data).then((_) {
+                print('Success');
+              }).catchError((error) {
+                print('Failed: $error');
+              });
+
+              EasyLoading.dismiss();
+            }
+          },
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    List<PhotoModel> photosLists = [
-      PhotoModel('assets/images/card1.png', false),
-      PhotoModel('assets/images/card2.png', true),
-      PhotoModel('assets/images/card2.png', false),
-      PhotoModel('assets/images/card1.png', true),
-    ];
 
-    Widget photoHorizontalList(List<PhotoModel> photos) {
+    Widget photoHorizontalList() {
       double size = 88;
+      List<PhotoModel> photos = [];
+
+      if (caseModel != null && caseModel!.photos != null) {
+        photos = caseModel!.photos!;
+      }
+
       return Container(
         height: size + 10,
         child: ListView.builder(
@@ -143,14 +371,17 @@ class CheckUp2Body extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                     image: DecorationImage(
-                      image: AssetImage(photos[index].url),
+                      image: NetworkImage(
+                        photos[index].url != null ? photos[index].url! : "",
+                      ),
+                      fit: BoxFit.fill,
                     ),
                   ),
                 ),
-                !photos[index].isVerified
+                photos[index].status! == PhotoModel.REJECTED
                     ? GestureDetector(
                         onTap: () {
-                          ResubmitPhotosDialog(context: context);
+                          openCameraOrGallery(context, index);
                         },
                         child: Container(
                           height: size,
@@ -308,6 +539,9 @@ class CheckUp2Body extends StatelessWidget {
     }
 
     Widget replyFromDoctor() {
+      if (doctor == null) {
+        return Container();
+      }
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -321,7 +555,7 @@ class CheckUp2Body extends StatelessWidget {
           ),
           SizedBox(height: 4),
           Text(
-            "None",
+            "${caseModel!.replyFromPatient}",
             style: GoogleFonts.syne(
               fontSize: 15,
               fontWeight: FontWeight.normal,
@@ -338,7 +572,7 @@ class CheckUp2Body extends StatelessWidget {
           ),
           SizedBox(height: 4),
           Text(
-            "Dr Mariam Alzaabi",
+            "${doctor!.fullname != null ? doctor!.fullname! : ""}",
             style: GoogleFonts.syne(
               fontSize: 15,
               fontWeight: FontWeight.bold,
@@ -347,7 +581,7 @@ class CheckUp2Body extends StatelessWidget {
           ),
           SizedBox(height: 2),
           Text(
-            "Licenced in Dubai, UAE",
+            "Licenced in ${doctor!.licensedFrom != null ? doctor!.licensedFrom : ""}",
             style: GoogleFonts.syne(
               fontSize: 15,
               fontWeight: FontWeight.normal,
@@ -356,7 +590,7 @@ class CheckUp2Body extends StatelessWidget {
           ),
           SizedBox(height: 16),
           Text(
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
+            "${caseModel!.replyFromDoctor}",
             style: GoogleFonts.syne(
               fontSize: 14,
               fontWeight: FontWeight.normal,
@@ -368,6 +602,12 @@ class CheckUp2Body extends StatelessWidget {
     }
 
     Widget whatIsawWidget() {
+      if (caseModel == null ||
+          caseModel!.photos == null ||
+          caseModel!.photos!.length < 1) {
+        return Container();
+      }
+
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -392,13 +632,13 @@ class CheckUp2Body extends StatelessWidget {
                   child: Container(
                     height: 150,
                     child: Swiper(
-                      index: 0,
+                      index: whatISawIndex,
                       itemBuilder: (BuildContext context, int index) {
                         return Stack(
                           children: [
                             PhotoView.customChild(
                               child: Image.network(
-                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7WLVv1HbS-YtqKc2q7RfubcfHsSucy_lPXw&usqp=CAU",
+                                caseModel!.photos![index].url!,
                                 loadingBuilder: (BuildContext context,
                                     Widget child,
                                     ImageChunkEvent? loadingProgress) {
@@ -422,7 +662,11 @@ class CheckUp2Body extends StatelessWidget {
                           ],
                         );
                       },
-                      itemCount: 3,
+                      onIndexChanged: (int index) {
+                        whatISawIndex = index;
+                        setState(() {});
+                      },
+                      itemCount: caseModel!.photos!.length,
                       curve: Curves.easeInOut,
                       indicatorLayout: PageIndicatorLayout.SCALE,
                       pagination: SwiperPagination(
@@ -439,7 +683,7 @@ class CheckUp2Body extends StatelessWidget {
                   padding: EdgeInsets.all(12),
                   child: Center(
                     child: Text(
-                      "Moderate Overcrowding",
+                      "${caseModel!.photos![whatISawIndex].title!}",
                       textAlign: TextAlign.center,
                       style: GoogleFonts.syne(
                         fontSize: 12,
@@ -454,7 +698,7 @@ class CheckUp2Body extends StatelessWidget {
           ),
           SizedBox(height: 16),
           Text(
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
+            "${caseModel!.photos![whatISawIndex].description!}",
             style: GoogleFonts.syne(
               fontSize: 14,
               fontWeight: FontWeight.normal,
@@ -466,6 +710,19 @@ class CheckUp2Body extends StatelessWidget {
     }
 
     Widget whatCanYouDo() {
+      double scaleWidth = width - 64;
+      double severityScale = caseModel!.severityScale;
+      double scaleVale = 0.0;
+      if (severityScale == 0) {
+        scaleVale = 0.0;
+      } else if (severityScale == 10) {
+        scaleVale = scaleWidth;
+      } else {
+        //TODO need to calculate
+        severityScale = 10 - severityScale;
+        scaleVale = scaleWidth / severityScale;
+      }
+
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -488,11 +745,12 @@ class CheckUp2Body extends StatelessWidget {
           ),
           SizedBox(height: 24),
           Stack(
-            alignment: Alignment.center,
+            //alignment: Alignment,
             children: [
               Container(
-                width: width,
+                width: scaleWidth,
                 height: 4.0,
+                margin: EdgeInsets.only(top: 8),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(2),
                   gradient: LinearGradient(
@@ -509,24 +767,28 @@ class CheckUp2Body extends StatelessWidget {
                 ),
               ),
               Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      offset: Offset(0.0, 1.0), //(x,y)
-                      blurRadius: 6.0,
-                    ),
-                  ],
-                ),
+                width: scaleVale + 20,
+                alignment: Alignment.centerRight,
                 child: Container(
-                  width: 12.0,
-                  height: 12.0,
-                  margin: EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: CustomColors.primarycolor,
+                    borderRadius: BorderRadius.circular(16),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey,
+                        offset: Offset(0.0, 1.0), //(x,y)
+                        blurRadius: 6.0,
+                      ),
+                    ],
+                  ),
+                  child: Container(
+                    width: 12.0,
+                    height: 12.0,
+                    margin: EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: CustomColors.primarycolor,
+                    ),
                   ),
                 ),
               )
@@ -534,7 +796,7 @@ class CheckUp2Body extends StatelessWidget {
           ),
           SizedBox(height: 24),
           Text(
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
+            "${caseModel!.whatYouCanDo}",
             style: GoogleFonts.syne(
               fontSize: 14,
               fontWeight: FontWeight.normal,
@@ -559,28 +821,34 @@ class CheckUp2Body extends StatelessWidget {
           ),
           SizedBox(height: 16),
           Text(
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
+            "${caseModel!.nextSteps}",
             style: GoogleFonts.syne(
               fontSize: 14,
               fontWeight: FontWeight.normal,
               color: CustomColors.inputfillColor,
             ),
           ),
-          SizedBox(height: 16),
-          ButtonWidget(
-            name: "Find nearby dentist",
-            height: 50,
-            width: width,
-            fontSize: 19,
-            backgroundColor: CustomColors.primarycolor,
-            textColor: Colors.white,
-            onTap: () {},
-          ),
+          // SizedBox(height: 16),
+          // ButtonWidget(
+          //   name: "Find nearby dentist",
+          //   height: 50,
+          //   width: width,
+          //   fontSize: 19,
+          //   backgroundColor: CustomColors.primarycolor,
+          //   textColor: Colors.white,
+          //   onTap: () {},
+          // ),
         ],
       );
     }
 
     Widget treatmentCostWidget() {
+      if (caseModel == null ||
+          caseModel!.recommendedTreatments == null ||
+          caseModel!.recommendedTreatments!.length < 1) {
+        return Container();
+      }
+
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -663,16 +931,16 @@ class CheckUp2Body extends StatelessWidget {
                 color: CustomColors.inputfillColor,
               ),
             ),
-            SizedBox(height: 20),
-            ButtonWidget(
-              name: "Buy",
-              height: 40,
-              width: width,
-              fontSize: 15,
-              backgroundColor: CustomColors.primarycolor,
-              textColor: Colors.white,
-              onTap: () {},
-            ),
+            // SizedBox(height: 20),
+            // ButtonWidget(
+            //   name: "Buy",
+            //   height: 40,
+            //   width: width,
+            //   fontSize: 15,
+            //   backgroundColor: CustomColors.primarycolor,
+            //   textColor: Colors.white,
+            //   onTap: () {},
+            // ),
           ],
         ),
       );
@@ -709,65 +977,102 @@ class CheckUp2Body extends StatelessWidget {
       );
     }
 
+    String convertDateTime() {
+      String date = caseModel!.createdDate!.day.toString() +
+          "th of" +
+          DateFormat(" MMM y").format(caseModel!.createdDate!);
+      print("caseids------------> ${caseModel!.id}");
+      return date;
+    }
+
     return ResponsiveBuilder(
       builder: (context, SizingInformation) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 16),
-            CheckupStyleWidget(
-              date: "14th_of_May_2022",
-              title: "Emergency",
-              title2: "report_ready",
-              dotColor: CustomColors.green,
-              icon: Moru.smile,
-              showReport: false,
-              caseModel: CaseModel(),
-            ),
-            const SizedBox(height: 8),
-            CheckupActionWidget(
-              title: "Reviewed by Dr. Mariam",
-              title2: "King's College Hospital London",
-              boxcolor: CustomColors.orangeshade,
-              icon: Moru.person_add,
-            ),
-            const SizedBox(height: 24),
-            LocaleText(
-              "photos",
-              style: GoogleFonts.syne(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            photoHorizontalList(photosLists),
-            const SizedBox(height: 12),
-            //resubmitPhotos(),
-            reportWidget(),
-            const SizedBox(height: 24),
-            replyFromDoctor(),
-            const SizedBox(height: 32),
-            whatIsawWidget(),
-            SizedBox(height: 32),
-            whatCanYouDo(),
-            SizedBox(height: 32),
-            nextStep(),
-            SizedBox(height: 32),
-            treatmentCostWidget(),
-            SizedBox(height: 32),
-            recommendedProductsWidget(),
-            SizedBox(height: 120),
-          ],
-        );
+        return StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('cases')
+                .doc(caseModel!.id)
+                .snapshots(),
+            builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              if (snapshot.data! == null || !snapshot.data!.exists) {
+                return Container();
+              }
+              Map data = snapshot.data!.data() as Map;
+              caseModel = new CaseModel.fromJson(caseModel!.id!, data);
+
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 16),
+                  caseModel != null
+                      ? CheckupStyleWidget(
+                          date: convertDateTime(),
+                          title: "Emergency",
+                          title2: "${caseModel!.status!.formateCaseStatusStr}",
+                          dotColor: caseModel!.status!.formateCaseStatusColor,
+                          icon: caseModel!.status!.formateCaseStatusIcon,
+                          boxcolor:
+                              caseModel!.status!.formateCaseStatusBackground,
+                          showReport: caseModel!.status!.formateCaseStatusStr ==
+                              "REPORT READY",
+                          caseModel: caseModel!,
+                        )
+                      : Container(),
+                  const SizedBox(height: 8),
+                  doctor != null
+                      ? CheckupDoctorWidget(
+                          title: "Reviewed by ${doctor!.fullname}",
+                          title2:
+                              "${doctor!.collegeName} ${doctor!.collegeAddress}",
+                          boxcolor: CustomColors.orangeshade,
+                          icon: Moru.person_add,
+                          photo: doctor!.photo!,
+                        )
+                      : Container(),
+                  const SizedBox(height: 24),
+                  LocaleText(
+                    "photos",
+                    style: GoogleFonts.syne(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  photoHorizontalList(),
+                  const SizedBox(height: 12),
+                  //resubmitPhotos(),
+                  Container(),
+
+                  caseModel!.status == "reportReady"
+                      ? Column(
+                          children: [
+                            reportWidget(),
+                            const SizedBox(height: 24),
+                            replyFromDoctor(),
+                            const SizedBox(height: 32),
+                            whatIsawWidget(),
+                            SizedBox(height: 32),
+                            whatCanYouDo(),
+                            SizedBox(height: 32),
+                            nextStep(),
+                            SizedBox(height: 32),
+                            treatmentCostWidget(),
+                            SizedBox(height: 32),
+                            recommendedProductsWidget(),
+                            SizedBox(height: 120),
+                          ],
+                        )
+                      : Column(),
+                ],
+              );
+            });
       },
     );
   }
-}
-
-class PhotoModel {
-  final String url;
-  final bool isVerified;
-
-  PhotoModel(this.url, this.isVerified);
 }
