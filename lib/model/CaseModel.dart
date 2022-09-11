@@ -95,7 +95,12 @@ class CaseModel {
 
       var createdDate = json['createdDate'] as Timestamp;
       this.createdDate = createdDate != null ? createdDate.toDate() : null;
-      this.lastStatusUpdated = json["lastStatusUpdated"];
+
+      if(json['lastStatusUpdated'] != null) {
+        var lastStatusUpdated = json['lastStatusUpdated'] as Timestamp;
+        this.lastStatusUpdated =
+        lastStatusUpdated != null ? lastStatusUpdated.toDate() : null;
+      }
 
       this.nextSteps = json["nextSteps"];
       this.coupon = json["coupon"];
@@ -103,7 +108,10 @@ class CaseModel {
       this.totalCostOfPlan = double.parse("${json["totalCostOfPlan"]}");
       this.totalCostPaid = double.parse("${json["totalCostPaid"]}");
 
-      this.discountAmount = double.parse("${json["discountAmount"]}");
+      if(json.containsKey("discountAmount") && json["discountAmount"] != null && json["discountAmount"] != "") {
+        print("discountAmount----> ${json["discountAmount"]}");
+        this.discountAmount = double.parse("${json["discountAmount"]}");
+      }
       this.plan = json["plan"];
       this.status = json["status"];
 

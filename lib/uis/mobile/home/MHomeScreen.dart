@@ -228,13 +228,35 @@ class CheckupStyle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<AppViewModel>(builder: (ctx, data, Widget? child) {
-      var model = data.getAllCheckupModel();
 
-      model.sort((a, b) {
-        return b.createdDate!.compareTo(a.createdDate!);
-      });
+      return StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection('cases')
+              .snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
 
-      return loadData(model);
+          if (snapshot.data!.docs.length < 1) {
+            return Container();
+          }
+
+          List<CaseModel> model =
+          snapshot.data!.docs.map((doc) {
+            Map data = doc.data() as Map;
+            return new CaseModel.fromJson(doc.id, data);
+          }).toList();
+
+          model.sort((a, b) {
+            return b.createdDate!.compareTo(a.createdDate!);
+          });
+
+          return loadData(model);
+        }
+      );
     });
   }
 }
