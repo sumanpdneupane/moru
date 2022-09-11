@@ -14,17 +14,7 @@ class MContactScreen extends StatefulWidget {
 class _MContactScreenState extends State<MContactScreen> {
   @override
   void initState() {
-    _launchURL();
     super.initState();
-  }
-
-  _launchURL() async {
-    const url = 'https://www.getmoru.com/';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      Commons.toastMessage(context, "Could not launch $url");
-    }
   }
 
   @override
