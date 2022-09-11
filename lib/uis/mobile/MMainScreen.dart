@@ -56,7 +56,7 @@ class _MMainScreenState extends State<MMainScreen> {
   }
 
   _launchURL() async {
-    const url = 'https://www.getmoru.com/';
+    const url = 'https://wa.me/message/SFUXOSYWAUBDC1';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
