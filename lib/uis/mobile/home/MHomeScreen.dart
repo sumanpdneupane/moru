@@ -141,40 +141,6 @@ class HomePgeBody extends StatelessWidget {
           // ),
 
           CheckupStyle(),
-
-          // CheckupStyleWidget(
-          //   date: "14th_of_May_2022",
-          //   title: "full_assessment",
-          //   title2: "in_progress",
-          //   dotColor: CustomColors.yellow,
-          // ),
-          // SizedBox(height: 8),
-          // CheckupStyleWidget(
-          //   date: "10th_of_aprill_2022",
-          //   title: "single_issue",
-          //   title2: "need_update",
-          //   boxcolor: CustomColors.orangeshade,
-          //   icon: Moru.teeth_calen,
-          //   dotColor: CustomColors.red,
-          // ),
-          // SizedBox(height: 8),
-          // CheckupStyleWidget(
-          //   date: "14th_of_May_2022",
-          //   title: "Emergency",
-          //   title2: "report_ready",
-          //   dotColor: CustomColors.green,
-          //   icon: Moru.teeth_cross,
-          //   showReport: true,
-          // ),
-          // SizedBox(height: 8),
-          // CheckupStyleWidget(
-          //   date: "10th_of_aprill_2022",
-          //   title: "emergency",
-          //   title2: "report_ready",
-          //   dotColor: CustomColors.green,
-          //   icon: Moru.teeth_add,
-          //   showReport: true,
-          // ),
           SizedBox(
             height: 48,
           ),
