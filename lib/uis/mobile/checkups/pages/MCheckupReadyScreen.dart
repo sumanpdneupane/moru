@@ -276,13 +276,13 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
       var snapshot = await _firebaseStorage
           .ref()
           .child(
-          'cases/${uid}/${DateTime.now().microsecondsSinceEpoch}-moru.jpeg')
+              'cases/${uid}/${DateTime.now().microsecondsSinceEpoch}-moru.jpeg')
           .putData(
-        byte,
-        SettableMetadata(
-          contentType: 'image/jpeg',
-        ),
-      )
+            byte,
+            SettableMetadata(
+              contentType: 'image/jpeg',
+            ),
+          )
           .whenComplete(() => null);
       var downloadUrl = await snapshot.ref.getDownloadURL();
       return downloadUrl;
@@ -308,7 +308,7 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
             } else {
               EasyLoading.show(status: 'Uploading...');
               var currentUserViewModel =
-              Provider.of<UserViewModel>(context, listen: false);
+                  Provider.of<UserViewModel>(context, listen: false);
               var model = currentUserViewModel.getModel();
 
               String imageUrl = await uploadFile(bytes, caseModel!.id);
@@ -318,12 +318,14 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
               }
               caseModel!.photos![index].url = imageUrl;
               caseModel!.photos![index].status = "active";
+              caseModel!.status = "pending";
               Map<String, dynamic> data = Map();
               if (caseModel!.photos != null) {
                 data["photos"] = caseModel!.photos!.map((element) {
                   return element.toJson();
                 }).toList();
               }
+              data["status"] = "pending";
 
               var collection = FirebaseFirestore.instance.collection('cases');
               collection.doc(caseModel!.id).update(data).then((_) {
@@ -378,27 +380,27 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
                 ),
                 photos[index].status! == PhotoModel.REJECTED
                     ? GestureDetector(
-                  onTap: () {
-                    openCameraOrGallery(context, index);
-                  },
-                  child: Container(
-                    height: size,
-                    width: size,
-                    margin: EdgeInsets.only(right: 8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: CustomColors.darkred.withOpacity(0.45),
-                    ),
-                    child: Center(
-                      child: Image.asset(
-                        "assets/icons/alert.png",
-                        height: 32,
-                        width: 32,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                )
+                        onTap: () {
+                          openCameraOrGallery(context, index);
+                        },
+                        child: Container(
+                          height: size,
+                          width: size,
+                          margin: EdgeInsets.only(right: 8),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: CustomColors.darkred.withOpacity(0.45),
+                          ),
+                          child: Center(
+                            child: Image.asset(
+                              "assets/icons/alert.png",
+                              height: 32,
+                              width: 32,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      )
                     : Container(),
               ],
             );
@@ -644,13 +646,13 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
                                   return Center(
                                     child: CircularProgressIndicator(
                                       value:
-                                      loadingProgress.expectedTotalBytes !=
-                                          null
-                                          ? loadingProgress
-                                          .cumulativeBytesLoaded /
-                                          loadingProgress
-                                              .expectedTotalBytes!
-                                          : null,
+                                          loadingProgress.expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  loadingProgress
+                                                      .expectedTotalBytes!
+                                              : null,
                                     ),
                                   );
                                 },
@@ -1010,28 +1012,28 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
                   const SizedBox(height: 16),
                   caseModel != null
                       ? CheckupStyleWidget(
-                    date: convertDateTime(),
-                    title: "Emergency",
-                    title2: "${caseModel!.status!.formateCaseStatusStr}",
-                    dotColor: caseModel!.status!.formateCaseStatusColor,
-                    icon: caseModel!.status!.formateCaseStatusIcon,
-                    boxcolor:
-                    caseModel!.status!.formateCaseStatusBackground,
-                    showReport: caseModel!.status!.formateCaseStatusStr ==
-                        "REPORT READY",
-                    caseModel: caseModel!,
-                  )
+                          date: convertDateTime(),
+                          title: "Emergency",
+                          title2: "${caseModel!.status!.formateCaseStatusStr}",
+                          dotColor: caseModel!.status!.formateCaseStatusColor,
+                          icon: caseModel!.status!.formateCaseStatusIcon,
+                          boxcolor:
+                              caseModel!.status!.formateCaseStatusBackground,
+                          showReport: caseModel!.status!.formateCaseStatusStr ==
+                              "REPORT READY",
+                          caseModel: caseModel!,
+                        )
                       : Container(),
                   const SizedBox(height: 8),
                   doctor != null
                       ? CheckupDoctorWidget(
-                    title: "Reviewed by ${doctor!.fullname}",
-                    title2:
-                    "${doctor!.collegeName} ${doctor!.collegeAddress}",
-                    boxcolor: CustomColors.orangeshade,
-                    icon: Moru.person_add,
-                    photo: doctor!.photo!,
-                  )
+                          title: "Reviewed by ${doctor!.fullname}",
+                          title2:
+                              "${doctor!.collegeName} ${doctor!.collegeAddress}",
+                          boxcolor: CustomColors.orangeshade,
+                          icon: Moru.person_add,
+                          photo: doctor!.photo!,
+                        )
                       : Container(),
                   const SizedBox(height: 24),
                   LocaleText(
@@ -1049,23 +1051,23 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
 
                   caseModel!.status == "reportReady"
                       ? Column(
-                    children: [
-                      reportWidget(),
-                      const SizedBox(height: 24),
-                      replyFromDoctor(),
-                      const SizedBox(height: 32),
-                      whatIsawWidget(),
-                      SizedBox(height: 32),
-                      whatCanYouDo(),
-                      SizedBox(height: 32),
-                      nextStep(),
-                      SizedBox(height: 32),
-                      treatmentCostWidget(),
-                      SizedBox(height: 32),
-                      recommendedProductsWidget(),
-                      SizedBox(height: 120),
-                    ],
-                  )
+                          children: [
+                            reportWidget(),
+                            const SizedBox(height: 24),
+                            replyFromDoctor(),
+                            const SizedBox(height: 32),
+                            whatIsawWidget(),
+                            SizedBox(height: 32),
+                            whatCanYouDo(),
+                            SizedBox(height: 32),
+                            nextStep(),
+                            SizedBox(height: 32),
+                            treatmentCostWidget(),
+                            SizedBox(height: 32),
+                            recommendedProductsWidget(),
+                            SizedBox(height: 120),
+                          ],
+                        )
                       : Column(),
                 ],
               );
