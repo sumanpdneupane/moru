@@ -711,7 +711,7 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
 
     Widget whatCanYouDo() {
       double scaleWidth = width - 64;
-      double severityScale = caseModel!.severityScale;
+      double severityScale = caseModel!.severityScale!;
       double scaleVale = 0.0;
       if (severityScale == 0) {
         scaleVale = 0.0;
@@ -981,7 +981,7 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
       String date = caseModel!.createdDate!.day.toString() +
           "th of" +
           DateFormat(" MMM y").format(caseModel!.createdDate!);
-      print("caseids------------> ${caseModel!.id}");
+      //print("caseids------------> ${caseModel!.id}");
       return date;
     }
 
