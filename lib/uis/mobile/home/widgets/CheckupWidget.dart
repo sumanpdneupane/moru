@@ -22,7 +22,7 @@ class CheckupWidget extends StatelessWidget {
     model = CaseModel();
     //add min and max photo can be uploaded
     model.lowerPhotoBoundSize = 2;
-    model.upperPhotoBoundSize = 1000; //double.minPositive.toInt();
+    model.upperPhotoBoundSize = 6; //double.minPositive.toInt();
     model.plan = CaseModel.SINGLE_ISSUE_PLAN;
     model.priceId = "price_1LZC7LDXe16sDQVN287FtFur";
     model.productId = "prod_MHle6zMmxr5Mik";

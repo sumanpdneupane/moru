@@ -1,6 +1,6 @@
 # moru
 
-A new Flutter project.
+MORU - 24/7 Online Dentist Anytime, Anywhere
 
 ## Getting Started
 
