@@ -8,7 +8,9 @@ import 'package:moru/uis/mobile/contact/MContactScreen.dart';
 import 'package:moru/uis/mobile/home/MHomeScreen.dart';
 import 'package:moru/utils/CustomColors.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../utils/Commons.dart';
 import 'checkups/MCheckupScreen.dart';
 
 class MMainScreen extends StatefulWidget {
@@ -53,6 +55,15 @@ class _MMainScreenState extends State<MMainScreen> {
         : Colors.grey[500];
   }
 
+  _launchURL() async {
+    const url = 'https://www.getmoru.com/';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      Commons.toastMessage(context, "Could not launch $url");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ResponsiveBuilder(
@@ -64,6 +75,10 @@ class _MMainScreenState extends State<MMainScreen> {
             type: BottomNavigationBarType.fixed,
             currentIndex: widget.selectedIndex,
             onTap: (value) {
+              if (value == 2) {
+                _launchURL();
+                return;
+              }
               print("BottomNavigationBar::value--------> ${value}");
               onindexchange(value);
             },
