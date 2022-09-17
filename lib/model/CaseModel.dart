@@ -16,7 +16,7 @@ class CaseModel {
   String? whatYouCanDo;
   String? replyFromDoctor;
   String? replyFromPatient;
-  var severityScale;
+  double? severityScale;
 
   DateTime? createdDate;
   DateTime? lastStatusUpdated;
@@ -90,13 +90,19 @@ class CaseModel {
       this.replyFromDoctor = json["replyFromDoctor"];
       this.replyFromPatient = json["replyFromPatient"];
 
-      this.severityScale = json["severityScale"];
+      if (json.containsKey("severityScale") &&
+          json["severityScale"] != null &&
+          json["severityScale"] != "") {
+        this.severityScale = double.parse("${json["severityScale"]}");
+      }
+
       this.createdBy = json["createdBy"];
 
       var createdDate = json['createdDate'] as Timestamp;
       this.createdDate = createdDate != null ? createdDate.toDate() : null;
 
-      if (json['lastStatusUpdated'] != null) {
+      if (json['lastStatusUpdated'] != null &&
+          json['lastStatusUpdated'] != "") {
         var lastStatusUpdated = json['lastStatusUpdated'] as Timestamp;
         this.lastStatusUpdated =
             lastStatusUpdated != null ? lastStatusUpdated.toDate() : null;
@@ -111,7 +117,7 @@ class CaseModel {
       if (json.containsKey("discountAmount") &&
           json["discountAmount"] != null &&
           json["discountAmount"] != "") {
-        print("discountAmount----> ${json["discountAmount"]}");
+        //print("discountAmount----> ${json["discountAmount"]}");
         this.discountAmount = double.parse("${json["discountAmount"]}");
       }
       this.plan = json["plan"];

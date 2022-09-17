@@ -37,9 +37,9 @@ class _MCheckupScreenState extends State<MCheckupScreen> {
     appViewModel.updateAllCheckupModel(cases);
     EasyLoading.dismiss();
 
-    appViewModel.getAllCheckupModel().forEach((element) {
-      print("updateAllCheckupModel------------> ${element.replyFromPatient}");
-    });
+    // appViewModel.getAllCheckupModel().forEach((element) {
+    //   print("updateAllCheckupModel------------> ${element.replyFromPatient}");
+    // });
   }
 
   @override

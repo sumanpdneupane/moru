@@ -42,9 +42,9 @@ class _MHomeScreenState extends State<MHomeScreen> {
     appViewModel.updateAllCheckupModel(cases);
     EasyLoading.dismiss();
 
-    appViewModel.getAllCheckupModel().forEach((element) {
-      print("updateAllCheckupModel------------> ${element.replyFromPatient}");
-    });
+    // appViewModel.getAllCheckupModel().forEach((element) {
+    //   print("updateAllCheckupModel------------> ${element.replyFromPatient}");
+    // });
   }
 
   @override
@@ -169,7 +169,7 @@ class CheckupStyle extends StatelessWidget {
                 "th of" +
                 DateFormat(" MMM y").format(model[index].createdDate!);
 
-            print("caseids------------> ${model[index].id}");
+            //print("caseids------------> ${model[index].id}");
 
             return Container(
               margin: EdgeInsets.only(bottom: 8),

@@ -131,7 +131,7 @@ class CheckupDoctorWidget extends StatelessWidget {
     return ResponsiveBuilder(builder: (context, SizingInformation) {
       return GestureDetector(
         onTap: () {
-          Routes.pushNamed(context, Routes.CHECKUP_READY_PAGE);
+          //Routes.pushNamed(context, Routes.CHECKUP_READY_PAGE);
         },
         child: SizedBox(
           width: width,

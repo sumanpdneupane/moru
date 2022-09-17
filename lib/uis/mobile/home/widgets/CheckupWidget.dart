@@ -21,8 +21,8 @@ class CheckupWidget extends StatelessWidget {
     //refresh case model from begining
     model = CaseModel();
     //add min and max photo can be uploaded
-    model.lowerPhotoBoundSize = 1;
-    model.upperPhotoBoundSize = 2;
+    model.lowerPhotoBoundSize = 2;
+    model.upperPhotoBoundSize = 6; //double.minPositive.toInt();
     model.plan = CaseModel.SINGLE_ISSUE_PLAN;
     model.priceId = "price_1LZC7LDXe16sDQVN287FtFur";
     model.productId = "prod_MHle6zMmxr5Mik";
@@ -44,8 +44,8 @@ class CheckupWidget extends StatelessWidget {
     //refresh case model from begining
     model = CaseModel();
     //add min and max photo can be uploaded
-    model.lowerPhotoBoundSize = 3;
-    model.upperPhotoBoundSize = double.minPositive.toInt();
+    model.lowerPhotoBoundSize = 6;
+    model.upperPhotoBoundSize = 1000;//double.minPositive.toInt();
     model.plan = CaseModel.FULL_ASSESSMENT_PLAN;
     model.priceId = "price_1LZC7pDXe16sDQVND8b3cPGD";
     model.productId = "prod_MHlfxSndZMsJpX";
