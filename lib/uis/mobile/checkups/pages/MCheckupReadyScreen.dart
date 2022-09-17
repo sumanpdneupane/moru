@@ -842,6 +842,22 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
       );
     }
 
+    Future<List<Map>> fetchAllTreatments(List<dynamic> productIds) async {
+      try {
+        List<Future<Map>> allFutures = [];
+        productIds.forEach((productId) {
+          allFutures.add(FirebaseFirestore.instance
+              .collection("treatments")
+              .doc(productId)
+              .get()
+              .then((value) => value.data()!));
+        });
+        return await Future.wait(allFutures);
+      } catch (e) {
+        return [];
+      }
+    }
+
     Widget treatmentCostWidget() {
       if (caseModel == null ||
           caseModel!.recommendedTreatments == null ||
@@ -861,52 +877,85 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
             ),
           ),
           SizedBox(height: 12),
-          ListView.builder(
-            //padding: const EdgeInsets.all(16),
-            itemCount: 3,
-            physics: NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                margin: EdgeInsets.only(top: 4, bottom: 4),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        child: Text(
-                          "Treatment ${index + 1}",
-                          style: GoogleFonts.syne(
-                            fontSize: 14,
-                            fontWeight: FontWeight.normal,
-                            color: CustomColors.inputfillColor,
+          FutureBuilder<List<Map>>(
+              future: fetchAllTreatments(caseModel!.recommendedTreatments!),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return const Text('Error');
+                  } else if (snapshot.hasData) {
+                    return ListView.builder(
+                      //padding: const EdgeInsets.all(16),
+                      itemCount: snapshot.data!.length,
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (BuildContext context, int index) {
+                        var treatment = snapshot.data![index];
+                        return Container(
+                          margin: EdgeInsets.only(top: 4, bottom: 4),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  child: Text(
+                                    "${treatment['name']}",
+                                    style: GoogleFonts.syne(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.normal,
+                                      color: CustomColors.inputfillColor,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  child: Text(
+                                    "${treatment['price']} AED",
+                                    style: GoogleFonts.syne(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.normal,
+                                      color: CustomColors.inputfillColor,
+                                    ),
+                                  ),
+                                  alignment: Alignment.center,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        child: Text(
-                          "${(index + 1) * 459} AED",
-                          style: GoogleFonts.syne(
-                            fontSize: 14,
-                            fontWeight: FontWeight.normal,
-                            color: CustomColors.inputfillColor,
-                          ),
-                        ),
-                        alignment: Alignment.center,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
+                        );
+                      },
+                    );
+                  } else {
+                    return const Text('Empty data');
+                  }
+                } else {
+                  return Text('State: ${snapshot.connectionState}');
+                }
+              }),
         ],
       );
     }
 
-    Widget recommendedProductsItemWidget(int index) {
+    Future<List<Map>> fetchAllProducts(List<dynamic> productIds) async {
+      try {
+        List<Future<Map>> allFutures = [];
+        productIds.forEach((productId) {
+          allFutures.add(FirebaseFirestore.instance
+              .collection("products")
+              .doc(productId)
+              .get()
+              .then((value) => value.data()!));
+        });
+        return await Future.wait(allFutures);
+      } catch (e) {
+        return [];
+      }
+    }
+
+    Widget recommendedProductsItemWidget(Map product) {
       return Container(
         margin: EdgeInsets.only(left: 8, right: 8),
         child: Column(
@@ -917,13 +966,13 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 image: DecorationImage(
-                  image: AssetImage("assets/images/neurology.png"),
+                  image: NetworkImage("${product['photo']}"),
                 ),
               ),
             ),
             SizedBox(height: 8),
             Text(
-              "Oral-B Vitality 100 Cross Action Electric Toothbrush",
+              "${product['productName']}",
               textAlign: TextAlign.start,
               style: GoogleFonts.syne(
                 fontSize: 15,
@@ -947,6 +996,11 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
     }
 
     Widget recommendedProductsWidget() {
+      if (caseModel == null ||
+          caseModel!.recommendedProducts == null ||
+          caseModel!.recommendedProducts!.length < 1) {
+        return Container();
+      }
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -959,20 +1013,37 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
             ),
           ),
           SizedBox(height: 20),
-          GridView.builder(
-            itemCount: 2,
-            physics: NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisExtent: 280,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 0,
-            ),
-            itemBuilder: (BuildContext context, int i) {
-              return recommendedProductsItemWidget(i);
-            },
-          ),
+          FutureBuilder<List<Map>>(
+              future: fetchAllProducts(caseModel!.recommendedProducts!),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return const Text('Error');
+                  } else if (snapshot.hasData) {
+                    return GridView.builder(
+                      itemCount: snapshot.data!.length,
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisExtent: 280,
+                        crossAxisSpacing: 8,
+                        mainAxisSpacing: 0,
+                      ),
+                      itemBuilder: (BuildContext context, int i) {
+                        return recommendedProductsItemWidget(snapshot.data![i]);
+                      },
+                    );
+                    ;
+                  } else {
+                    return const Text('Empty data');
+                  }
+                } else {
+                  return Text('State: ${snapshot.connectionState}');
+                }
+              }),
         ],
       );
     }
