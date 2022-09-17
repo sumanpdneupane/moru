@@ -193,36 +193,36 @@ class CheckupStyle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var userViewModel = Provider.of<UserViewModel>(context, listen: false);
+    var user = userViewModel.getModel();
     return Consumer<AppViewModel>(builder: (ctx, data, Widget? child) {
-
       return StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection('cases')
+              .where("createdBy", isEqualTo: user.uid)
               .snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
 
-          if (snapshot.data!.docs.length < 1) {
-            return Container();
-          }
+            if (snapshot.data!.docs.length < 1) {
+              return Container();
+            }
 
-          List<CaseModel> model =
-          snapshot.data!.docs.map((doc) {
-            Map data = doc.data() as Map;
-            return new CaseModel.fromJson(doc.id, data);
-          }).toList();
+            List<CaseModel> model = snapshot.data!.docs.map((doc) {
+              Map data = doc.data() as Map;
+              return new CaseModel.fromJson(doc.id, data);
+            }).toList();
 
-          model.sort((a, b) {
-            return b.createdDate!.compareTo(a.createdDate!);
+            model.sort((a, b) {
+              return b.createdDate!.compareTo(a.createdDate!);
+            });
+
+            return loadData(model);
           });
-
-          return loadData(model);
-        }
-      );
     });
   }
 }
