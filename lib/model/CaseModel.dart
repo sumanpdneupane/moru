@@ -137,8 +137,12 @@ class CaseModel {
         });
       }
       //this.questionaires = json["questionaires"];
-      this.recommendedProducts = json["recommendedProducts"];
-      this.recommendedTreatments = json["recommendedTreatments"];
+      if (json["recommendedProducts"] != null) {
+        this.recommendedProducts = json["recommendedProducts"];
+      }
+      if (json["recommendedTreatments"] != null) {
+        this.recommendedTreatments = json["recommendedTreatments"];
+      }
     }
   }
 
