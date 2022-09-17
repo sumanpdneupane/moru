@@ -711,7 +711,8 @@ class _CheckUp2BodyState extends State<CheckUp2Body> {
 
     Widget whatCanYouDo() {
       double scaleWidth = width - 64;
-      double severityScale = caseModel!.severityScale!;
+      double severityScale =
+          caseModel!.severityScale != null ? caseModel!.severityScale! : 0;
       double scaleVale = 0.0;
       if (severityScale == 0) {
         scaleVale = 0.0;
